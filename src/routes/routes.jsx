@@ -1,0 +1,18 @@
+import { Route, Routes } from "react-router-dom"
+import { Inicio } from "../features/landing/inicio/inicio"
+import { NuestrosProductos } from "../features/landing/nuestrosproductos/nuestrosProductos"
+import { QuienesSomos } from "../features/landing/quienessomos/quienesSomos"
+import { Register } from "../features/landing/register/register"
+
+export const Routers = () => {
+    return(
+        <>
+            <Routes>
+                <Route path="/" element={<Inicio/>}/>
+                <Route path="/nuestrosproductos" element={<NuestrosProductos/>}/>
+                <Route path="/quienessomos" element={<QuienesSomos/>}/>
+                <Route path="/register" element={<Register/>}/>
+            </Routes>
+        </>
+    )
+}
