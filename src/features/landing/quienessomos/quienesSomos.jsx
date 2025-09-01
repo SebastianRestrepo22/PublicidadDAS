@@ -1,3 +1,4 @@
+import { Footer } from "../components/footer"
 import { Navbar } from "../components/Navbar"
 
 export const QuienesSomos = () => {
@@ -5,6 +6,7 @@ export const QuienesSomos = () => {
         <>
             <Navbar/>
             <h1>Este es nuestros productos</h1>
+            <Footer/>
         </>
     )
 }
