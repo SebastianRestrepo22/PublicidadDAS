@@ -3,6 +3,7 @@ import { Inicio } from "../features/landing/inicio/inicio"
 import { NuestrosProductos } from "../features/landing/nuestrosproductos/nuestrosProductos"
 import { QuienesSomos } from "../features/landing/quienessomos/quienesSomos"
 import { Register } from "../features/landing/register/register"
+import { Login } from "../features/landing/login/login"
 
 export const Routers = () => {
     return(
@@ -12,6 +13,7 @@ export const Routers = () => {
                 <Route path="/nuestrosproductos" element={<NuestrosProductos/>}/>
                 <Route path="/quienessomos" element={<QuienesSomos/>}/>
                 <Route path="/register" element={<Register/>}/>
+                <Route path="/login" element={<Login/>}/>
             </Routes>
         </>
     )

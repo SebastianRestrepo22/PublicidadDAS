@@ -1,36 +1,17 @@
-import { Animacion } from "../Animacion/animacion"
 import { Navbar } from "../components/Navbar"
 
-export const Register = () => {
+export const Login = () => {
     return (
         <>
             <Navbar />
-            <div className="bg-white px-10 py-20 rounded-3xl border-2 lg:w-1/2">
-                <h1 className="text-5xl font-semibold">Bienvenidos</h1>
-                <p className="font-medium text-lg text-gray-500 mt-4">litografia PublicidadDas</p>
+            <div className="bg-white px-10 py-20 rounded-3x1 border-2 lg:w-1/2">
+                <h1 className="text-5x1 font-semibold">Bienvenidos</h1>
+                <p className="font-medium text-lg text-gray-500 mt-4">Bienvenidos a litografia PublicidadDas</p>
                 <div className="mt-8 ">
-                    <div>
-                        <label className="text-lg font-medium">Nombre Completo</label>
-                        <input className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                            placeholder="Ingrese su nombre"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-lg font-medium">Telefono</label>
-                        <input className="w-full border-2 border-gray-100 rounded-x1 p-4 mt-1 bg-transparent"
-                            placeholder="Ingrese su telefono"
-                        />
-                    </div>
                     <div>
                         <label className="text-lg font-medium">Correo Electronico</label>
                         <input className="w-full border-2 border-gray-100 rounded-x1 p-4 mt-1 bg-transparent"
                             placeholder="Ingrese su correo electronico"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-lg font-medium">Direccion</label>
-                        <input className="w-full border-2 border-gray-100 rounded-x1 p-4 mt-1 bg-transparent"
-                            placeholder="Ingrese su direccion"
                         />
                     </div>
                     <div>
@@ -52,19 +33,49 @@ export const Register = () => {
                 </div>
                 <div className="mt-8 flex flex-col gap-y-4">
                     <button className="py-3 rounded-xl bg-violet-500 text-violet">Sing in</button>
-                    <button className="py-3 rounded-xl border ">sing in whith google</button>
+                    <button>sing in whith google</button>
                 </div>
             </div>
-
-            {/* <div className="hidden lg:flex w-1/2 items-center justify-center bg gradient-to-br from-purple-200 to-indigo-200">
-                <Animacion/>
-            </div> */}
 
 
 
         </>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
