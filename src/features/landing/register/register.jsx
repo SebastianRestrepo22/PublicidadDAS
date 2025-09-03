@@ -1,10 +1,13 @@
+
 import { Animacion } from "../Animacion/animacion"
 import { Navbar } from "../components/Navbar"
+import { Footer } from "../components/footer"
 
 export const Register = () => {
     return (
         <>
             <Navbar />
+
             <div className="bg-white px-10 py-20 rounded-3xl border-2 lg:w-1/2">
                 <h1 className="text-5xl font-semibold">Bienvenidos</h1>
                 <p className="font-medium text-lg text-gray-500 mt-4">litografia PublicidadDas</p>
@@ -62,6 +65,7 @@ export const Register = () => {
 
 
 
+<Footer />
         </>
     )
 }

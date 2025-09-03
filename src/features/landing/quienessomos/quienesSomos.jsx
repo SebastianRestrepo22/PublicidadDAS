@@ -1,8 +1,11 @@
+
 import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/footer"
 
 export const QuienesSomos = () => {
     return (
         <>
+
             <Navbar />
             <section className="w-full">
                 <div className="relative w-full h-[400px]">
@@ -132,6 +135,8 @@ export const QuienesSomos = () => {
                 </div>
 
             </section>
+
+<Footer/>
         </>
     );
 };
