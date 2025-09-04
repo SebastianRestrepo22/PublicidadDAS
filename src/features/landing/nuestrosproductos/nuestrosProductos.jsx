@@ -39,8 +39,8 @@ export const NuestrosProductos = () => {
     <>
       <Navbar />
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-center font-bold text-4xl mb-2">Productos</h1>
-        <p className="text-gray-400 text-center mb-12">Descubra nuestros productos</p>
+        <h1 className="text-center font-bold text-4xl mb-2">Diseños que No Puedes Perder</h1>
+        <p className="text-gray-400 text-center mb-12">Descubra nuestros productos Y transforma tus ideas en impresiones únicas.</p>
 
         <div className="relative">
           <button onClick={() => slide(-1)} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg z-10"><i className="bx bx-chevron-left text-3xl w9"></i></button>
@@ -68,6 +68,107 @@ export const NuestrosProductos = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="card-container">
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
+          </div>
+        </div>
+
+        <div className="card">
+          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <div className="card-content">
+            <h3>Card 1</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
+            </p>
+            <a href="" className="btn">Read More</a>
           </div>
         </div>
       </div>
