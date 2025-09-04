@@ -4,6 +4,7 @@ import { NuestrosProductos } from "../features/landing/nuestrosproductos/nuestro
 import { QuienesSomos } from "../features/landing/quienessomos/quienesSomos"
 import { Register } from "../features/landing/register/register"
 import { Login } from "../features/landing/login/login"
+import { Dashboard } from "../features/dashboard/dashboard"
 
 export const Routers = () => {
     return(
@@ -14,6 +15,10 @@ export const Routers = () => {
                 <Route path="/quienessomos" element={<QuienesSomos/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
+
+                <Route path="/dashboard" element={<Dashboard/>}>
+                    
+                </Route>
             </Routes>
         </>
     )
