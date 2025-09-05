@@ -1,12 +1,8 @@
 import { Sidebar } from "./sidebar"
 import { Navbar } from "./navbar"
-import { ReactNode } from "react"
 
-interface DashboardLayoutProps {
-  children: ReactNode
-}
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children }) {
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />

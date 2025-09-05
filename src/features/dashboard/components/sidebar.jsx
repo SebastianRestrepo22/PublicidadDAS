@@ -48,7 +48,7 @@ const menuItems = [
 export const Sidebar = () => {
   const [expandedItems, setExpandedItems] = useState([]);
 
-  const toggleSubmenu = (index: ) => {
+  const toggleSubmenu = (index) => {
     setExpandedItems((prev) =>
       prev.includes(index)
         ? prev.filter((i) => i !== index)
