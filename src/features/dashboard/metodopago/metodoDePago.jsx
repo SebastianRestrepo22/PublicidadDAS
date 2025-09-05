@@ -1,9 +1,8 @@
 import React from "react";
 
-
-export const Animacion = ()=> {
+export const MetodoDePago = () => {
     return(
-        <> 
+        <>
         
         </>
     )

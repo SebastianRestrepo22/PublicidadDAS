@@ -8,27 +8,25 @@ export const QuienesSomos = () => {
 
             <Navbar />
             <section className="w-full">
-                <div className="relative w-full h-[400px]">
-                    <img src="" alt="" />
+                <div className="relative w-full h-[420px] ">
+                    <img src="public/multimedia/quienessomos2.jpg" alt="" className="w-full h-full object-cover" />
                 </div>
             </section>
 
             <section className="bg-white py-16 px-8 lg:px-20">
-                <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-                    Quienes Somos
-                </h2>
+                
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div>
-                        <h3 className="text-2xl font-bold text-pink-600 mb-4">
+                        <h3 className="text-6xl font-bold text-pink-600 mb-4">
                             PublicidadDAS
                         </h3>
-                        <p className="text-gray-700 mb-4">
+                        <p className="text-gray-800 mb-4">
                             Somos una empresa experta en darte lo mejor para cada una de tus necesidades
                             estamos dispuesto a que estes siempre agusto con nosotros y mejores la calidad
                             y la experiencia al trabajar con nosotros .
                         </p>
-                        <p className="text-gray-700 mb-4">
+                        <p className="text-gray-900 mb-4">
                             Calidad es la que buscas ,siempre estamos disponibles para ti para que podamos
                             complacer cada necesidad que te haga falta en todo lo necesario , haremos una realidad
                             virtual , en realidad tangible .
@@ -39,12 +37,12 @@ export const QuienesSomos = () => {
                         <img
                             src="public/multimedia/image2.jpg"
                             alt="imagen2"
-                            className="absolute top-0 right-0 w-[70%] h-[250px] object-cover rounded-xl shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl "
+                            className="absolute top-0 right-0 w-[80%] h-[500px] object-cover rounded-xl shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl "
                         />
                         <img
                             src="public/multimedia/image3.jpg"
                             alt="imagen3"
-                            className="absolute bottom-0 left-0 w-[60%] h-[200px] object-cover   rounded-xl shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                            className="absolute bottom-0 left-0 w-[70%] h-[300px] object-cover   rounded-xl shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
                         />
                     </div>
                 </div>
@@ -100,7 +98,7 @@ export const QuienesSomos = () => {
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">
                             MISION
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-gray-900">
                             Nuestra mision es hacer que tus necesidades sean menos
                             no sean una realidad virtual si no una realidad tangible.
                             <span className="font-semibold">Confianza</span>

@@ -10,23 +10,33 @@ import { Proveedores } from "../features/dashboard/constrolinsumos/proveedores/p
 import { Ventas } from "../features/dashboard/gestionventas/ventas/ventas"
 import { EstadosVentas } from "../features/dashboard/gestionventas/estadosventas/estadosVentas"
 import { DashboardLayout } from "../features/dashboard/components/dashboardLayout"
+import { Usuarios } from "../features/dashboard/usuarios/usuarios"
+import { Roles } from "../features/dashboard/roles/roles"
+import { Pedidos } from "../features/dashboard/pedidos/pedidos"
+import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
+import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
 
 export const Routers = () => {
-    return(
+    return (
         <>
             <Routes>
-                <Route path="/" element={<Inicio/>}/>
-                <Route path="/nuestrosproductos" element={<NuestrosProductos/>}/>
-                <Route path="/quienessomos" element={<QuienesSomos/>}/>
-                <Route path="/register" element={<Register/>}/>
-                <Route path="/login" element={<Login/>}/>
+                <Route path="/" element={<Inicio />} />
+                <Route path="/nuestrosproductos" element={<NuestrosProductos />} />
+                <Route path="/quienessomos" element={<QuienesSomos />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
 
-                <Route path="/dashboard" element={<DashboardLayout/>}>
-                    <Route path="insumos" element={<Insumos/>}/>
-                    <Route path="productoServicio" element={<ProductoServicios/>}/>
-                    <Route path="proveedores" element={<Proveedores/>}/>
-                    <Route path="ventas" element={<Ventas/>}/>
-                    <Route path="estadosVentas" element={<EstadosVentas/>}/>
+                <Route path="/dashboard" element={<DashboardLayout />}>
+                    <Route path="usuarios" element={<Usuarios />} />
+                    <Route path="roles" element={<Roles />} />
+                    <Route path="pedidos" element={<Pedidos />} />
+                    <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
+                    <Route path="insumos" element={<Insumos />} />
+                    <Route path="productoServicio" element={<ProductoServicios />} />
+                    <Route path="proveedores" element={<Proveedores />} />
+                    <Route path="ventas" element={<Ventas />} />
+                    <Route path="estadosVentas" element={<EstadosVentas />} />
+                    <Route path="metodoDePago" element={<MetodoDePago />} />
                 </Route>
             </Routes>
         </>
