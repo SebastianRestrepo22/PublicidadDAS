@@ -254,9 +254,7 @@ code{
   animation: bounce 2s infinite ease-in-out;
 }
 
-/*Logs del CRUD*/
-
 td img {
-  width: 60px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
 }
