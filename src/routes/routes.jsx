@@ -10,6 +10,11 @@ import { ProductoServicios } from "../features/dashboard/servicios/productoServi
 import { Proveedores } from "../features/dashboard/constrolinsumos/proveedores/proveedores"
 import { Ventas } from "../features/dashboard/gestionventas/ventas/ventas"
 import { EstadosVentas } from "../features/dashboard/gestionventas/estadosventas/estadosVentas"
+import { Usuarios } from "../features/dashboard/Usuarios/usuarios"
+import { Roles } from "../features/dashboard/roles/roles"
+import { Pedidos } from "../features/dashboard/pedidos/pedidos"
+import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
+import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriadediseño"
 
 export const Routers = () => {
     return(
@@ -22,11 +27,16 @@ export const Routers = () => {
                 <Route path="/login" element={<Login/>}/>
 
                 <Route path="/dashboard" element={<Dashboard/>}>
+                    <Route path="usuarios" element={<Usuarios/>}/>
+                    <Route path="roles" element={<Roles/>}/>
+                    <Route path="pedidos" element={<Pedidos/>}/>
+                    <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño/>}/>
                     <Route path="insumos" element={<Insumos/>}/>
                     <Route path="productoServicio" element={<ProductoServicios/>}/>
                     <Route path="proveedores" element={<Proveedores/>}/>
                     <Route path="ventas" element={<Ventas/>}/>
                     <Route path="estadosVentas" element={<EstadosVentas/>}/>
+                    <Route path="metodoDePago" element={<MetodoDePago/>}/>
                 </Route>
             </Routes>
         </>
