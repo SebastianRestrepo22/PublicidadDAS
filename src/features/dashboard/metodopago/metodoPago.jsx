@@ -1,10 +1,8 @@
 import React from "react";
 
-
-export const Pedidos = () => {
-
+export const MetodoDePago = () =>{
     return(
         <>
         </>
     )
-}
+} 

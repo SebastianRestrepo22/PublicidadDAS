@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
@@ -15,34 +15,34 @@ import {
 } from "lucide-react";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: BarChart3, label: "Gráficos Estadísticos", href: "/graficos" },
-  { icon: UserCheck, label: "Roles", href: "/roles" },
-  { icon: Users, label: "Usuarios", href: "/usuarios" },
-  { icon: Wrench, label: "Servicios", href: "/servicios" },
+  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
+  { icon: BarChart3, label: "Gráficos Estadísticos", to: "/graficos" },
+  { icon: UserCheck, label: "Roles", to: "/roles" },
+  { icon: Users, label: "Usuarios", to: "/usuarios" },
+  { icon: Wrench, label: "Servicios", to: "/servicios" },
   {
     icon: Package,
     label: "Control Insumos",
-    href: "/inventario",
+    to: "/inventario",
     hasSubmenu: true,
     submenu: [
-      { label: "Proveedores", href: "/inventario/proveedores" },
-      { label: "Pedidos", href: "/inventario/pedidos" },
-      { label: "Insumos", href: "/inventario/insumos" },
+      { label: "Proveedores", to: "/inventario/proveedores" },
+      { label: "Pedidos", to: "/inventario/pedidos" },
+      { label: "Insumos", to: "/inventario/insumos" },
     ],
   },
-  { icon: Palette, label: "Categoría de Diseño", href: "/categoria-de-diseño" },
+  { icon: Palette, label: "Categoría de Diseño", to: "/categoria-de-diseño" },
   {
     icon: ShoppingCart,
     label: "Gestión de Ventas",
-    href: "/ventas",
+    to: "/ventas",
     hasSubmenu: true,
     submenu: [
-      { label: "Ventas", href: "/ventas" },
-      { label: "Estados de Ventas", href: "/ventas/estados" },
+      { label: "Ventas", to: "/ventas" },
+      { label: "Estados de Ventas", to: "/ventas/estados" },
     ],
   },
-  { icon: CreditCard, label: "Método de pago", href: "/pagos" },
+  { icon: CreditCard, label: "Método de pago", to: "/pagos" },
 ];
 
 export const Sidebar = () => {
@@ -75,7 +75,7 @@ export const Sidebar = () => {
               >
                 {!item.hasSubmenu ? (
                   <Link
-                    href={item.href}
+                    href={item.to}
                     className="flex items-center gap-4 flex-1"
                   >
                     <item.icon className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
