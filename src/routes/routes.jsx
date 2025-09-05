@@ -9,12 +9,12 @@ import { ProductoServicios } from "../features/dashboard/servicios/productoServi
 import { Proveedores } from "../features/dashboard/constrolinsumos/proveedores/proveedores"
 import { Ventas } from "../features/dashboard/gestionventas/ventas/ventas"
 import { EstadosVentas } from "../features/dashboard/gestionventas/estadosventas/estadosVentas"
-import { DashboardLayout } from "../features/dashboard/components/dashboardLayout"
 import { Usuarios } from "../features/dashboard/usuarios/usuarios"
 import { Roles } from "../features/dashboard/roles/roles"
 import { Pedidos } from "../features/dashboard/pedidos/pedidos"
 import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
 import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
+import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
 
 export const Routers = () => {
     return (
@@ -26,7 +26,7 @@ export const Routers = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
 
-                <Route path="/dashboard" element={<DashboardLayout />}>
+                <Route path="/dashboard" element={<DashboardLayout/>}>
                     <Route path="usuarios" element={<Usuarios />} />
                     <Route path="roles" element={<Roles />} />
                     <Route path="pedidos" element={<Pedidos />} />

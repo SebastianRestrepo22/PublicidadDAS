@@ -62,7 +62,7 @@ export const Sidebar = () => {
         <h1 className="text-xl font-bold text-white">Dashboard</h1>
       </div>
 
-      <nav className="flex-1 py-6">
+      <nav className="flex-1 py-6 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item, index) => (
             <li key={index}>
