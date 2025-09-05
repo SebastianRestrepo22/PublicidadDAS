@@ -14,7 +14,7 @@ export const Navbar2 = () => {
             transition-colors duration-200 text-sm font-medium"
             >
                 <logOut className="w-4 h-4"/>
-                Cerrar Sesion
+                Cerrar Sesioon
 
             </button>
 
