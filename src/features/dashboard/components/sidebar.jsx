@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
@@ -15,34 +15,34 @@ import {
 } from "lucide-react";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: BarChart3, label: "Gráficos Estadísticos", href: "/graficos" },
-  { icon: UserCheck, label: "Roles", href: "/roles" },
-  { icon: Users, label: "Usuarios", href: "/usuarios" },
-  { icon: Wrench, label: "Servicios", href: "/servicios" },
+  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
+  { icon: BarChart3, label: "Gráficos Estadísticos", to: "/graficos" },
+  { icon: UserCheck, label: "Roles", to: "/roles" },
+  { icon: Users, label: "Usuarios", to: "/usuarios" },
+  { icon: Wrench, label: "Servicios", to: "/servicios" },
   {
     icon: Package,
     label: "Control Insumos",
-    href: "/inventario",
+    to: "/inventario",
     hasSubmenu: true,
     submenu: [
-      { label: "Proveedores", href: "/inventario/proveedores" },
-      { label: "Pedidos", href: "/inventario/pedidos" },
-      { label: "Insumos", href: "/inventario/insumos" },
+      { label: "Proveedores", to: "/inventario/proveedores" },
+      { label: "Pedidos", to: "/inventario/pedidos" },
+      { label: "Insumos", to: "/inventario/insumos" },
     ],
   },
-  { icon: Palette, label: "Categoría de Diseño", href: "/categoria-de-diseño" },
+  { icon: Palette, label: "Categoría de Diseño", to: "/categoria-de-diseño" },
   {
     icon: ShoppingCart,
     label: "Gestión de Ventas",
-    href: "/ventas",
+    to: "/ventas",
     hasSubmenu: true,
     submenu: [
-      { label: "Ventas", href: "/ventas" },
-      { label: "Estados de Ventas", href: "/ventas/estados" },
+      { label: "Ventas", to: "/ventas" },
+      { label: "Estados de Ventas", to: "/ventas/estados" },
     ],
   },
-  { icon: CreditCard, label: "Método de pago", href: "/pagos" },
+  { icon: CreditCard, label: "Método de pago", to: "/pagos" },
 ];
 
 export const Sidebar = () => {
@@ -68,16 +68,13 @@ export const Sidebar = () => {
             <li key={index}>
               <div
                 className={`flex items-center justify-between px-6 py-4 hover:text-white
-                                hover:bg-gray-800 transition-colors duration-200 group ${
-                                  item.hasSubmenu ? "cursor-pointer" : ""
-                                }`}
+                  hover:bg-gray-800 transition-colors duration-200 group ${
+                    item.hasSubmenu ? "cursor-pointer" : ""
+                  }`}
                 onClick={item.hasSubmenu ? () => toggleSubmenu(index) : undefined}
               >
                 {!item.hasSubmenu ? (
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-4 flex-1"
-                  >
+                  <Link to={item.to} className="flex items-center gap-4 flex-1">
                     <item.icon className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
                     <span className="text-sm font-medium text-white">
                       {item.label}
@@ -108,10 +105,10 @@ export const Sidebar = () => {
 
               {item.hasSubmenu && expandedItems.includes(index) && (
                 <ul className="ml-6 mt-2 space-y-1 border-l border-gray-700 pl-4">
-                  {item.submenu?.map((subItem, subIndex) => (
+                  {item.submenu.map((subItem, subIndex) => (
                     <li key={subIndex}>
                       <Link
-                        href={subItem.href}
+                        to={subItem.to}
                         className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors duration-200"
                       >
                         {subItem.label}

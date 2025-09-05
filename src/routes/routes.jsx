@@ -4,7 +4,6 @@ import { NuestrosProductos } from "../features/landing/nuestrosproductos/nuestro
 import { QuienesSomos } from "../features/landing/quienessomos/quienesSomos"
 import { Register } from "../features/landing/register/register"
 import { Login } from "../features/landing/login/login"
-import { Dashboard } from "../features/dashboard/dashboard"
 import { Insumos } from "../features/dashboard/constrolinsumos/insumos/insumos"
 import { ProductoServicios } from "../features/dashboard/servicios/productoServicios"
 import { Proveedores } from "../features/dashboard/constrolinsumos/proveedores/proveedores"
@@ -15,6 +14,7 @@ import { Roles } from "../features/dashboard/roles/roles"
 import { Pedidos } from "../features/dashboard/pedidos/pedidos"
 import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
 import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriadediseño"
+import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
 
 export const Routers = () => {
     return(
@@ -26,7 +26,7 @@ export const Routers = () => {
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
 
-                <Route path="/dashboard" element={<Dashboard/>}>
+                <Route path="/dashboard" element={<DashboardLayout/>}>
                     <Route path="usuarios" element={<Usuarios/>}/>
                     <Route path="roles" element={<Roles/>}/>
                     <Route path="pedidos" element={<Pedidos/>}/>
