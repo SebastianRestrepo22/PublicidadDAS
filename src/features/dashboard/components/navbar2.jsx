@@ -3,10 +3,9 @@ import { LogOut } from "lucide-react"
 export const Navbar2 = () => {
 
   const handleLogout = () => {
-        console.log("Cerrar Sesion")
-      }
-  
+    console.log("Cerrar Sesion")
 
+    }
     return (
       
       
@@ -21,4 +20,5 @@ export const Navbar2 = () => {
       </nav>
     )
   }
+
 

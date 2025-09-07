@@ -7,7 +7,7 @@ export const QuienesSomos = () => {
         <>
 
             <Navbar />
-            <section className="w-full">
+            <section className="w-full pt-20">
                 <div className="relative w-full h-[420px] ">
                     <img src="public/multimedia/quienessomos2.jpg" alt="" className="w-full h-full object-cover" />
                 </div>

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
 
-export const NuestrosProductos = () => {
+export const Productos = () => {
   const products = [
     { name: "Tarjetas de Presentación", price: "$49", image: "https://images.unsplash.com/photo-1581092588429-14f0d3f8df8e?crop=entropy&cs=tinysrgb&fit=crop&w=600&h=400", rating: 4.8 },
     { name: "Volantes Publicitarios", price: "$79", image: "https://images.unsplash.com/photo-1557683316-973673baf926?crop=entropy&cs=tinysrgb&fit=crop&w=600&h=400", rating: 4.6 },
@@ -38,16 +38,37 @@ export const NuestrosProductos = () => {
   return (
     <>
       <Navbar />
+
+      {/* Sección de categoria y la barra de busqueda */}
+      <div className="flex bg-[#B1B8C0] justify-center pt-20">
+        <div className="m-3">
+          <select className="border border-gray-300 rounded-lg px-3 py-2">
+            <option value="">Categorias</option>
+            <option value="id">Gran formato</option>
+            <option value="Nombre del Insumo">Stickers / Etiquetas</option>
+            <option value="Stock">Folletos / Trípticos</option>
+            <option value="Stock">Posters / Pósters</option>
+          </select>
+        </div>
+
+        <div className="relative m-3">
+          <img src="/public/multimedia/lupa.png" alt="Buscar" className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+
+          <input type="text" placeholder="Buscar" className="border border-gray-300 rounded-lg px-4 py-2 w-80 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </div>
+
+      {/*Carrusel */}
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-center font-bold text-4xl mb-2">Diseños que No Puedes Perder</h1>
-        <p className="text-gray-400 text-center mb-12">Descubra nuestros productos Y transforma tus ideas en impresiones únicas.</p>
+        <h1 className="text-center font-bold text-4xl mb-2">Productos que no puedes perder</h1>
+        <p className="text-gray-400 text-center mb-12">Descubra nuestros productos y transforma tus ideas en impresiones únicas.</p>
 
         <div className="relative">
           <button onClick={() => slide(-1)} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg z-10"><i className="bx bx-chevron-left text-3xl w9"></i></button>
           <button onClick={() => slide(1)} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg z-10"><i className="bx bx-chevron-right text-3xl w9"></i></button>
 
           <div className="overflow-hidden">
-            <div ref={carouselRef} className="carousel-container flex gap-6 overflow-x-auto py-8 px-8 justify-start scroll-smooth">
+            <div ref={carouselRef} className="carousel-container flex gap-6 overflow-hidden py-8 px-8 scroll-smooth">
               {products.map((product, idx) => (
                 <div key={idx} className="product-card flex-none w-72 bg-gray-800 rounded-xl overflow-hidden shadow-lg">
                   <div className="relative">
@@ -72,6 +93,48 @@ export const NuestrosProductos = () => {
         </div>
       </div>
 
+      {/*Sección de descuentos*/}
+
+      <section class="bg-yellow-100 py-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+          <h2 class="text-3xl font-bold mb-4">¡Aprovecha nuestras ofertas!</h2>
+          <p class="text-lg text-gray-700 mb-8">
+            Descuentos especiales en productos seleccionados, solo por tiempo limitado.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+              <h3 class="text-xl font-semibold mb-2">Producto A</h3>
+              <p class="text-gray-500 mb-4">Antes: <span class="line-through">$50</span></p>
+              <p class="text-green-600 font-bold text-2xl mb-4">$35</p>
+              <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                Comprar
+              </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+              <h3 class="text-xl font-semibold mb-2">Producto B</h3>
+              <p class="text-gray-500 mb-4">Antes: <span class="line-through">$80</span></p>
+              <p class="text-green-600 font-bold text-2xl mb-4">$60</p>
+              <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                Comprar
+              </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
+              <h3 class="text-xl font-semibold mb-2">Producto C</h3>
+              <p class="text-gray-500 mb-4">Antes: <span class="line-through">$100</span></p>
+              <p class="text-green-600 font-bold text-2xl mb-4">$75</p>
+              <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">Nuestros productos</h1>
       <div className="card-container">
         <div className="card">
           <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
