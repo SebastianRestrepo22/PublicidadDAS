@@ -4,7 +4,7 @@ export const Login = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen flex items-center justify-center bg-gray-100 pt-20">
+            <div className="min-h-screen flex items-center justify-center bg-gray-100">
                 <div className="bg-white px-10 py-12 rounded-3xl shadow-2xl w-full max-w-md">
                     <h1 className="text-5xl font-semibold text-center">Bienvenidos</h1>
                     <p className="font-medium text-lg text-gray-500 mt-4 text-center">

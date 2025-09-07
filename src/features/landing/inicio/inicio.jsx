@@ -16,7 +16,7 @@ export const Inicio = () => {
     return (
         <>
             <Navbar />
-            <main className="transition-all pt-20">
+            <main className="transition-all">
 
                 {/* Carrusel */}
                 <div className="container">
