@@ -8,7 +8,7 @@ export const Register = () => {
         <>
             <Navbar />
 
-            <div className="bg-white px-10 py-20 rounded-3xl border-2 lg:w-1/2 pt-20">
+            <div className="bg-white px-10 py-20 rounded-3xl border-2 lg:w-1/2">
                 <h1 className="text-5xl font-semibold">Bienvenidos</h1>
                 <p className="font-medium text-lg text-gray-500 mt-4">litografia PublicidadDas</p>
                 <div className="mt-8 ">
