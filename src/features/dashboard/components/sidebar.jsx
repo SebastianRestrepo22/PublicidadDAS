@@ -15,34 +15,33 @@ import {
 } from "lucide-react";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
-  { icon: BarChart3, label: "Gráficos Estadísticos", to: "/graficos" },
-  { icon: UserCheck, label: "Roles", to: "/roles" },
-  { icon: Users, label: "Usuarios", to: "/usuarios" },
-  { icon: Wrench, label: "Servicios", to: "/servicios" },
+  { icon: BarChart3, label: "Gráficos Estadísticos", to: "/dashboard/insumos" },
+  { icon: UserCheck, label: "Roles", to: "/dashboard/roles" },
+  { icon: Users, label: "Usuarios", to: "/dashboard/usuarios" },
+  { icon: Wrench, label: "Servicios", to: "/dashboard/productoServicio" },
   {
     icon: Package,
     label: "Control Insumos",
-    to: "/inventario",
+    to: "/dashboard/insumos",
     hasSubmenu: true,
     submenu: [
-      { label: "Proveedores", to: "/inventario/proveedores" },
-      { label: "Pedidos", to: "/inventario/pedidos" },
-      { label: "Insumos", to: "/inventario/insumos" },
+      { label: "Proveedores", to: "/dashboard/proveedores" },
+      { label: "Pedidos", to: "/dashboard/pedidos" },
+      { label: "Insumos", to: "/dashboard/insumos" },
     ],
   },
-  { icon: Palette, label: "Categoría de Diseño", to: "/categoria-de-diseño" },
+  { icon: Palette, label: "Categoría de Diseño", to: "/dashboard/categoriaDeDiseño" },
   {
     icon: ShoppingCart,
     label: "Gestión de Ventas",
-    to: "/ventas",
+    to: "/dashboard/ventas",
     hasSubmenu: true,
     submenu: [
-      { label: "Ventas", to: "/ventas" },
-      { label: "Estados de Ventas", to: "/ventas/estados" },
+      { label: "Ventas", to: "/dashboard/ventas" },
+      { label: "Estados de Ventas", to: "/dashboard/estadosVentas" },
     ],
   },
-  { icon: CreditCard, label: "Método de pago", to: "/pagos" },
+  { icon: CreditCard, label: "Método de pago", to: "/dashboard/metodoDePago" },
 ];
 
 export const Sidebar = () => {
@@ -57,62 +56,54 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 h-screen bg-gray-900 text-white flex flex-col">
-      <div className="p-6 pb-8 border-b border-gray-700">
-        <h1 className="text-xl font-bold text-white">Dashboard</h1>
+    <div className="w-52 h-screen bg-gray-900 text-white flex flex-col">
+      {/* Encabezado */}
+      <div className="p-4 pb-6 border-b border-gray-700">
+        <h1 className="text-lg font-bold text-white tracking-tight">Dashboard</h1>
       </div>
 
-      <nav className="flex-1 py-6 overflow-y-auto">
-        <ul className="space-y-2">
+      {/* Menú */}
+      <nav className="flex-1 py-4 overflow-y-auto">
+        <ul className="space-y-1">
           {menuItems.map((item, index) => (
             <li key={index}>
               <div
-                className={`flex items-center justify-between px-6 py-4 hover:text-white
-                                hover:bg-gray-800 transition-colors duration-200 group ${
-                                  item.hasSubmenu ? "cursor-pointer" : ""
-                                }`}
-                onClick={item.hasSubmenu ? () => toggleSubmenu(index) : undefined}
+                className={`flex items-center justify-between px-4 py-3 hover:bg-gray-800 rounded-md transition-colors duration-200 group ${
+                  item.hasSubmenu ? "cursor-pointer" : ""
+                }`}
               >
                 {!item.hasSubmenu ? (
-                  <Link
-                    href={item.to}
-                    className="flex items-center gap-4 flex-1"
-                  >
-                    <item.icon className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
-                    <span className="text-sm font-medium text-white">
-                      {item.label}
-                    </span>
+                  <Link to={item.to} className="flex items-center gap-3 flex-1">
+                    <item.icon className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+                    <span className="text-xs font-medium">{item.label}</span>
                   </Link>
                 ) : (
-                  <button
-                    onClick={() => toggleSubmenu(index)}
-                    className="flex items-center gap-4 flex-1 text-left"
-                  >
-                    <item.icon className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
-                    <span className="text-sm font-medium text-white">
-                      {item.label}
-                    </span>
-                  </button>
-                )}
-
-                {item.hasSubmenu && (
-                  <div className="ml-2">
-                    {expandedItems.includes(index) ? (
-                      <ChevronDown className="w-4 h-4 transition-transform duration-200" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4 transition-transform duration-200" />
-                    )}
+                  <div className="flex items-center flex-1 justify-between">
+                    <Link to={item.to} className="flex items-center gap-3 flex-1">
+                      <item.icon className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+                      <span className="text-xs font-medium">{item.label}</span>
+                    </Link>
+                    <button
+                      onClick={() => toggleSubmenu(index)}
+                      className="ml-1 focus:outline-none"
+                    >
+                      {expandedItems.includes(index) ? (
+                        <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                      ) : (
+                        <ChevronRight className="w-4 h-4 transition-transform duration-200" />
+                      )}
+                    </button>
                   </div>
                 )}
               </div>
 
               {item.hasSubmenu && expandedItems.includes(index) && (
-                <ul className="ml-6 mt-2 space-y-1 border-l border-gray-700 pl-4">
+                <ul className="ml-5 mt-1 space-y-1 border-l border-gray-700 pl-3">
                   {item.submenu?.map((subItem, subIndex) => (
                     <li key={subIndex}>
                       <Link
-                        href={subItem.href}
-                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors duration-200"
+                        to={subItem.to}
+                        className="block px-3 py-2 text-xs text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors duration-200"
                       >
                         {subItem.label}
                       </Link>
