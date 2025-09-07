@@ -16,10 +16,10 @@ export const Navbar = () => {
     return (
         <>
             <header>
-                <nav className="p-5 bg-[#25395C] shadow md:flex md:items-center md:justify-between">
+                <nav className="fixed top-0 left-0 w-full p-0 h-20 bg-[#25395C] shadow md:flex md:items-center md:justify-between z-50">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center cursor-pointer relative z-50">
-                            <img src="/public/multimedia/logo.png" alt="Logo" className="rounded-full h-20 inline" />
+                            <img src="/public/multimedia/logo.png" alt="Logo" className="h-[90px] w-auto inline" />
                         </div>
                         <span className="text-3xl cursor-pointer md:hidden block">
                             <ion-icon name="menu-outline" onClick={(e) => Menu(e.target)}></ion-icon>
@@ -30,9 +30,24 @@ export const Navbar = () => {
                         <li className="mx-10 my-6 md:my-0">
                             <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
                         </li>
-                        <li className="mx-10 my-6 md:my-0">
-                            <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/nuestrosproductos'>Nuestros productos</Link>
+                        <li className="relative mx-10 my-6 md:my-0 group">
+                            <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500">
+                                Nuestros productos
+                            </Link>
+                            <ul className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                                <li>
+                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-cyan-500 hover:text-white rounded-t-lg" to="/productos">
+                                        Productos
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-cyan-500 hover:text-white rounded-b-lg" to="/servicios">
+                                        Servicios
+                                    </Link>
+                                </li>
+                            </ul>
                         </li>
+
                         <li className="mx-10 my-6 md:my-0">
                             <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/quienessomos'>Quienes somos</Link>
                         </li>
