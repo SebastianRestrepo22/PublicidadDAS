@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom"
 import { Inicio } from "../features/landing/inicio/inicio"
 import { Productos } from "../features/landing/nuestrosproductos/productos"
 import { QuienesSomos } from "../features/landing/quienessomos/quienesSomos"
-import { Register } from "../features/landing/register/register"
 import { Login } from "../features/landing/login/login"
 import { Insumos } from "../features/dashboard/constrolinsumos/insumos/insumos"
 import { ProductoServicios } from "../features/dashboard/servicios/productoServicios"
@@ -25,7 +24,6 @@ export const Routers = () => {
                 <Route path="/productos" element={<Productos />} />
                 <Route path="/servicios" element={<Servicios />} />
                 <Route path="/quienessomos" element={<QuienesSomos />} />
-                <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
 
                 <Route path="/dashboard" element={<DashboardLayout/>}>

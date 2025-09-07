@@ -52,9 +52,6 @@ export const Navbar = () => {
                             <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/quienessomos'>Quienes somos</Link>
                         </li>
                         <li className="mx-10 my-6 md:my-0">
-                            <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/register'>Registro</Link>
-                        </li>
-                        <li className="mx-10 my-6 md:my-0">
                             <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/login'>Login</Link>
                         </li>
                         <div>
