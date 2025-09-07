@@ -1,120 +1,133 @@
-import { Navbar } from "../components/Navbar"
+import { useState } from "react";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/footer";
 
 export const Login = () => {
-    return (
-        <>
-            <Navbar />
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <div className="bg-white px-10 py-12 rounded-3xl shadow-2xl w-full max-w-md">
-                    <h1 className="text-5xl font-semibold text-center">Bienvenidos</h1>
-                    <p className="font-medium text-lg text-gray-500 mt-4 text-center">
-                        Bienvenidos a litografia <span className="font-bold">PublicidadDAS</span>
-                    </p>
+  const [isLogin, setIsLogin] = useState(true);
 
-                    <div className="mt-8 space-y-6">
-                        <div>
-                            <label className="text-lg font-medium block">Correo Electronico</label>
-                            <input
-                                className="w-full border-2 border-gray-200 rounded-xl p-4 mt-2 bg-transparent focus:border-violet-500 focus:outline-none"
-                                placeholder="Ingrese su correo electronico"
-                                type="email" 
-                                />
-                        </div>
-
-                        <div>
-                            <label className="text-lg font-medium block">Contraseña</label>
-                            <input 
-                            className="w-full border-2 border-gray-200 rounded-xl p-4 mt-2 bg-tramsparent focus:border-violet-500 focus:outline-none"
-                            placeholder="Ingrese su contraseña"
-                            type="password" 
-                            />
-                        </div>
-
-                        <div className="flex items-center justify-center justify-between">
-                            <div className="flex items-center">
-                                <input id="remember" type="checkbox" className="mr-2" />
-                                <label htmlFor="remember" className="font-medium text-base text-gray-700">
-                                    recordar
-                                </label>
-                            </div>
-                        </div>
-                        <button className="font-medium text-base text-violet-600 hover:underline">
-                            ¿Olvidaste tu contraseña?
-                        </button>
-                    </div>
-
-                    <div className="flex flex-col gap-y-4 mt-6">
-                        <button className="py-3 rounded-xl bg-violet-600 text-white font-semibold shadow-md hover:bg-violet-700 transition">
-                            Iniciar Ssesion
-                        </button>
-                        <button className="py-3 rounded-xl border border-gray-300 shadow-sm font-medium hover:bg-gray-100 transition">
-                            Continuar con google
-                        </button>
-                    </div>
+  return (
+    <>
+      <Navbar />
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        {/* CONTENEDOR PRINCIPAL */}
+        <div className="w-[90%] max-w-4xl h-[600px] bg-white rounded-3xl shadow-2xl overflow-hidden relative">
+          {/* CONTENEDOR DESLIZANTE */}
+          <div
+            className={`flex w-[200%] h-full transition-transform duration-700 ease-in-out ${
+              isLogin ? "translate-x-0" : "-translate-x-1/2"
+            }`}
+          >
+            {/* PANEL LOGIN */}
+            <div className="w-1/2 flex flex-col md:flex-row">
+              {/* Panel Morado */}
+              <div className="hidden md:flex flex-col justify-between items-start bg-violet-600 text-white p-10 w-1/2">
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">¡Bienvenido!</h2>
+                  <p className="text-sm">Inicia sesión para continuar</p>
                 </div>
+                <img src="" alt="" className="max-w-xs mx-auto" />
+                <button
+                  onClick={() => setIsLogin(false)}
+                  className="mt-4 py-2 px-6 bg-white text-violet-600 rounded-xl font-semibold hover:bg-gray-100"
+                >
+                  Registrarse
+                </button>
+              </div>
+
+              {/* Formulario Login */}
+              <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
+                <h1 className="text-4xl font-bold text-center mb-6">
+                  Iniciar Sesión
+                </h1>
+                <form className="space-y-5">
+                  <input
+                    type="email"
+                    placeholder="Correo electrónico"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                  />
+                  <input
+                    type="password"
+                    placeholder="Contraseña"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="w-full bg-violet-600 text-white py-3 rounded-xl font-semibold hover:bg-violet-700 transition"
+                  >
+                    Iniciar Sesión
+                  </button>
+                </form>
+                <button
+                  onClick={() => setIsLogin(false)}
+                  className="mt-4 text-violet-600 hover:underline text-sm"
+                >
+                  ¿No tienes cuenta? Regístrate
+                </button>
+              </div>
             </div>
 
+            {/* PANEL REGISTRO */}
+            <div className="w-1/2 flex flex-col md:flex-row">
+              {/* Formulario Registro */}
+              <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
+                <h1 className="text-4xl font-bold text-center mb-6">
+                  Crear Cuenta
+                </h1>
+                <form className="space-y-5">
+                  <input
+                    type="text"
+                    placeholder="Nombre Completo"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Correo electrónico"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Dirección"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                  />
+                  <input
+                    type="password"
+                    placeholder="Contraseña"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="w-full bg-violet-600 text-white py-3 rounded-xl font-semibold hover:bg-violet-700 transition"
+                  >
+                    Registrarse
+                  </button>
+                </form>
+                <button
+                  onClick={() => setIsLogin(true)}
+                  className="mt-4 text-violet-600 hover:underline text-sm"
+                >
+                  ¿Ya tienes cuenta? Inicia sesión
+                </button>
+              </div>
 
-
-        </>
-    )
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              {/* Panel Morado */}
+              <div className="hidden md:flex flex-col justify-between items-start bg-violet-600 text-white p-10 w-1/2">
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">¡Hola de nuevo!</h2>
+                  <p className="text-sm">Regresa para seguir con nosotros</p>
+                </div>
+                <img src="" alt="" className="max-w-xs mx-auto" />
+                <button
+                  onClick={() => setIsLogin(true)}
+                  className="mt-4 py-2 px-6 bg-white text-violet-600 rounded-xl font-semibold hover:bg-gray-100"
+                >
+                  Iniciar Sesión
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+};
