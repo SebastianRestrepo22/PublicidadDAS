@@ -16,10 +16,10 @@ export const Inicio = () => {
     return (
         <>
             <Navbar />
-            <main className="transition-all">
+            <main className="transition-all pt-20">
 
                 {/* Carrusel */}
-                <div className="container">
+                <div className="container ">
                     <div className="slide">
                         <div className="item" style={{ backgroundImage: `url(/multimedia/litografia1.png)` }}>
                             <div className="content">

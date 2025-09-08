@@ -15,6 +15,7 @@ import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
 import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
 import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
 import { Servicios } from "../features/landing/nuestrosproductos/servicios"
+import { Error404 } from "../features/404/error404"
 
 export const Routers = () => {
     return (
@@ -38,6 +39,8 @@ export const Routers = () => {
                     <Route path="estadosVentas" element={<EstadosVentas />} />
                     <Route path="metodoDePago" element={<MetodoDePago />} />
                 </Route>
+
+                <Route path="*" element={<Error404 />}/>
             </Routes>
         </>
     )

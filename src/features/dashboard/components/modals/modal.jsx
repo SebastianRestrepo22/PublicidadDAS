@@ -1,4 +1,4 @@
-export default function ModalInsumoCreate({ open, onClose, children }) {
+export default function Modal({ open, onClose, children }) {
     return(
         <>
             <div onClick={onClose} className={`
