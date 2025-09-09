@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
+import { Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Productos = () => {
   const products = [
@@ -40,21 +42,24 @@ export const Productos = () => {
       <Navbar />
 
       {/* Sección de categoria y la barra de busqueda */}
-      <div className="flex bg-[#B1B8C0] justify-center pt-20">
-        <div className="m-3">
-          <select className="border border-gray-300 rounded-lg px-3 py-2">
+
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 pt-12">
+        <div className="flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <select className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]">
             <option value="">Categorias</option>
             <option value="id">Gran formato</option>
             <option value="Nombre del Insumo">Stickers / Etiquetas</option>
             <option value="Stock">Folletos / Trípticos</option>
             <option value="Stock">Posters / Pósters</option>
           </select>
-        </div>
-
-        <div className="relative m-3">
-          <img src="/public/multimedia/lupa.png" alt="Buscar" className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-
-          <input type="text" placeholder="Buscar" className="border border-gray-300 rounded-lg px-4 py-2 w-80 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Buscar producto"
+              className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
+            />
+          </div>
         </div>
       </div>
 
@@ -64,8 +69,8 @@ export const Productos = () => {
         <p className="text-gray-400 text-center mb-12">Descubra nuestros productos y transforma tus ideas en impresiones únicas.</p>
 
         <div className="relative">
-          <button onClick={() => slide(-1)} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg z-10"><i className="bx bx-chevron-left text-3xl w9"></i></button>
-          <button onClick={() => slide(1)} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg z-10"><i className="bx bx-chevron-right text-3xl w9"></i></button>
+          <button onClick={() => slide(-1)} className="absolute left-[-60px] top-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg z-10"><i className="bx bx-chevron-left text-3xl w9"></i></button>
+          <button onClick={() => slide(1)} className="absolute right-[-60px] top-1/2 -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg z-10"><i className="bx bx-chevron-right text-3xl w9"></i></button>
 
           <div className="overflow-hidden">
             <div ref={carouselRef} className="carousel-container flex gap-6 overflow-hidden py-8 px-8 scroll-smooth">
@@ -134,106 +139,67 @@ export const Productos = () => {
       </section>
 
 
-      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">Nuestros productos</h1>
+      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 pt-10">Nuestros productos</h1>
       <div className="card-container">
+
         <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <img src="https://assets.freelogoservices.com/sites/all/themes/freelogoservices/images/bcworkflow/bc_lp_grey_top_bkg.png" alt="" />
           <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
+            <div>
+              <h3>Tarjetas de presentación</h3>
+            </div>
+
+            <div>
+              <p>
+                Tarjetas personalizadas con información de contacto, ideales para networking y promoción profesional.
+              </p>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <Link className="btn" to='/carritoproducto'>Añadir al carrito</Link>
+              <p class="text-green-600 font-bold text-2xl mb-4 m-7">$60.000</p>
+            </div>
           </div>
         </div>
 
         <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <img src="https://alsurestudio.es/wp-content/uploads/2024/01/papeleria-corporativa-alsurestudio-01.jpg" alt="" />
           <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
+            <div>
+              <h3>Papelería corporativa</h3>
+            </div>
+
+            <div>
+              <p>
+                Incluye hojas membretadas, sobres y tarjetas de presentación, diseñadas para mantener una imagen coherente de la empresa.              </p>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <Link className="btn" to='/carritoproducto'>Añadir al carrito</Link>
+              <p class="text-green-600 font-bold text-2xl mb-4 m-7">$60.000</p>
+            </div>
           </div>
         </div>
 
         <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
+          <img src="https://impresosrichard.com/wp-content/uploads/2018/11/producto_afiches_5.jpg" alt="" />
           <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
+            <div>
+              <h3>Volantes y afiches</h3>
+            </div>
+
+            <div>
+              <p>
+                Material publicitario impreso en papel de alta calidad, utilizado para promociones, eventos o campañas publicitarias.              </p>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <Link className="btn" to='/carritoproducto'>Añadir al carrito</Link>
+              <p class="text-green-600 font-bold text-2xl mb-4 m-7">$60.000</p>
+            </div>
           </div>
         </div>
 
-        <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-          <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
-          </div>
-        </div>
-
-        <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-          <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
-          </div>
-        </div>
-
-        <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-          <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
-          </div>
-        </div>
-
-        <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-          <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
-          </div>
-        </div>
-
-        <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-          <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
-          </div>
-        </div>
-
-        <div className="card">
-          <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-          <div className="card-content">
-            <h3>Card 1</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-            </p>
-            <a href="" className="btn">Read More</a>
-          </div>
-        </div>
       </div>
       <Footer />
     </>

@@ -13,56 +13,61 @@ export const Navbar = () => {
             document.body.classList.remove("menu-open");
         }
     }
+
     return (
-        <>
-            <header>
-                <nav className="fixed top-0 left-0 w-full p-0 h-20 bg-[#25395C] shadow md:flex md:items-center md:justify-between z-50">
-                    <div className="flex justify-between items-center">
-                        <div className="flex items-center cursor-pointer relative z-50">
-                            <img src="/public/multimedia/logo.png" alt="Logo" className="h-[90px] w-auto inline" />
-                        </div>
-                        <span className="text-3xl cursor-pointer md:hidden block">
-                            <ion-icon name="menu-outline" onClick={(e) => Menu(e.target)}></ion-icon>
-                        </span>
-                    </div>
+        <header>
+            <nav className="bg-[#25395C] fixed top-0 left-0 w-full p-0 h-14 shadow z-50 flex items-center justify-between">
+                
+                <div className="flex items-center">
+                    <img src="/public/multimedia/logo.png" alt="Logo" className="h-[80px] w-auto" />
+                </div>
 
-                    <ul className="md:flex md:items-center z-40 md:z-auto md:static absolute bg-[#25395C] w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500">
-                        <li className="mx-10 my-6 md:my-0">
-                            <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
-                        </li>
-                        <li className="relative mx-10 my-6 md:my-0 group">
-                            <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500">
-                                Nuestros productos
-                            </Link>
-                            <ul className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                                <li>
-                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-cyan-500 hover:text-white rounded-t-lg" to="/productos">
-                                        Productos
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link className="block px-4 py-2 text-gray-800 hover:bg-cyan-500 hover:text-white rounded-b-lg" to="/servicios">
-                                        Servicios
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+                <ul className="hidden md:flex mx-auto items-center} gap-10">
+                    <li>
+                        <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
+                    </li>
 
-                        <li className="mx-10 my-6 md:my-0">
-                            <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/quienessomos'>Quienes somos</Link>
-                        </li>
-                        <li className="mx-10 my-6 md:my-0">
-                            <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/login'>Login</Link>
-                        </li>
-                        <div>
-                            <img src="/public/multimedia/carritoCompras.png" alt="CarritoCompras" className="h-12 inline duration-500 px-5 py-2 mx-4" />
-                        </div>
+                    <li className="relative group">
+                        <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500">
+                            Nuestros productos
+                        </Link>
+                        <ul className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <li>
+                                <Link className="block px-4 py-2 text-gray-800 hover:bg-cyan-500 hover:text-white rounded-t-lg" to="/productos">
+                                    Productos
+                                </Link>
+                            </li>
+                            <li>
+                                <Link className="block px-4 py-2 text-gray-800 hover:bg-cyan-500 hover:text-white rounded-b-lg" to="/servicios">
+                                    Servicios
+                                </Link>
+                            </li>
+                        </ul>
+                    </li>
 
-                    </ul>
-                </nav>
-            </header>
+                    <li>
+                        <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/quienessomos'>Quienes somos</Link>
+                    </li>
+                </ul>
 
+                <div className="flex items-center gap-2">
+                    <Link className="flex items-center justify-center text-white w-12 h-10 transition-all duration-300 shadow-md hover:shadow-xl hover:bg-blue-500/10 rounded-full">
+                        <img src="/multimedia/user.png" alt="user" className="h-8 cursor-pointer px-1 mx-4 hover:scale-110 transition-transform duration-300" />
+                    </Link>
 
-        </>
+                    <li className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
+                        <Link className="text-white font-bold text-xl" to='/login'>Login</Link>
+                    </li>
+
+                    <Link to='/carritodecompras' className="flex items-center justify-center text-white w-12 h-10 transition-all duration-300 shadow-md hover:shadow-xl hover:bg-blue-500/10 rounded-full">
+                        <img src="/public/multimedia/carritoCompras.png" alt="CarritoCompras" className="h-8 cursor-pointer px-1 mx-4 hover:scale-110 transition-transform duration-300" />
+                    </Link>
+
+                    <span className="text-3xl cursor-pointer md:hidden block">
+                        <ion-icon name="menu-outline" onClick={(e) => Menu(e.target)}></ion-icon>
+                    </span>
+                </div>
+            </nav>
+        </header>
     )
 }
