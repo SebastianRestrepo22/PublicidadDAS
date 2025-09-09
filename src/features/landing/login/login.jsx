@@ -8,7 +8,7 @@ export const Login = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 pt-20">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
         {/* CONTENEDOR PRINCIPAL */}
         <div className="w-[90%] max-w-4xl h-[600px] bg-white rounded-3xl shadow-2xl overflow-hidden relative">
           {/* CONTENEDOR DESLIZANTE */}
