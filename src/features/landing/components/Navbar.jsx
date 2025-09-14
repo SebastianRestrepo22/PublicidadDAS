@@ -19,7 +19,7 @@ export const Navbar = () => {
             <nav className="bg-[#25395C] fixed top-0 left-0 w-full p-0 h-14 shadow z-50 flex items-center justify-between">
                 
                 <div className="flex items-center">
-                    <img src="/public/multimedia/logo.png" alt="Logo" className="h-[80px] w-auto" />
+                    <img src="/public/multimedia/logo.png" alt="Logo" className="h-[40px] w-auto" />
                 </div>
 
                 <ul className="hidden md:flex mx-auto items-center} gap-10 mr-[200px]">

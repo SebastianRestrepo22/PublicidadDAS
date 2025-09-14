@@ -62,26 +62,26 @@ export const Ventas = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="flex flex-col gap-2">
                         <label className="font-medium">Venta ID</label>
-                        <input type="text" placeholder="1" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" placeholder="Ingrese el ID" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="font-medium">Cedula ID</label>
-                        <input type="text" placeholder="1001" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" placeholder="Ingrese la cedula del usuario" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="font-medium">Nombre</label>
-                        <input type="text" placeholder="Litografía Central" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" placeholder="Ingrese el nombre del usuario" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-2">
                         <label className="font-medium">Fecha de registro venta</label>
-                        <input type="date" placeholder="2025-09-01" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="date" placeholder="Ingrese la fecha de registro" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="font-medium">Método de pago</label>
-                        <input type="text" placeholder="Efectivo" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <input type="text" placeholder="Ingrese el metodo de pago" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
                 </div>
 
@@ -92,13 +92,13 @@ export const Ventas = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-8 gap-4">
-                    <div className="flex flex-col gap-2"><label className="font-medium">ID</label><input type="text" placeholder="1" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Nombre</label><input type="text" placeholder="Calendario" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Tipo</label><input type="text" placeholder="Producto" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Descripción</label><input type="text" placeholder="Con pinzas" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Cantidad</label><input type="text" placeholder="10" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Alto</label><input type="text" placeholder="10 cm" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Ancho</label><input type="text" placeholder="5 cm" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2"><label className="font-medium">ID</label><input type="text" placeholder="Ingrese el id" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2"><label className="font-medium">Nombre</label><input type="text" placeholder="Ingrese el nombre" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2"><label className="font-medium">Tipo</label><input type="text" placeholder="Ingrese el tipo" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2"><label className="font-medium">Descripción</label><input type="text" placeholder="Ingrese la descripcion" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2"><label className="font-medium">Cantidad</label><input type="text" placeholder="Ingrese la cantidad" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2"><label className="font-medium">Alto</label><input type="text" placeholder="Ingrese el alto" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2"><label className="font-medium">Ancho</label><input type="text" placeholder="Ingrese el ancho" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
                     <div className="flex flex-col gap-2"><label className="font-medium">Descuento</label><input type="text" placeholder="5%" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
                 </div>
 

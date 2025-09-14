@@ -25,7 +25,7 @@ export const Proveedores = () => {
           <label>ID</label>
           <input
             type="text"
-            placeholder="1"
+            placeholder="Ingrese el ID"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -34,7 +34,7 @@ export const Proveedores = () => {
           <label>Nombre</label>
           <input
             type="text"
-            placeholder="Proveedor A"
+            placeholder="Ingrese el nombre"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -43,7 +43,7 @@ export const Proveedores = () => {
           <label>Teléfono</label>
           <input
             type="text"
-            placeholder="123456789"
+            placeholder="Ingrese el telefono"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -52,7 +52,7 @@ export const Proveedores = () => {
           <label>Correo</label>
           <input
             type="email"
-            placeholder="correo@mail.com"
+            placeholder="Ingrese el correo"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -61,7 +61,7 @@ export const Proveedores = () => {
           <label>Dirección</label>
           <input
             type="text"
-            placeholder="Calle 123"
+            placeholder="Ingrese la dirección"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -70,7 +70,7 @@ export const Proveedores = () => {
           <label>Estado</label>
           <input
             type="text"
-            placeholder="Activo"
+            placeholder="Ingrese el estado"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
