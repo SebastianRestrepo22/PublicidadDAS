@@ -22,7 +22,7 @@ export const Navbar = () => {
                     <img src="/public/multimedia/logo.png" alt="Logo" className="h-[40px] w-auto" />
                 </div>
 
-                <ul className="hidden md:flex mx-auto items-center} gap-10 mr-[200px]">
+                <ul className="hidden md:flex mx-auto items-center} gap-10">
                     <li>
                         <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
                     </li>
@@ -50,10 +50,9 @@ export const Navbar = () => {
                     </li>
                 </ul>
 
-                <div className="flex items-center gap-2 mr-10">
-                    <Link className="flex items-center justify-center text-white w-12 h-10 transition-all duration-300 shadow-md hover:shadow-xl hover:bg-blue-500/10 rounded-full">
-                        <img src="/multimedia/user.png" alt="user" className="h-8 cursor-pointer px-1 mx-4 hover:scale-110 transition-transform duration-300" />
-                    </Link>
+
+
+                <div className="flex items-center gap-2">
                     
 
                     <li className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
