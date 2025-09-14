@@ -28,7 +28,7 @@ export const Insumos = () => {
           <label>ID</label>
           <input
             type="text"
-            placeholder="1"
+            placeholder="Ingrese el ID"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -37,7 +37,7 @@ export const Insumos = () => {
           <label>Nombre del insumo</label>
           <input
             type="text"
-            placeholder="Tintas"
+            placeholder="Ingrese el nombre"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -46,7 +46,7 @@ export const Insumos = () => {
           <label>Stock</label>
           <input
             type="number"
-            placeholder="50"
+            placeholder="Ingrese el stock"
             readOnly={isReadOnly}
             className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
