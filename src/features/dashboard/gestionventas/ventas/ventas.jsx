@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Edit, Eye, Trash2 } from "lucide-react";
+import { Plus, Edit, Eye, Trash2, ChevronRight, ChevronDown } from "lucide-react";
 import Modal from "../../components/modals/modal";
 
 export const Ventas = () => {
@@ -8,6 +8,13 @@ export const Ventas = () => {
     const [openEditar, setOpenEditar] = useState(false);
     const [openVer, setOpenVer] = useState(false);
     const [openEliminar, setOpenEliminar] = useState(false);
+
+    // Controlar qué fila está expandida
+    const [openRow, setOpenRow] = useState(null);
+
+    const toggleRow = (id) => {
+        setOpenRow(openRow === id ? null : id);
+    };
 
     // Datos de ejemplo
     const ventas = [
@@ -29,7 +36,7 @@ export const Ventas = () => {
                     alto: "9 cm",
                     ancho: "5 cm",
                     descuento: "0%",
-                    url: "/public/img/tarjetas.png"
+                    url: "img"
                 },
                 {
                     id: "P002",
@@ -40,7 +47,7 @@ export const Ventas = () => {
                     alto: "42 cm",
                     ancho: "29.7 cm",
                     descuento: "5%",
-                    url: "/public/img/afiche.png"
+                    url: "img"
                 }
             ]
         }
@@ -53,17 +60,36 @@ export const Ventas = () => {
         return (
             <form className="flex flex-col gap-6 p-4 bg-white rounded-lg shadow-md">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="flex flex-col gap-2"><label className="font-medium">Venta ID</label><input type="text" placeholder="1" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Cedula ID</label><input type="text" placeholder="1001" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Nombre</label><input type="text" placeholder="Litografía Central" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2">
+                        <label className="font-medium">Venta ID</label>
+                        <input type="text" placeholder="1" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="font-medium">Cedula ID</label>
+                        <input type="text" placeholder="1001" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="font-medium">Nombre</label>
+                        <input type="text" placeholder="Litografía Central" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex flex-col gap-2"><label className="font-medium">Fecha de registro venta</label><input type="date" placeholder="2025-09-01" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                    <div className="flex flex-col gap-2"><label className="font-medium">Método de pago</label><input type="text" placeholder="Efectivo" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                    <div className="flex flex-col gap-2">
+                        <label className="font-medium">Fecha de registro venta</label>
+                        <input type="date" placeholder="2025-09-01" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="font-medium">Método de pago</label>
+                        <input type="text" placeholder="Efectivo" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
                 </div>
 
-                <div className="flex justify-end"><Link className="inline-flex h-10 items-center gap-2 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium"><Plus size={15} /> Añadir item</Link></div>
+                <div className="flex justify-end">
+                    <Link className="inline-flex h-10 items-center gap-2 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
+                        <Plus size={15} /> Añadir item
+                    </Link>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-8 gap-4">
                     <div className="flex flex-col gap-2"><label className="font-medium">ID</label><input type="text" placeholder="1" readOnly={isReadOnly} className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
@@ -78,11 +104,20 @@ export const Ventas = () => {
 
                 <div className="flex flex-col md:flex-row gap-4 mt-4 items-center">
                     {type !== "ver" && <button className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition-colors">{buttonLabel}</button>}
-                    <button type="button" className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors" onClick={() => { if (type === "create") setOpenCreate(false); else if (type === "editar") setOpenEditar(false); else if (type === "ver") setOpenVer(false); }}>{type === "ver" ? "Cerrar" : "Cancelar"}</button>
+                    <button
+                        type="button"
+                        className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors"
+                        onClick={() => {
+                            if (type === "create") setOpenCreate(false);
+                            else if (type === "editar") setOpenEditar(false);
+                            else if (type === "ver") setOpenVer(false);
+                        }}
+                    >
+                        {type === "ver" ? "Cerrar" : "Cancelar"}
+                    </button>
                     <h1 className="font-bold text-lg">Total: 30000</h1>
                 </div>
             </form>
-
         );
     };
 
@@ -163,11 +198,12 @@ export const Ventas = () => {
                     </div>
                 </Modal>
 
-                {/* Tabla principal con scroll vertical y horizontal */}
+                {/* Tabla principal con scroll */}
                 <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-auto max-h-[600px]">
                     <table className="min-w-full table-auto">
                         <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
                             <tr>
+                                <th className="py-4 px-6"></th>
                                 <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">VentaID</th>
                                 <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Cedula ID</th>
                                 <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Nombre</th>
@@ -181,7 +217,10 @@ export const Ventas = () => {
                         <tbody className="divide-y divide-slate-100">
                             {ventas.map((venta) => (
                                 <React.Fragment key={venta.id}>
-                                    <tr className="hover:bg-slate-50 transition-colors">
+                                    <tr className="hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => toggleRow(venta.id)}>
+                                        <td className="py-4 px-6 text-slate-600">
+                                            {openRow === venta.id ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                                        </td>
                                         <td className="py-4 px-6 text-sm font-medium text-slate-900">{venta.id}</td>
                                         <td className="py-4 px-6 text-sm font-medium text-slate-900">{venta.cedula}</td>
                                         <td className="py-4 px-6 text-sm font-medium text-slate-900">{venta.nombre}</td>
@@ -198,10 +237,10 @@ export const Ventas = () => {
                                         </td>
                                     </tr>
 
-                                    {/* Detalle */}
-                                    {venta.detalle.map((item, idx) => (
-                                        <tr key={idx} className="bg-gray-50 hover:bg-gray-100 transition-colors">
-                                            <td colSpan="8" className="py-3 px-6">
+                                    {/* Detalle expandible */}
+                                    {openRow === venta.id && (
+                                        <tr className="bg-gray-50">
+                                            <td colSpan="9" className="p-4">
                                                 <div className="overflow-x-auto">
                                                     <table className="min-w-full border border-gray-200 rounded-lg">
                                                         <thead className="bg-gray-200">
@@ -219,36 +258,38 @@ export const Ventas = () => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr className="hover:bg-gray-100">
-                                                                <td className="py-2 px-4">{item.id}</td>
-                                                                <td className="py-2 px-4">{item.nombre}</td>
-                                                                <td className="py-2 px-4">{item.tipo}</td>
-                                                                <td className="py-2 px-4">{item.descripcion}</td>
-                                                                <td className="py-2 px-4">{item.cantidad}</td>
-                                                                <td className="py-2 px-4">{item.alto}</td>
-                                                                <td className="py-2 px-4">{item.ancho}</td>
-                                                                <td className="py-2 px-4">{item.descuento}</td>
-                                                                <td className="py-2 px-4">{item.url}</td>
-                                                                <td className="py-2 px-4">
-                                                                    <div className="flex gap-2">
-                                                                        <Link>
-                                                                            <Edit size={14} className="text-blue-600 hover:text-blue-800" />
-                                                                        </Link>
-                                                                        <Link>
-                                                                            <Eye size={14} className="text-emerald-600 hover:text-emerald-800" />
-                                                                        </Link>
-                                                                        <Link>
-                                                                            <Trash2 size={14} className="text-red-600 hover:text-red-800" />
-                                                                        </Link>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
+                                                            {venta.detalle.map((item, idx) => (
+                                                                <tr key={idx} className="hover:bg-gray-100">
+                                                                    <td className="py-2 px-4">{item.id}</td>
+                                                                    <td className="py-2 px-4">{item.nombre}</td>
+                                                                    <td className="py-2 px-4">{item.tipo}</td>
+                                                                    <td className="py-2 px-4">{item.descripcion}</td>
+                                                                    <td className="py-2 px-4">{item.cantidad}</td>
+                                                                    <td className="py-2 px-4">{item.alto}</td>
+                                                                    <td className="py-2 px-4">{item.ancho}</td>
+                                                                    <td className="py-2 px-4">{item.descuento}</td>
+                                                                    <td className="py-2 px-4">{item.url}</td>
+                                                                    <td className="py-2 px-4">
+                                                                        <div className="flex gap-2">
+                                                                            <Link onClick={() => setOpenEditar(true)}>
+                                                                                <Edit size={14} className="text-blue-600 hover:text-blue-800" />
+                                                                            </Link>
+                                                                            <Link onClick={() => setOpenVer(true)}>
+                                                                                <Eye size={14} className="text-emerald-600 hover:text-emerald-800" />
+                                                                            </Link>
+                                                                            <Link onClick={() => setOpenEliminar(true)}>
+                                                                                <Trash2 size={14} className="text-red-600 hover:text-red-800" />
+                                                                            </Link>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </td>
                                         </tr>
-                                    ))}
+                                    )}
                                 </React.Fragment>
                             ))}
                         </tbody>

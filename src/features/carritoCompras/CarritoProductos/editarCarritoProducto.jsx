@@ -3,14 +3,14 @@ import { Navbar } from "../../landing/components/Navbar";
 import { Footer } from "../../landing/components/footer";
 import { Link } from "react-router-dom";
 
-export const CarritoProducto = () => {
+export const EditarCarritoProducto = () => {
     return (
         <div className="flex flex-col min-h-screen pt-[150px]">
             <Navbar />
             
             {/* Contenido principal */}
             <div className="container mx-auto px-4 pt-20 flex-1">
-                <Link to='/productos' className="bg-gray-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-gray-700 transition duration-300">
+                <Link to='/carritodecompras' className="bg-gray-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-gray-700 transition duration-300">
                     Regresar
                 </Link>
 
@@ -49,7 +49,7 @@ export const CarritoProducto = () => {
                         </div>
 
                         <Link to='/carritodecompras' className="bg-black text-white p-3 rounded-xl hover:bg-gray-900 font-bold transition duration-300 text-center">
-                            Añadir al carrito
+                            Editar
                         </Link>
                     </form>
                 </div>

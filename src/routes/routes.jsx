@@ -18,6 +18,7 @@ import { Servicios } from "../features/landing/nuestrosproductos/servicios"
 import { Error404 } from "../features/404/error404"
 import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
 import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
+import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
 import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
 
 export const Routers = () => {
@@ -32,7 +33,9 @@ export const Routers = () => {
 
                 
                 <Route path="/carritodecompras" element={<CarritoCompras />} />
+
                 <Route path="/carritoproducto" element={<CarritoProducto />} />
+                <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
 
 
                 <Route path="/dashboard" element={<DashboardLayout />}>
