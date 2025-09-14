@@ -8,7 +8,7 @@ export const CarritoProducto = () => {
         <div className="flex flex-col min-h-screen pt-[150px]">
             <Navbar />
             
-            {/* Contenido principal */}
+            {/* Contenido principal  */}
             <div className="container mx-auto px-4 pt-20 flex-1">
                 <Link to='/productos' className="bg-gray-800 text-white font-bold px-6 py-3 rounded-xl hover:bg-gray-700 transition duration-300">
                     Regresar
