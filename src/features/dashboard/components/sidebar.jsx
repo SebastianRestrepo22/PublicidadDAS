@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 const menuItems = [
-  { icon: BarChart3, label: "Gráficos Estadísticos", to: "/dashboard/insumos" },
+  { icon: BarChart3, label: "Gráficos Estadísticos", to: "/dashboard/graficosEstadisticos" },
   { icon: UserCheck, label: "Roles", to: "/dashboard/roles" },
   { icon: Users, label: "Usuarios", to: "/dashboard/usuarios" },
   { icon: Wrench, label: "Servicios", to: "/dashboard/productoServicio" },
@@ -56,14 +56,14 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="w-52 h-screen bg-gray-900 text-white flex flex-col">
+    <div className="w-52 min-h-screen bg-gray-900 text-white flex flex-col">
       {/* Encabezado */}
       <div className="p-4 pb-6 border-b border-gray-700">
         <h1 className="text-lg font-bold text-white tracking-tight">Dashboard</h1>
       </div>
 
       {/* Menú */}
-      <nav className="flex-1 py-4 overflow-y-auto">
+      <nav className="flex-1 py-4 ">
         <ul className="space-y-1">
           {menuItems.map((item, index) => (
             <li key={index}>
