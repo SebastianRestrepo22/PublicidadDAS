@@ -12,7 +12,7 @@ export const EstadosVentas = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-slate-800 mb-6">Estados de ventas</h1>
 
         {/* Barra de búsqueda */}
@@ -37,27 +37,20 @@ export const EstadosVentas = () => {
           </div>
         </div>
 
-        {/* Tabla más pequeña */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto max-w-lg mx-auto">
-          <table className="w-full">
+        {/* Tabla */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+          <table className="min-w-full">
             <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
               <tr>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Nombre del estado
-                </th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">ID</th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Nombre del estado</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {estados.map((estado) => (
-                <tr
-                  key={estado.id}
-                  className="hover:bg-slate-50 transition-colors duration-150"
-                >
-                  <td className="py-3 px-4 text-sm font-medium text-slate-900">{estado.id}</td>
-                  <td className="py-3 px-4 text-sm font-medium text-slate-900">{estado.nombre}</td>
+                <tr key={estado.id} className="hover:bg-slate-50 transition-colors duration-150">
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{estado.id}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{estado.nombre}</td>
                 </tr>
               ))}
             </tbody>
