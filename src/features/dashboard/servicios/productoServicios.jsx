@@ -10,9 +10,9 @@ export const ProductoServicios = () => {
   const [openEliminar, setOpenEliminar] = useState(false);
 
   const productos = [
-    { id: 1, tipo: "producto", nombre: "Tintas", descripcion: "Tinta negra para impresora", url: "img", precio: 10, descuento: 0, stock: 50, esPersonalizado: false, categoriaId: 1 },
-    { id: 2, tipo: "producto", nombre: "Papel Couché", descripcion: "Papel de alta calidad", url: "img", precio: 5, descuento: 0, stock: 200, esPersonalizado: false, categoriaId: 2 },
-    { id: 3, tipo: "producto", nombre: "Barniz UV", descripcion: "Barniz protector", url: "img", precio: 15, descuento: 0, stock: 75, esPersonalizado: false, categoriaId: 3 },
+    { id: 1, tipo: "producto", nombre: "Tintas", descripcion: "Tinta negra para impresora", url: "https://example.com/tintas.jpg", precio: 10, descuento: 0, stock: 50, esPersonalizado: false, categoriaId: 1 },
+    { id: 2, tipo: "producto", nombre: "Papel Couché", descripcion: "Papel de alta calidad", url: "https://example.com/papel.jpg", precio: 5, descuento: 0, stock: 200, esPersonalizado: false, categoriaId: 2 },
+    { id: 3, tipo: "producto", nombre: "Barniz UV", descripcion: "Barniz protector", url: "https://example.com/barniz.jpg", precio: 15, descuento: 0, stock: 75, esPersonalizado: false, categoriaId: 3 },
   ];
 
   const formFields = [
