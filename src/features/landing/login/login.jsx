@@ -1,9 +1,47 @@
 import { useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+
+  //Sección del registro
+
+  const [values, setValues] = useState({
+    CedulaId: '',
+    NombreCompleto: '',
+    Telefono: '',
+    CorreoElectronico: '',
+    Direccion: '',
+    Contrasena: ''
+  });
+
+  const handleChanges = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post('http://localhost:3000/auth/register', values);
+      if (response.status === 201) {
+        setIsLogin(true);
+        setValues({
+          CedulaId: '',
+          NombreCompleto: '',
+          Telefono: '',
+          CorreoElectronico: '',
+          Direccion: '',
+          Contrasena: ''
+        });
+      }
+      console.log("Datos enviados:", values);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -13,9 +51,8 @@ export const Login = () => {
         <div className="w-[90%] max-w-4xl h-[600px] bg-white rounded-3xl shadow-2xl overflow-hidden relative">
           {/* CONTENEDOR DESLIZANTE */}
           <div
-            className={`flex w-[200%] h-full transition-transform duration-700 ease-in-out ${
-              isLogin ? "translate-x-0" : "-translate-x-1/2"
-            }`}
+            className={`flex w-[200%] h-full transition-transform duration-700 ease-in-out ${isLogin ? "translate-x-0" : "-translate-x-1/2"
+              }`}
           >
             {/* PANEL LOGIN */}
             <div className="w-1/2 flex flex-col md:flex-row">
@@ -25,7 +62,7 @@ export const Login = () => {
                   <h2 className="text-3xl font-bold mb-2">¡Bienvenido!</h2>
                   <p className="text-sm">Inicia sesión para continuar</p>
                 </div>
-                <img src="" alt="" className="max-w-xs mx-auto" />
+                <img src="img" alt="..." className="max-w-xs mx-auto" />
                 <button
                   onClick={() => setIsLogin(false)}
                   className="mt-4 py-2 px-6 bg-white text-violet-600 rounded-xl font-semibold hover:bg-gray-100"
@@ -70,29 +107,51 @@ export const Login = () => {
             <div className="w-1/2 flex flex-col md:flex-row">
               {/* Formulario Registro */}
               <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
-                <h1 className="text-4xl font-bold text-center mb-6">
+                <h1 className="text-2xl font-bold text-center mb-2">
                   Crear Cuenta
                 </h1>
-                <form className="space-y-5">
+                <form className="space-y-3" onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    placeholder="Cedula"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.CedulaId}
+                    name="CedulaId" onChange={handleChanges}
+                  />
                   <input
                     type="text"
                     placeholder="Nombre Completo"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.NombreCompleto} 
+                    name="NombreCompleto" onChange={handleChanges}
                   />
                   <input
                     type="email"
                     placeholder="Correo electrónico"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.CorreoElectronico}
+                    name="CorreoElectronico" onChange={handleChanges}
                   />
                   <input
                     type="text"
                     placeholder="Dirección"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.Direccion}
+                    name="Direccion" onChange={handleChanges}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Telefono"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.Telefono}
+                    name="Telefono" onChange={handleChanges}
                   />
                   <input
                     type="password"
                     placeholder="Contraseña"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.Contrasena}
+                    name="Contrasena" onChange={handleChanges}
                   />
                   <button
                     type="submit"
@@ -103,7 +162,7 @@ export const Login = () => {
                 </form>
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="mt-4 text-violet-600 hover:underline text-sm"
+                  className="mt-2 text-violet-600 hover:underline text-sm"
                 >
                   ¿Ya tienes cuenta? Inicia sesión
                 </button>
@@ -115,7 +174,7 @@ export const Login = () => {
                   <h2 className="text-3xl font-bold mb-2">¡Hola de nuevo!</h2>
                   <p className="text-sm">Regresa para seguir con nosotros</p>
                 </div>
-                <img src="" alt="" className="max-w-xs mx-auto" />
+                <img src="img" alt="..." className="max-w-xs mx-auto" />
                 <button
                   onClick={() => setIsLogin(true)}
                   className="mt-4 py-2 px-6 bg-white text-violet-600 rounded-xl font-semibold hover:bg-gray-100"
