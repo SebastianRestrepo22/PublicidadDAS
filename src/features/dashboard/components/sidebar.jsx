@@ -12,6 +12,7 @@ import {
   CreditCard,
   ChevronDown,
   ChevronRight,
+  CalendarDays,
 } from "lucide-react";
 
 const menuItems = [
@@ -31,17 +32,9 @@ const menuItems = [
     ],
   },
   { icon: Palette, label: "Categoría de Diseño", to: "/dashboard/categoriaDeDiseño" },
-  {
-    icon: ShoppingCart,
-    label: "Gestión de Ventas",
-    to: "/dashboard/ventas",
-    hasSubmenu: true,
-    submenu: [
-      { label: "Ventas", to: "/dashboard/ventas" },
-      { label: "Estados de Ventas", to: "/dashboard/estadosVentas" },
-    ],
-  },
+  { icon: ShoppingCart, label: "Gestión de Ventas", to: "/dashboard/gestionVentas"},
   { icon: CreditCard, label: "Método de pago", to: "/dashboard/metodoDePago" },
+  { icon: CalendarDays, label: "Agenda", to: "/dashboard/agenda"},
 ];
 
 export const Sidebar = () => {

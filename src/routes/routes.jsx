@@ -6,8 +6,6 @@ import { Login } from "../features/landing/login/login"
 import { Insumos } from "../features/dashboard/constrolinsumos/insumos/insumos"
 import { ProductoServicios } from "../features/dashboard/servicios/productoServicios"
 import { Proveedores } from "../features/dashboard/constrolinsumos/proveedores/proveedores"
-import { Ventas } from "../features/dashboard/gestionventas/ventas/ventas"
-import { EstadosVentas } from "../features/dashboard/gestionventas/estadosventas/estadosVentas"
 import { Usuarios } from "../features/dashboard/usuarios/usuarios"
 import { Roles } from "../features/dashboard/roles/roles"
 import { Pedidos } from "../features/dashboard/pedidos/pedidos"
@@ -19,6 +17,7 @@ import { Error404 } from "../features/404/error404"
 import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
 import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
 import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
+import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas"
 
 export const Routers = () => {
     return (
@@ -44,8 +43,7 @@ export const Routers = () => {
                     <Route path="insumos" element={<Insumos />} />
                     <Route path="productoServicio" element={<ProductoServicios />} />
                     <Route path="proveedores" element={<Proveedores />} />
-                    <Route path="ventas" element={<Ventas />} />
-                    <Route path="estadosVentas" element={<EstadosVentas />} />
+                    <Route path="gestionVentas" element={<GestionVentas />} />
                     <Route path="metodoDePago" element={<MetodoDePago />} />
                 </Route>
 

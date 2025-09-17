@@ -18,17 +18,17 @@ export const Navbar = () => {
         <header>
             <nav className="bg-[#25395C] fixed top-0 left-0 w-full p-0 h-14 shadow z-50 flex items-center justify-between">
                 
-                <div className="flex items-center">
-                    <img src="/public/multimedia/logo.png" alt="Logo" className="h-[40px] w-auto" />
+                <div className="flex items-center ml-10">
+                    <img src="/public/multimedia/logo.png" alt="Logo" className="h-[30px] w-auto" />
                 </div>
 
                 <ul className="hidden md:flex mx-auto items-center} gap-10">
                     <li>
-                        <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
+                        <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
                     </li>
 
                     <li className="relative group">
-                        <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500">
+                        <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500">
                             Nuestros productos
                         </Link>
                         <ul className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
@@ -46,17 +46,17 @@ export const Navbar = () => {
                     </li>
 
                     <li>
-                        <Link className="text-white font-bold text-xl hover:text-cyan-500 duration-500" to='/quienessomos'>Quienes somos</Link>
+                        <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500" to='/quienessomos'>Quienes somos</Link>
                     </li>
                 </ul>
 
 
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mr-10">
                     
 
                     <li className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
-                        <Link className="text-white font-bold text-xl" to='/login'>Login</Link>
+                        <Link className="text-white font-bold text-[17px]" to='/login'>register</Link>
                     </li>
 
                     <Link to='/carritodecompras' className="flex items-center justify-center text-white w-12 h-10 transition-all duration-300 shadow-md hover:shadow-xl hover:bg-blue-500/10 rounded-full">
