@@ -22,7 +22,7 @@ export const Navbar = () => {
                     <img src="/public/multimedia/logo.png" alt="Logo" className="h-[30px] w-auto" />
                 </div>
 
-                <ul className="hidden md:flex mx-auto items-center} gap-10">
+                <ul className="hidden md:flex mx-auto items-center gap-10">
                     <li>
                         <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
                     </li>
@@ -53,14 +53,20 @@ export const Navbar = () => {
 
 
                 <div className="flex items-center gap-2 mr-10">
+<<<<<<< HEAD
                     
 
                     <li className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
                         <Link className="text-white font-bold text-[17px]" to='/login'>register</Link>
+=======
+
+                    <li className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
+                        <Link className="text-white font-bold text-[17px]" to='/login'>Login</Link>
+>>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
                     </li>
 
-                    <Link to='/carritodecompras' className="flex items-center justify-center text-white w-12 h-10 transition-all duration-300 shadow-md hover:shadow-xl hover:bg-blue-500/10 rounded-full">
-                        <img src="/public/multimedia/carritoCompras.png" alt="CarritoCompras" className="h-8 cursor-pointer px-1 mx-4 hover:scale-110 transition-transform duration-300" />
+                    <Link to='/carritodecompras' className="flex items-center justify-center text-white w-10 h-10 transition-all duration-300 shadow-md hover:shadow-xl hover:bg-blue-500/10 rounded-full">
+                        <img src="/public/multimedia/carritoCompras.png" alt="CarritoCompras" className="h-7 cursor-pointer px-1 mx-4 hover:scale-110 transition-transform duration-300" />
                     </Link>
 
                     <span className="text-3xl cursor-pointer md:hidden block">

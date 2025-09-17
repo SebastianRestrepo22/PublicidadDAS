@@ -91,7 +91,7 @@ export const Inicio = () => {
                             {/* Card 1 */}
                             <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300">
                                 <span className="material-icons text-4xl text-black-500 mb-4">thumb_up</span>
-                                <h1 className="text-2xl md:text-3xl font-bold mb-2">Calidad</h1>
+                                <h1 className="text-2xl md:text-3xl text-[#25395C] font-bold mb-2">Calidad</h1>
                                 <p className="text-gray-600 text-base md:text-lg">
                                     Productos de primera con materiales duraderos y acabados impecables para garantizar la mejor experiencia.
                                 </p>
@@ -100,7 +100,7 @@ export const Inicio = () => {
                             {/* Card 2 */}
                             <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300">
                                 <span className="material-icons text-4xl text-black-500 mb-4">attach_money</span>
-                                <h1 className="text-2xl md:text-3xl font-bold mb-2">Buenos precios</h1>
+                                <h1 className="text-2xl md:text-3xl text-[#25395C] font-bold mb-2">Buenos precios</h1>
                                 <p className="text-gray-600 text-base md:text-lg">
                                     Ofrecemos precios competitivos sin comprometer la calidad de nuestros productos y servicios.
                                 </p>
@@ -109,7 +109,7 @@ export const Inicio = () => {
                             {/* Card 3 */}
                             <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300">
                                 <span className="material-icons text-4xl text-black-500 mb-4">lightbulb</span>
-                                <h1 className="text-2xl md:text-3xl font-bold mb-2">Creatividad</h1>
+                                <h1 className="text-2xl md:text-3xl text-[#25395C] font-bold mb-2">Creatividad</h1>
                                 <p className="text-gray-600 text-base md:text-lg">
                                     Diseños únicos y originales que reflejan ideas innovadoras y atención al detalle.
                                 </p>
@@ -172,14 +172,6 @@ export const Inicio = () => {
 
                         {/* Card 1 */}
                         <div className="h-[260px] max-w-sm mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6 m-10">
-                            <div className="flex items-center mt-2 text-yellow-400">
-                                <p className="text-2xl">★★★★★</p>
-                            </div>
-
-                            <p className="text-gray-700 italic mb-4">
-                                “La calidad de las obras es excepcional. Cada pieza que he adquirido ha superado mis expectativas. El servicio al cliente es impecable.”
-                            </p>
-
                             <div className="flex items-center space-x-4 mb-4">
                                 <img
                                     className="w-16 h-16 rounded-full object-cover"
@@ -191,17 +183,17 @@ export const Inicio = () => {
                                     <p className="text-sm text-gray-500">Cliente Satisfecho</p>
                                 </div>
                             </div>
+                            <p className="text-gray-700 italic mb-4">
+                                “La calidad de las obras es excepcional. Cada pieza que he adquirido ha superado mis expectativas. El servicio al cliente es impecable.”
+                            </p>
+
+                            <div className="flex items-center mt-2 text-yellow-400">
+                                <p className="text-2xl">★★★★★</p>
+                            </div>
                         </div>
 
                         {/* Card 2 */}
                         <div className="h-[260px] max-w-sm mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6 m-10">
-                            <div className="flex items-center mt-2 text-yellow-400">
-                                <p className="text-2xl">★★★★★</p>
-                            </div>
-
-                            <p className="text-gray-700 italic mb-4">
-                                “Descubrí esta galería hace un año y desde entonces he adquirido varias obras. La autenticidad y el cuidado en cada detalle es notable.”
-                            </p>
 
                             <div className="flex items-center space-x-4 mb-4">
                                 <img
@@ -214,18 +206,18 @@ export const Inicio = () => {
                                     <p className="text-sm text-gray-500">Cliente Satisfecho</p>
                                 </div>
                             </div>
+
+                            <p className="text-gray-700 italic mb-4">
+                                “Descubrí esta galería hace un año y desde entonces he adquirido varias obras. La autenticidad y el cuidado en cada detalle es notable.”
+                            </p>
+
+                            <div className="flex items-center mt-2 text-yellow-400">
+                                <p className="text-2xl">★★★★★</p>
+                            </div>
                         </div>
 
                         {/* Card 3 */}
                         <div className="h-[260px] max-w-sm mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6 m-10">
-                            <div className="flex items-center mt-2 text-yellow-400">
-                                <p className="text-2xl">★★★★★</p>
-                            </div>
-
-                            <p className="text-gray-700 italic mb-4">
-                                “Trabajo frecuentemente con esta galería para mis proyectos. Sus piezas clásicas aportan elegancia y sofisticación a cualquier espacio.”
-                            </p>
-
                             <div className="flex items-center space-x-4 mb-4">
                                 <img
                                     className="w-16 h-16 rounded-full object-cover"
@@ -236,6 +228,14 @@ export const Inicio = () => {
                                     <h2 className="text-lg font-semibold text-gray-900">Andrés Restrepo</h2>
                                     <p className="text-sm text-gray-500">Cliente Satisfecho</p>
                                 </div>
+                            </div>
+
+                            <p className="text-gray-700 italic mb-4">
+                                “Trabajo frecuentemente con esta galería para mis proyectos. Sus piezas clásicas aportan elegancia y sofisticación a cualquier espacio.”
+                            </p>
+
+                            <div className="flex items-center mt-2 text-yellow-400">
+                                <p className="text-2xl">★★★★★</p>
                             </div>
                         </div>
                     </div>
