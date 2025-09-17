@@ -17,38 +17,34 @@ import { Error404 } from "../features/404/error404"
 import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
 import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
 import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
-import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas"
 import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
 
 export const Routers = () => {
     return (
-        <>
-            <Routes>
-                <Route path="/" element={<Inicio />} />
-                <Route path="/productos" element={<Productos />} />
-                <Route path="/servicios" element={<Servicios />} />
-                <Route path="/quienessomos" element={<QuienesSomos />} />
-                <Route path="/login" element={<Login />} />
+        <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/productos" element={<Productos />} />
+            <Route path="/servicios" element={<Servicios />} />
+            <Route path="/quienessomos" element={<QuienesSomos />} />
+            <Route path="/login" element={<Login />} />
 
-                <Route path="/carritodecompras" element={<CarritoCompras />} />
-                <Route path="/carritoproducto" element={<CarritoProducto />} />
-                <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
+            <Route path="/carritodecompras" element={<CarritoCompras />} />
+            <Route path="/carritoproducto" element={<CarritoProducto />} />
+            <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
 
-                <Route path="/dashboard" element={<DashboardLayout />}>
-                    <Route path="graficosEstadisticos" element={<GraficosEstadisticos />} />
-                    <Route path="usuarios" element={<Usuarios />} />
-                    <Route path="roles" element={<Roles />} />
-                    <Route path="pedidos" element={<Pedidos />} />
-                    <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
-                    <Route path="insumos" element={<Insumos />} />
-                    <Route path="productoServicio" element={<ProductoServicios />} />
-                    <Route path="proveedores" element={<Proveedores />} />
-                    <Route path="gestionVentas" element={<GestionVentas />} />
-                    <Route path="metodoDePago" element={<MetodoDePago />} />
-                </Route>
+            <Route path="/dashboard" element={<DashboardLayout />}>
+                <Route path="graficosEstadisticos" element={<GraficosEstadisticos />} />
+                <Route path="usuarios" element={<Usuarios />} />
+                <Route path="roles" element={<Roles />} />
+                <Route path="pedidos" element={<Pedidos />} />
+                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
+                <Route path="insumos" element={<Insumos />} />
+                <Route path="productoServicio" element={<ProductoServicios />} />
+                <Route path="proveedores" element={<Proveedores />} />
+                <Route path="metodoDePago" element={<MetodoDePago />} />
+            </Route>
 
-                <Route path="*" element={<Error404 />} />
-            </Routes>
-        </>
+            <Route path="*" element={<Error404 />} />
+        </Routes>
     )
 }

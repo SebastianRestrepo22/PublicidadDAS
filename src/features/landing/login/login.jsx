@@ -1,17 +1,10 @@
 import { useState } from "react";
 import { Navbar } from "../components/Navbar";
-<<<<<<< HEAD
-=======
-import { Footer } from "../components/footer";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   //Sección del registro
-
   const [values, setValues] = useState({
     CedulaId: '',
     NombreCompleto: '',
@@ -49,33 +42,16 @@ export const Login = () => {
   return (
     <>
       <Navbar />
-      <div className=" flex items-center justify-center bg-gray-100 pt-20">
+      <div className="flex items-center justify-center bg-gray-100 pt-20">
         <div className="w-[90%] max-w-2xl h-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden relative">
           <div
             className={`flex w-[200%] h-full transition-transform duration-700 ease-in-out ${isLogin ? "translate-x-0" : "-translate-x-1/2"
               }`}
           >
             <div className="w-1/2 flex flex-col md:flex-row">
-<<<<<<< HEAD
               <div className="hidden md:flex flex-col justify-between items-start text-white p-10 w-1/2 bg-cover bg-center"
-                style={{ backgroundImage: "url('/multimedia/login1.png') "}}
+                style={{ backgroundImage: "url('/multimedia/login1.png')" }}
               >
-                
-=======
-              {/* Panel Morado */}
-              <div className="hidden md:flex flex-col justify-between items-start bg-violet-600 text-white p-10 w-1/2">
-                <div>
-                  <h2 className="text-3xl font-bold mb-2">¡Bienvenido!</h2>
-                  <p className="text-sm">Inicia sesión para continuar</p>
-                </div>
-                <img src="img" alt="..." className="max-w-xs mx-auto" />
-                <button
-                  onClick={() => setIsLogin(false)}
-                  className="mt-4 py-2 px-6 bg-white text-violet-600 rounded-xl font-semibold hover:bg-gray-100"
-                >
-                  Registrarse
-                </button>
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
               </div>
 
               <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
@@ -126,7 +102,7 @@ export const Login = () => {
                     type="text"
                     placeholder="Nombre Completo"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.NombreCompleto} 
+                    value={values.NombreCompleto}
                     name="NombreCompleto" onChange={handleChanges}
                   />
                   <input
@@ -166,43 +142,20 @@ export const Login = () => {
                 </form>
                 <button
                   onClick={() => setIsLogin(true)}
-<<<<<<< HEAD
                   className="mt-4 text-blue-800 hover:underline text-sm"
-=======
-                  className="mt-2 text-violet-600 hover:underline text-sm"
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
                 >
                   ¿Ya tienes cuenta? Inicia sesión
                 </button>
               </div>
 
-<<<<<<< HEAD
               <div className="hidden md:flex flex-col justify-between items-start text-white p-10 w-1/2 bg-cover bg-center"
-                style={{ backgroundImage: "url('/multimedia/register2.png') "}}
+                style={{ backgroundImage: "url('/multimedia/register2.png')" }}
               >
-                
-                
-=======
-              {/* Panel Morado */}
-              <div className="hidden md:flex flex-col justify-between items-start bg-violet-600 text-white p-10 w-1/2">
-                <div>
-                  <h2 className="text-3xl font-bold mb-2">¡Hola de nuevo!</h2>
-                  <p className="text-sm">Regresa para seguir con nosotros</p>
-                </div>
-                <img src="img" alt="..." className="max-w-xs mx-auto" />
-                <button
-                  onClick={() => setIsLogin(true)}
-                  className="mt-4 py-2 px-6 bg-white text-violet-600 rounded-xl font-semibold hover:bg-gray-100"
-                >
-                  Iniciar Sesión
-                </button>
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
               </div>
             </div>
           </div>
         </div>
       </div>
-      
     </>
   );
 };
