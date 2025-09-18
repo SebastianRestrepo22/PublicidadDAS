@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+import React from "react";
+
+export const CategoriaDeDiseño = () => {
+    return(
+        <>
+        
+        </>
+    )
+}
+=======
 import { Link } from "react-router-dom";
 import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
 import Modal from "../components/modals/modal";
@@ -228,3 +239,4 @@ export const CategoriaDeDiseño = () => {
     </div>
   );
 };
+>>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf

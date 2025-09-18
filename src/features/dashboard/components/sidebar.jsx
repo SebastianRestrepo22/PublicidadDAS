@@ -32,9 +32,9 @@ const menuItems = [
     ],
   },
   { icon: Palette, label: "Categoría de Diseño", to: "/dashboard/categoriaDeDiseño" },
-  { icon: ShoppingCart, label: "Gestión de Ventas", to: "/dashboard/gestionVentas"},
+  { icon: ShoppingCart, label: "Gestión de Ventas", to: "/dashboard/gestionVentas" },
   { icon: CreditCard, label: "Método de pago", to: "/dashboard/metodoDePago" },
-  { icon: CalendarDays, label: "Agenda", to: "/dashboard/agenda"},
+  { icon: CalendarDays, label: "Agenda", to: "/dashboard/agenda" },
 ];
 
 export const Sidebar = () => {
@@ -56,7 +56,7 @@ export const Sidebar = () => {
       </div>
 
       {/* Menú */}
-      <nav className="flex-1 py-4 ">
+      <nav className="flex-1 py-4">
         <ul className="space-y-1">
           {menuItems.map((item, index) => (
             <li key={index}>
@@ -81,33 +81,3 @@ export const Sidebar = () => {
                       className="ml-1 focus:outline-none"
                     >
                       {expandedItems.includes(index) ? (
-                        <ChevronDown className="w-4 h-4 transition-transform duration-200" />
-                      ) : (
-                        <ChevronRight className="w-4 h-4 transition-transform duration-200" />
-                      )}
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {item.hasSubmenu && expandedItems.includes(index) && (
-                <ul className="ml-5 mt-1 space-y-1 border-l border-gray-700 pl-3">
-                  {item.submenu?.map((subItem, subIndex) => (
-                    <li key={subIndex}>
-                      <Link
-                        to={subItem.to}
-                        className="block px-3 py-2 text-xs text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors duration-200"
-                      >
-                        {subItem.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
-  );
-};

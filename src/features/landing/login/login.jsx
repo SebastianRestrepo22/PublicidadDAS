@@ -39,14 +39,36 @@ export const Login = () => {
     }
   }
 
+  //Login
+
+  const [valuesLogin, setValuesLogin] = useState({
+    CorreoElectronico: '',
+    Contrasena: ''
+  });
+
+  const handleChangesLogin = (e) => {
+    setValuesLogin({ ...valuesLogin, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', valuesLogin);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      // aquí manejarías la navegación y la validación del rol si hace falta
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <Navbar />
       <div className="flex items-center justify-center bg-gray-100 pt-20">
         <div className="w-[90%] max-w-2xl h-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden relative">
           <div
-            className={`flex w-[200%] h-full transition-transform duration-700 ease-in-out ${isLogin ? "translate-x-0" : "-translate-x-1/2"
-              }`}
+            className={`flex w-[200%] h-full transition-transform duration-700 ease-in-out ${isLogin ? "translate-x-0" : "-translate-x-1/2"}`}
           >
             <div className="w-1/2 flex flex-col md:flex-row">
               <div className="hidden md:flex flex-col justify-between items-start text-white p-10 w-1/2 bg-cover bg-center"
@@ -58,16 +80,20 @@ export const Login = () => {
                 <h1 className="text-4xl font-bold text-center mb-6">
                   Iniciar Sesión
                 </h1>
-                <form className="space-y-5">
+                <form onSubmit={handleSubmitLogin} className="space-y-5">
                   <input
                     type="email"
                     placeholder="Correo electrónico"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={valuesLogin.CorreoElectronico}
+                    name="CorreoElectronico" onChange={handleChangesLogin}
                   />
                   <input
                     type="password"
                     placeholder="Contraseña"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={valuesLogin.Contrasena}
+                    name="Contrasena" onChange={handleChangesLogin}
                   />
                   <button
                     type="submit"
@@ -93,13 +119,6 @@ export const Login = () => {
                 <form className="space-y-3" onSubmit={handleSubmit}>
                   <input
                     type="text"
-                    placeholder="Cedula"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.CedulaId}
-                    name="CedulaId" onChange={handleChanges}
-                  />
-                  <input
-                    type="text"
                     placeholder="Nombre Completo"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
                     value={values.NombreCompleto}
@@ -111,6 +130,13 @@ export const Login = () => {
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
                     value={values.CorreoElectronico}
                     name="CorreoElectronico" onChange={handleChanges}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Cedula"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.CedulaId}
+                    name="CedulaId" onChange={handleChanges}
                   />
                   <input
                     type="text"
