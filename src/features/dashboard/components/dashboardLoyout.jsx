@@ -1,26 +1,50 @@
+import { useEffect } from "react"
 import { Sidebar } from "./sidebar"
-<<<<<<< HEAD
+
+import { Outlet, useNavigate } from "react-router-dom"
+import axios from "axios"
+
 import { Navbar2 } from "./navbar2"
-import { Outlet } from "react-router-dom"
-=======
-import { Outlet } from "react-router-dom"
 
 
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
+
 
 export function DashboardLayout({ children }) {
+  const navigate = useNavigate()
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.get('http://localhost:3000/auth/dashboard', {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      if (response.status === 201) {
+        navigate('/login')
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        navigate('/login');
+      } else {
+        console.error("Error inesperado:", error);
+      }
+    }
+  }
+
+  useEffect(() => {
+    fetchUser()
+  }, [])
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />
       <div className="flex-1 flex flex-col">
-<<<<<<< HEAD
+
         <Navbar2 />
-=======
-        
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
+
         <main className="flex-1 p-6 overflow-auto">
-          <Outlet/>
+          <Outlet />
         </main>
+
       </div>
     </div>
   )

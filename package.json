@@ -11,11 +11,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
+
     "@heroicons/react": "^2.2.0",
     "axios": "^1.12.2",
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
+
+    "jwt-decode": "^4.0.0",
+
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

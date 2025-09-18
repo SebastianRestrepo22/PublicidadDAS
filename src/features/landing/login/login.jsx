@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -43,6 +44,43 @@ export const Login = () => {
     }
   }
 
+  //Login
+
+  const [valuesLogin, setValuesLogin] = useState({
+    CorreoElectronico: '',
+    Contrasena: ''
+  });
+
+  const navigate = useNavigate();
+
+  const handleChangesLogin = (e) => {
+    setValuesLogin({ ...valuesLogin, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', valuesLogin);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      const decoded = jwtDecode(token);
+
+      if (decoded.RoleId === '02') {
+        localStorage.setItem('token', response.data.token)
+        navigate('/dashboard/graficosEstadisticos');
+        setValuesLogin({
+          CorreoElectronico: '',
+          Contrasena: ''
+        });
+      } else {
+        alert("Acceso denegado. Solo el administrador puede entrar al dashboard.");
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -76,16 +114,20 @@ export const Login = () => {
                 <h1 className="text-4xl font-bold text-center mb-6">
                   Iniciar Sesión
                 </h1>
-                <form className="space-y-5">
+                <form onSubmit={handleSubmitLogin} className="space-y-5">
                   <input
                     type="email"
                     placeholder="Correo electrónico"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={valuesLogin.CorreoElectronico}
+                    name="CorreoElectronico" onChange={handleChangesLogin}
                   />
                   <input
                     type="password"
                     placeholder="Contraseña"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={valuesLogin.Contrasena}
+                    name="Contrasena" onChange={handleChangesLogin}
                   />
                   <button
                     type="submit"
@@ -113,16 +155,9 @@ export const Login = () => {
                 <form className="space-y-3" onSubmit={handleSubmit}>
                   <input
                     type="text"
-                    placeholder="Cedula"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.CedulaId}
-                    name="CedulaId" onChange={handleChanges}
-                  />
-                  <input
-                    type="text"
                     placeholder="Nombre Completo"
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.NombreCompleto} 
+                    value={values.NombreCompleto}
                     name="NombreCompleto" onChange={handleChanges}
                   />
                   <input
@@ -131,6 +166,13 @@ export const Login = () => {
                     className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
                     value={values.CorreoElectronico}
                     name="CorreoElectronico" onChange={handleChanges}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Cedula"
+                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    value={values.CedulaId}
+                    name="CedulaId" onChange={handleChanges}
                   />
                   <input
                     type="text"
