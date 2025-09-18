@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/footer";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   //Sección del registro
+
   const [values, setValues] = useState({
     CedulaId: '',
     NombreCompleto: '',
@@ -46,6 +51,8 @@ export const Login = () => {
     Contrasena: ''
   });
 
+  const navigate = useNavigate();
+
   const handleChangesLogin = (e) => {
     setValuesLogin({ ...valuesLogin, [e.target.name]: e.target.value })
   }
@@ -56,7 +63,19 @@ export const Login = () => {
       const response = await axios.post('http://localhost:3000/auth/login', valuesLogin);
       const token = response.data.token;
       localStorage.setItem('token', token);
-      // aquí manejarías la navegación y la validación del rol si hace falta
+      const decoded = jwtDecode(token);
+
+      if (decoded.RoleId === '02') {
+        localStorage.setItem('token', response.data.token)
+        navigate('/dashboard/graficosEstadisticos');
+        setValuesLogin({
+          CorreoElectronico: '',
+          Contrasena: ''
+        });
+      } else {
+        alert("Acceso denegado. Solo el administrador puede entrar al dashboard.");
+      }
+
     } catch (error) {
       console.log(error)
     }

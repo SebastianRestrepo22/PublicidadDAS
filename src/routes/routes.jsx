@@ -12,28 +12,38 @@ import { Pedidos } from "../features/dashboard/pedidos/pedidos"
 import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
 import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriadediseño"
 import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
+import { Error404 } from "../features/404/error404"
+import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
+import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
+import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
+import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
 
 export const Routers = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<Inicio />} />
-      <Route path="/productos" element={<Productos />} />
-      <Route path="/quienessomos" element={<QuienesSomos />} />
-      <Route path="/login" element={<Login />} />
+    return (
+        <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/productos" element={<Productos />} />
+            <Route path="/quienessomos" element={<QuienesSomos />} />
+            <Route path="/login" element={<Login />} />
 
-      <Route path="/dashboard" element={<DashboardLayout />}>
-        <Route path="usuarios" element={<Usuarios />} />
-        <Route path="roles" element={<Roles />} />
-        <Route path="pedidos" element={<Pedidos />} />
-        <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
-        <Route path="insumos" element={<Insumos />} />
-        <Route path="productoServicio" element={<ProductoServicios />} />
-        <Route path="proveedores" element={<Proveedores />} />
-        <Route path="metodoDePago" element={<MetodoDePago />} />
-      </Route>
+            <Route path="/carritodecompras" element={<CarritoCompras />} />
+            <Route path="/carritoproducto" element={<CarritoProducto />} />
+            <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
 
-      {/* 404 */}
-      <Route path="*" element={<div>Página no encontrada</div>} />
-    </Routes>
-  )
+            <Route path="/dashboard" element={<DashboardLayout />}>
+                <Route path="graficosEstadisticos" element={<GraficosEstadisticos/>} />
+                <Route path="usuarios" element={<Usuarios />} />
+                <Route path="roles" element={<Roles />} />
+                <Route path="pedidos" element={<Pedidos />} />
+                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
+                <Route path="insumos" element={<Insumos />} />
+                <Route path="productoServicio" element={<ProductoServicios />} />
+                <Route path="proveedores" element={<Proveedores />} />
+                <Route path="metodoDePago" element={<MetodoDePago />} />
+            </Route>
+
+            {/* 404 */}
+            <Route path="*" element={<Error404 />} />
+        </Routes>
+    )
 }
