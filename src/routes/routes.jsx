@@ -17,6 +17,8 @@ import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEst
 import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
 import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
 import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
+import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas"
+import { Agenda } from "../features/dashboard/agenda/agenda"
 
 export const Routers = () => {
     return (
@@ -39,7 +41,9 @@ export const Routers = () => {
                 <Route path="insumos" element={<Insumos />} />
                 <Route path="productoServicio" element={<ProductoServicios />} />
                 <Route path="proveedores" element={<Proveedores />} />
+                <Route path="gestionVentas" element={<GestionVentas/>}/>
                 <Route path="metodoDePago" element={<MetodoDePago />} />
+                <Route path="agenda" element={<Agenda/>}/>
             </Route>
 
             {/* 404 */}

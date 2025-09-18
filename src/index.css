@@ -266,3 +266,12 @@ td img {
   width: 24px;
   height: 24px;
 }
+
+/* Esto oculta mi scroll en mi dashboard */
+.scrollbar-hide::-webkit-scrollbar{
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
