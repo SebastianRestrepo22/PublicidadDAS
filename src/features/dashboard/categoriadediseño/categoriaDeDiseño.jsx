@@ -23,21 +23,14 @@ export const CategoriaDeDiseño = () => {
   const usuarios = [
     {
       id: 1,
-      cedula: "12345678",
-      nombre: "Juan Pérez",
-      direccion: "Calle 1 carrera 10",
-      correo: "juan@mail.com",
-      telefono: "123456789",
-      rol: "Admin",
+      nombre: "Pendones",
+      descripcion: "Grande , pequeña y redodnda ",
+      
     },
     {
       id: 2,
-      cedula: "87654321",
       nombre: "María Gómez",
-      direccion: "Calle 2",
-      correo: "maria@mail.com",
-      telefono: "987654321",
-      rol: "Usuario",
+      descripcion: "valla grande con bordes redondos "
     },
   ];
 
@@ -49,7 +42,7 @@ export const CategoriaDeDiseño = () => {
     return (
       <form className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
         <div className="flex flex-col">
-          <label>Cédula</label>
+          <label>ID</label>
           <input
             type="text"
             placeholder="Ingrese su cédula"
@@ -59,17 +52,17 @@ export const CategoriaDeDiseño = () => {
         </div>
 
         <div className="flex flex-col">
-          <label>Nombre completo</label>
+          <label>Nombre de la categoria</label>
           <input
             type="text"
-            placeholder="Ingrese su nombre"
+            placeholder="Ingrese la categoria"
             readOnly={isReadOnly}
             className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div className="flex flex-col">
-          <label>Dirección</label>
+          <label>Descripcion</label>
           <input
             type="text"
             placeholder="Ingrese su dirección"
@@ -77,37 +70,7 @@ export const CategoriaDeDiseño = () => {
             className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
-        <div className="flex flex-col">
-          <label>Correo electrónico</label>
-          <input
-            type="email"
-            placeholder="Ingrese su correo"
-            readOnly={isReadOnly}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label>Teléfono</label>
-          <input
-            type="text"
-            placeholder="Ingrese su teléfono"
-            readOnly={isReadOnly}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label>Rol</label>
-          <input
-            type="text"
-            placeholder="Rol"
-            readOnly={isReadOnly}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
+        
         <div className="col-span-1 md:col-span-2 flex gap-4 mt-4">
           {type !== "ver" && (
             <button className="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">
@@ -219,22 +182,13 @@ export const CategoriaDeDiseño = () => {
               <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
                 <tr>
                   <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
-                    Cédula
+                    ID
                   </th>
                   <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
-                    Nombre Completo
+                    Nombre de la categoria
                   </th>
                   <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
-                    Dirección
-                  </th>
-                  <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
-                    Correo Electrónico
-                  </th>
-                  <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
-                    Teléfono
-                  </th>
-                  <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
-                    Rol
+                    Descripcion
                   </th>
                   <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
                     Acciones
@@ -252,18 +206,6 @@ export const CategoriaDeDiseño = () => {
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">
                       {u.nombre}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-slate-900">
-                      {u.direccion}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-slate-900">
-                      {u.correo}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-slate-900">
-                      {u.telefono}
-                    </td>
-                    <td className="py-4 px-6 text-sm font-medium text-slate-900">
-                      {u.rol}
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex gap-2">

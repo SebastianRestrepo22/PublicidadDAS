@@ -6,70 +6,34 @@ import { Login } from "../features/landing/login/login"
 import { Insumos } from "../features/dashboard/constrolinsumos/insumos/insumos"
 import { ProductoServicios } from "../features/dashboard/servicios/productoServicios"
 import { Proveedores } from "../features/dashboard/constrolinsumos/proveedores/proveedores"
-import { Ventas } from "../features/dashboard/gestionventas/ventas/ventas"
-import { EstadosVentas } from "../features/dashboard/gestionventas/estadosventas/estadosVentas"
 import { Usuarios } from "../features/dashboard/usuarios/usuarios"
 import { Roles } from "../features/dashboard/roles/roles"
 import { Pedidos } from "../features/dashboard/pedidos/pedidos"
 import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
-<<<<<<< HEAD
 import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriadediseño"
 import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
-=======
-import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
-import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
-import { Servicios } from "../features/landing/nuestrosproductos/servicios"
-import { Error404 } from "../features/404/error404"
-import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
-import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
-import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
-import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
 
 export const Routers = () => {
-    return (
-        <>
-            <Routes>
-                <Route path="/" element={<Inicio />} />
-                <Route path="/productos" element={<Productos />} />
-                <Route path="/servicios" element={<Servicios />} />
-                <Route path="/quienessomos" element={<QuienesSomos />} />
-                <Route path="/login" element={<Login />} />
+  return (
+    <Routes>
+      <Route path="/" element={<Inicio />} />
+      <Route path="/productos" element={<Productos />} />
+      <Route path="/quienessomos" element={<QuienesSomos />} />
+      <Route path="/login" element={<Login />} />
 
-<<<<<<< HEAD
-                <Route path="/dashboard" element={<DashboardLayout/>}>
-                    <Route path="usuarios" element={<Usuarios/>}/>
-                    <Route path="roles" element={<Roles/>}/>
-                    <Route path="pedidos" element={<Pedidos/>}/>
-                    <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño/>}/>
-                    <Route path="insumos" element={<Insumos/>}/>
-                    <Route path="productoServicio" element={<ProductoServicios/>}/>
-                    <Route path="proveedores" element={<Proveedores/>}/>
-                    <Route path="ventas" element={<Ventas/>}/>
-                    <Route path="estadosVentas" element={<EstadosVentas/>}/>
-                    <Route path="metodoDePago" element={<MetodoDePago/>}/>
-=======
-                <Route path="/carritodecompras" element={<CarritoCompras />} />
-                <Route path="/carritoproducto" element={<CarritoProducto />} />
-                <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route path="usuarios" element={<Usuarios />} />
+        <Route path="roles" element={<Roles />} />
+        <Route path="pedidos" element={<Pedidos />} />
+        <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
+        <Route path="insumos" element={<Insumos />} />
+        <Route path="productoServicio" element={<ProductoServicios />} />
+        <Route path="proveedores" element={<Proveedores />} />
+        <Route path="metodoDePago" element={<MetodoDePago />} />
+      </Route>
 
-                <Route path="/dashboard" element={<DashboardLayout />}>
-                    <Route path="graficosEstadisticos" element={<GraficosEstadisticos />} />
-                    <Route path="usuarios" element={<Usuarios />} />
-                    <Route path="roles" element={<Roles />} />
-                    <Route path="pedidos" element={<Pedidos />} />
-                    <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
-                    <Route path="insumos" element={<Insumos />} />
-                    <Route path="productoServicio" element={<ProductoServicios />} />
-                    <Route path="proveedores" element={<Proveedores />} />
-                    <Route path="ventas" element={<Ventas />} />
-                    <Route path="estadosVentas" element={<EstadosVentas />} />
-                    <Route path="metodoDePago" element={<MetodoDePago />} />
->>>>>>> a611ff92e33d91e20fec2111fa0e1fe48a519edf
-                </Route>
-
-                <Route path="*" element={<Error404 />} />
-            </Routes>
-        </>
-    )
+      {/* 404 */}
+      <Route path="*" element={<div>Página no encontrada</div>} />
+    </Routes>
+  )
 }
