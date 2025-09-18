@@ -1,136 +1,212 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
+import Modal from "../../components/modals/modal";
 
 export const Proveedores = () => {
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openEditar, setOpenEditar] = useState(false);
+  const [openVer, setOpenVer] = useState(false);
+  const [openEliminar, setOpenEliminar] = useState(false);
+
+  const proveedores = [
+    { id: 1, nombre: "Proveedor A", telefono: "123456789", correo: "a@mail.com", direccion: "Calle 1", estado: "Activo" },
+    { id: 2, nombre: "Proveedor B", telefono: "987654321", correo: "b@mail.com", direccion: "Calle 2", estado: "Inactivo" },
+    { id: 3, nombre: "Proveedor C", telefono: "555666777", correo: "c@mail.com", direccion: "Calle 3", estado: "Activo" },
+  ];
+
+  const renderModalForm = (type = "create") => {
+    const isReadOnly = type === "ver";
+    const buttonLabel = type === "create" ? "Crear" : type === "editar" ? "Editar" : "Cerrar";
+
     return (
-        <>
-            <div>
-                <div className="flex m-10">
-                    <div className="m-5">
-                        <Link className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
-                            Nuevo proveedor
-                        </Link>
-                    </div>
+      <form className="flex flex-col gap-4">
+        <div className="flex flex-col text-left">
+          <label>ID</label>
+          <input
+            type="text"
+            placeholder="Ingrese el ID"
+            readOnly={isReadOnly}
+            className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex flex-col text-left">
+          <label>Nombre</label>
+          <input
+            type="text"
+            placeholder="Ingrese el nombre"
+            readOnly={isReadOnly}
+            className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex flex-col text-left">
+          <label>Teléfono</label>
+          <input
+            type="text"
+            placeholder="Ingrese el telefono"
+            readOnly={isReadOnly}
+            className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex flex-col text-left">
+          <label>Correo</label>
+          <input
+            type="email"
+            placeholder="Ingrese el correo"
+            readOnly={isReadOnly}
+            className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex flex-col text-left">
+          <label>Dirección</label>
+          <input
+            type="text"
+            placeholder="Ingrese la dirección"
+            readOnly={isReadOnly}
+            className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex flex-col text-left">
+          <label>Estado</label>
+          <input
+            type="text"
+            placeholder="Ingrese el estado"
+            readOnly={isReadOnly}
+            className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-                    <div className="m-3">
-                        <select className="border border-gray-300 rounded-lg px-3 py-2">
-                            <option value="">Campo</option>
-                            <option value="id">Nombre</option>
-                            <option value="Nombre del Insumo">Teléfono</option>
-                            <option value="Stock">Correo</option>
-                            <option value="Stock">Dirección</option>
-                            <option value="Stock">Estado</option>
-                        </select>
-                    </div>
+        <div className="flex gap-4 mt-4">
+          {type !== "ver" && (
+            <button className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition-colors">{buttonLabel}</button>
+          )}
+          <button
+            type="button"
+            className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors"
+            onClick={() => {
+              if (type === "create") setOpenCreate(false);
+              else if (type === "editar") setOpenEditar(false);
+              else if (type === "ver") setOpenVer(false);
+            }}
+          >
+            {type === "ver" ? "Cerrar" : "Cancelar"}
+          </button>
+        </div>
+      </form>
+    );
+  };
 
-                    <div className="relative m-3">
-                        <img src="/public/multimedia/lupa.png" alt="Buscar" className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold text-slate-800 mb-6">Gestión de proveedores</h1>
 
-                        <input type="text" placeholder="Buscar" className="border border-gray-300 rounded-lg px-4 py-2 w-80 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                </div>
+        {/* Barra de acciones */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            <Link
+              onClick={() => setOpenCreate(true)}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+            >
+              <Plus size={18} /> Nuevo proveedor
+            </Link>
 
-                {/* tabla */}
-                <div className="overflow-x-auto">
-                    <table className="min-w-full border-collapse border border-gray-200 shadow-md rounded-lg overflow-hidden">
-                        <thead className="bg-black text-white">
-                            <tr>
-                                <th className="py-3 px-6 text-left">ID</th>
-                                <th className="py-3 px-6 text-left">Nombre</th>
-                                <th className="py-3 px-6 text-left">Teléfono</th>
-                                <th className="py-3 px-6 text-left">Correo</th>
-                                <th className="py-3 px-6 text-left">Dirección</th>
-                                <th className="py-3 px-6 text-left">Estado</th>
-                                <th className="py-3 px-6 text-center w-40">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+            <select className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]">
+              <option value="">Filtrar por campo</option>
+              <option value="id">ID</option>
+              <option value="nombre">Nombre</option>
+              <option value="telefono">Teléfono</option>
+              <option value="correo">Correo</option>
+              <option value="direccion">Dirección</option>
+              <option value="estado">Estado</option>
+            </select>
 
-                            <tr className="hover:bg-gray-100 transition-colors">
-                                <td className="py-3 px-6">1</td>
-                                <td className="py-3 px-6">Litografía Central</td>
-                                <td className="py-3 px-6">555-1234</td>
-                                <td className="py-3 px-6">contacto@litocentral.com</td>
-                                <td className="py-3 px-6">Av. Siempre Viva 123</td>
-                                <td className="py-3 px-6">Activo</td>
-                                <td className="py-3 px-6">
-                                    <div className="w-full flex justify-center items-center gap-3">
-                                        <Link><img src="/public/multimedia/edit.png" alt="Editar" /></Link>
-                                        <Link><img src="/public/multimedia/ver.png" alt="Ver" /></Link>
-                                        <Link><img src="/public/multimedia/delete.png" alt="Eliminar" /></Link>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr className="hover:bg-gray-100 transition-colors">
-                                <td className="py-3 px-6">2</td>
-                                <td className="py-3 px-6">Gráficas del Norte</td>
-                                <td className="py-3 px-6">555-5678</td>
-                                <td className="py-3 px-6">ventas@graficasnorte.com</td>
-                                <td className="py-3 px-6">Calle Luna 45</td>
-                                <td className="py-3 px-6">Activo</td>
-                                <td className="py-3 px-6">
-                                    <div className="w-full flex justify-center items-center gap-3">
-                                        <Link><img src="/public/multimedia/edit.png" alt="Editar" /></Link>
-                                        <Link><img src="/public/multimedia/ver.png" alt="Ver" /></Link>
-                                        <Link><img src="/public/multimedia/delete.png" alt="Eliminar" /></Link>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr className="hover:bg-gray-100 transition-colors">
-                                <td className="py-3 px-6">3</td>
-                                <td className="py-3 px-6">Publicidad Express</td>
-                                <td className="py-3 px-6">555-8765</td>
-                                <td className="py-3 px-6">info@publicidadexpress.com</td>
-                                <td className="py-3 px-6">Carrera 7 #12-34</td>
-                                <td className="py-3 px-6">Inactivo</td>
-                                <td className="py-3 px-6">
-                                    <div className="w-full flex justify-center items-center gap-3">
-                                        <Link><img src="/public/multimedia/edit.png" alt="Editar" /></Link>
-                                        <Link><img src="/public/multimedia/ver.png" alt="Ver" /></Link>
-                                        <Link><img src="/public/multimedia/delete.png" alt="Eliminar" /></Link>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr className="hover:bg-gray-100 transition-colors">
-                                <td className="py-3 px-6">4</td>
-                                <td className="py-3 px-6">ColorPrint</td>
-                                <td className="py-3 px-6">555-3344</td>
-                                <td className="py-3 px-6">soporte@colorprint.com</td>
-                                <td className="py-3 px-6">Zona Industrial Bodega 10</td>
-                                <td className="py-3 px-6">Activo</td>
-                                <td className="py-3 px-6">
-                                    <div className="w-full flex justify-center items-center gap-3">
-                                        <Link><img src="/public/multimedia/edit.png" alt="Editar" /></Link>
-                                        <Link><img src="/public/multimedia/ver.png" alt="Ver" /></Link>
-                                        <Link><img src="/public/multimedia/delete.png" alt="Eliminar" /></Link>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr className="hover:bg-gray-100 transition-colors">
-                                <td className="py-3 px-6">5</td>
-                                <td className="py-3 px-6">Diseños Creativos</td>
-                                <td className="py-3 px-6">555-4455</td>
-                                <td className="py-3 px-6">hola@disenoscreativos.com</td>
-                                <td className="py-3 px-6">Calle Arte #89</td>
-                                <td className="py-3 px-6">Activo</td>
-                                <td className="py-3 px-6">
-                                    <div className="w-full flex justify-center items-center gap-3">
-                                        <Link><img src="/public/multimedia/edit.png" alt="Editar" /></Link>
-                                        <Link><img src="/public/multimedia/ver.png" alt="Ver" /></Link>
-                                        <Link><img src="/public/multimedia/delete.png" alt="Eliminar" /></Link>
-                                    </div>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Buscar proveedor"
+                className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
+              />
             </div>
-        </>
-    )
-}
+          </div>
+        </div>
+
+        {/* Modales */}
+        <Modal open={openCreate} onClose={() => setOpenCreate(false)}>
+          <div className="w-[400px] p-6 mx-auto text-center">
+            <h3 className="text-lg font-black text-gray-800 mb-6">Nuevo proveedor</h3>
+            {renderModalForm("create")}
+          </div>
+        </Modal>
+
+        <Modal open={openEditar} onClose={() => setOpenEditar(false)}>
+          <div className="w-[400px] p-6 mx-auto text-center">
+            <h3 className="text-lg font-black text-gray-800 mb-6">Editar proveedor</h3>
+            {renderModalForm("editar")}
+          </div>
+        </Modal>
+
+        <Modal open={openVer} onClose={() => setOpenVer(false)}>
+          <div className="w-[400px] p-6 mx-auto text-center">
+            <h3 className="text-lg font-black text-gray-800 mb-6">Ver proveedor</h3>
+            {renderModalForm("ver")}
+          </div>
+        </Modal>
+
+        <Modal open={openEliminar} onClose={() => setOpenEliminar(false)}>
+          <div className="w-[400px] p-6 mx-auto text-center">
+            <h3 className="text-lg font-black text-gray-800 mb-4">Eliminar proveedor</h3>
+            <p className="mb-6">¿Está seguro de eliminar este proveedor?</p>
+            <div className="flex gap-4">
+              <button className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors">Eliminar</button>
+              <button
+                className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors"
+                onClick={() => setOpenEliminar(false)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </Modal>
+
+        {/* Tabla */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+          <table className="min-w-full">
+            <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
+              <tr>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">ID</th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Nombre</th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Teléfono</th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Correo</th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Dirección</th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Estado</th>
+                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {proveedores.map((p) => (
+                <tr key={p.id} className="hover:bg-slate-50 transition-colors duration-150">
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{p.id}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{p.nombre}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{p.telefono}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{p.correo}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{p.direccion}</td>
+                  <td className="py-4 px-6 text-sm font-medium text-slate-900">{p.estado}</td>
+                  <td className="py-4 px-6">
+                    <div className="flex gap-2">
+                      <Link onClick={() => setOpenEditar(true)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150"><Edit size={16} /></Link>
+                      <Link onClick={() => setOpenVer(true)} className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors duration-150"><Eye size={16} /></Link>
+                      <Link onClick={() => setOpenEliminar(true)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"><Trash2 size={16} /></Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  );
+};

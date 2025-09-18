@@ -1,4 +1,5 @@
 
+import { Briefcase } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer"
 
@@ -8,17 +9,22 @@ export const QuienesSomos = () => {
 
             <Navbar />
             <section className="w-full">
-                <div className="relative w-full h-[420px] ">
+                <div className="relative w-full h-[220px] ">
                     <img src="public/multimedia/quienessomos2.jpg" alt="" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/40" />
+
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <h2 className="text-white text-3xl font-bold">Haz tangible lo que se te pase por tu mente </h2>
+                    </div>
                 </div>
             </section>
 
-            <section className="bg-white py-16 px-8 lg:px-20">
-                
+            <section className="bg-white py-16 px-8 lg:px-20 pb-40">
+
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div>
-                        <h3 className="text-6xl font-bold text-pink-600 mb-4">
+                        <h3 className="text-6xl font-bold text-black-600 mb-4">
                             PublicidadDAS
                         </h3>
                         <p className="text-gray-800 mb-4">
@@ -48,7 +54,106 @@ export const QuienesSomos = () => {
                 </div>
             </section>
 
-            <section className="w-full bg-gray-50 py-16 px-8 lg:px-20">
+            <section className="w-full bg-white-50 py-12 px-6 lg:px-20">
+                <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground mb-10">
+                    Estrategia Positiva
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <div className="bg-card p-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-4 text-center group">
+                        <div className="flex justify-center mb-6">
+                            <div className="p-4 bg-primary/10 rounded-full text-primary group-hover:bg-blue-900 group-hover:text-white transition-colors duration-300">
+                                <Briefcase className="w-6 h-6" />
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-semibold text-card-foreground mb-3">
+                            Clientes Satisfechos
+                        </h3>
+                        <p className="text-muted-foreground">
+                            Mas de 300 clientes satisfechos
+                        </p>
+                    </div>
+
+                    <div className="bg-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-4 text-center group">
+                        <div className="flex justify-center mb-6">
+                            <div className="p-4 bg-primary/10 rounded-full text-primary group-hover:bg-blue-900 group-hover:text-white transition-colors duration-300">
+                                <Briefcase className="w-6 h-6" />
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-semibold text-card-foreground mb-3">
+                            Calidad de Servicio
+                        </h3>
+                        <p className="text-muted-foreground">
+                            Excelente servicio
+                        </p>
+                    </div>
+
+                    <div className="bg-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-4 text-center group">
+                        <div className="flex justify-center mb-6">
+                            <div className="p-4 bg-primary/10 rounded-full text-primary group-hover:bg-blue-900 group-hover:text-primary-white transition-colors duration-300">
+                                <Briefcase className="w-6 h-6" />
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-semibold text-card-foreground mb-3">
+                            Tienda Fisica
+                        </h3>
+                        <p className="text-muted-foreground">
+                            Itagui es nuestro centro
+                        </p>
+                    </div>
+
+                    <div className="bg-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-4 text-center group">
+                        <div className="flex justify-center mb-6">
+                            <div className="p-4 bg-primary/10 rounded-full text-primary group-hover:bg-blue-900 group-hover:text-primary-white transition-colors duration-300">
+                                <Briefcase className="w-6 h-6" />
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-semibold text-card-foreground mb-3">
+                            Servicios a buen precio
+                        </h3>
+                        <p className="text-muted-foreground">
+                            Buenos benefcios con nosotros
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+            <section className="w-full bg-white py-12 px-6 lg:px-20">
+                <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground mb-10">
+                    Nuestra experiencia
+                </h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <img 
+                    src="/multimedia/experiencia-1.png" 
+                    alt="experiencia 1" 
+                    className="w-full h-64 object-cover rounded-lg shadow-lg transition-transform duration-500 hover:scale-105"
+                    />
+
+                    <img 
+                    src="/multimedia/experiencia-2.jpg" 
+                    alt="experiencia 2" 
+                    className="w-full h-64 object-cover rounded-lg shadow-lg transition-transform duration-500 hover:scale-105"
+                    />
+
+                    <img 
+                    src="/multimedia/experiencia-3.jpeg" 
+                    alt="experiencia 3" 
+                    className="w-full h-64 object-cover rounded-lg shadow-lg transition-transform duration-500 hover:scale-105"
+                    />
+
+                    <img 
+                    src="/multimedia/experiencia-4.jpeg" 
+                    alt="experiencia 4" 
+                    className="w-full h-64 object-cover rounded-lg shadow-lg transition-transform duration-500 hover:scale-105"
+                     />
+
+                </div>
+                
+            </section>
+
+
+            <section className="w-full bg-grey py-16 px-8 lg:px-20">
                 <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
                     Conocenos un poco mas
                 </h2>
@@ -74,7 +179,10 @@ export const QuienesSomos = () => {
                             HISTORIA
                         </h3>
                         <p className="text-gray-600">
-                            Nosotros tenemos chacha chacha chacha nb jblkugkuvuj
+                            Design and Style es una microempresa de litografía ubicada en Itagüí, con más de 4 años en
+                            el mercado. Ofrece servicios de impresión en papel, gran formato y personalización de productos
+                            para clientes individuales y empresas. Se apoya en canales digitales y
+                            una empresa asociada para gestionar sus pedidos de forma eficiente.
                             <span className="font-semibold">TENDENCIA</span> de tu mejor negocio
                         </p>
                     </div>
@@ -99,8 +207,11 @@ export const QuienesSomos = () => {
                             MISION
                         </h3>
                         <p className="text-gray-900">
-                            Nuestra mision es hacer que tus necesidades sean menos
-                            no sean una realidad virtual si no una realidad tangible.
+                            En Design and Style nos dedicamos a ofrecer soluciones de impresión y personalización de alta calidad,
+                            adaptadas a las necesidades tanto de clientes individuales como corporativos. Nuestro compromiso es brindar
+                            una experiencia ágil, moderna y cercana, utilizando herramientas digitales para facilitar y garantizar resultados visuales
+                            que superen las expectativas.
+
                             <span className="font-semibold">Confianza</span>
                         </p>
                     </div>
@@ -125,16 +236,18 @@ export const QuienesSomos = () => {
                             VISION
                         </h3>
                         <p className="text-gray-600">
-                            Nuestra vision es mejorar y darte lo mejor
-                            <span className="font-semibold">FUNDAMNTALES</span> para nuestra volutad
-                            eficientemente
+                            Aspiramos a consolidarnos como una empresa líder en servicios de impresión personalizada
+                            de Medellín, reconocida por su innovación, eficiencia y enfoque centrado en el cliente. Buscamos evolucionar continuamente, integrando nuevas tecnologías,
+                            nuestros canales de atención y métodos de pago, para ofrecer soluciones
+                            efectivas que fortalezcan la identidad visual de nuestros clientes.
+
                         </p>
                     </div>
                 </div>
 
             </section>
 
-<Footer/>
+            <Footer />
         </>
     );
 };
