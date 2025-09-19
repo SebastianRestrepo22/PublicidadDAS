@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
-import Modal from "../components/modals/Modal";
+import Modal from "../components/modals/modal";
 
 function Toggle({ checked = false, onChange }) {
   const [isOn, setIsOn] = useState(checked);
