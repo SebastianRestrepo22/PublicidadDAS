@@ -17,11 +17,11 @@ router.post('/register', async (req, res) => {
 
         const [roleRows] = await db.query(
             "SELECT RoleId FROM Roles WHERE Nombre = ?",
-            ['cliente']
+            ['Administrador']
         );
 
         if (roleRows.length === 0) {
-            return res.status(400).json({ message: "Rol 'cliente' no encontrado" });
+            return res.status(400).json({ message: "Rol 'administrador' no encontrado" });
         }
 
         const RoleId = roleRows[0].RoleId;
