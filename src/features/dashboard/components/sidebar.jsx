@@ -43,7 +43,6 @@ export const Sidebar = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const [expandedItems, setExpandedItems] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
 
   const toggleSubmenu = (index) => {
     setExpandedItems((prev) =>

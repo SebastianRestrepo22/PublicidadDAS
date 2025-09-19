@@ -65,7 +65,7 @@ export const Login = () => {
       localStorage.setItem('token', token);
       const decoded = jwtDecode(token);
 
-      if (decoded.RoleId === '02') {
+      if (decoded.Role === 'Administrador') {
         localStorage.setItem('token', response.data.token)
         navigate('/dashboard/graficosEstadisticos');
         setValuesLogin({

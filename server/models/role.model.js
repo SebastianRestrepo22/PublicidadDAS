@@ -1,18 +1,24 @@
 import { DataTypes } from 'sequelize';
-const sequelize = require('../config/db');
+import sequelize from '../lib/db.js';
 
-const Role = sequelize.define('roles', {
-  id: {
+const Role = sequelize.define('Role', {
+  RoleId: {
     type: DataTypes.STRING,
     defaultValue: DataTypes.UUIDV4,// Genera un UUID automáticamente
-    primaryKey: true  
+    primaryKey: true
   },
-  name: {
+  Nombre: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  Estado: {
+    type: DataTypes.ENUM('Activo', 'Inactivo'),  // ENUM con dos opciones
+    allowNull: false,
+    defaultValue: 'Activo'
   }
 }, {
-  timestamps: true
+  tableName: 'Roles',
+  timestamps: false
 });
 
-module.exports = Role;
+export default Role;
