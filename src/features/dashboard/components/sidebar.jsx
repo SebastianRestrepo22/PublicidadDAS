@@ -15,6 +15,7 @@ import {
   CalendarDays,
   LogOut,
 } from "lucide-react";
+import Modal from "./modals/modal";
 
 const menuItems = [
   { icon: BarChart3, label: "Gráficos Estadísticos", to: "/dashboard/graficosEstadisticos" },
@@ -33,12 +34,14 @@ const menuItems = [
     ],
   },
   { icon: Palette, label: "Categoría de Diseño", to: "/dashboard/categoriaDeDiseño" },
-  { icon: ShoppingCart, label: "Gestión de Ventas", to: "/dashboard/gestionVentas",},
+  { icon: ShoppingCart, label: "Gestión de Ventas", to: "/dashboard/gestionVentas", },
   { icon: CreditCard, label: "Método de pago", to: "/dashboard/metodoDePago" },
-  { icon: CalendarDays, label: "Agenda", to: "/dashboard/agenda"}
+  { icon: CalendarDays, label: "Agenda", to: "/dashboard/agenda" }
 ];
 
 export const Sidebar = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   const [expandedItems, setExpandedItems] = useState([]);
 
   const toggleSubmenu = (index) => {
@@ -48,6 +51,15 @@ export const Sidebar = () => {
         : [...prev, index]
     );
   };
+
+  const renderModalForm = (type = "modal") => {
+    return (
+      <div className="flex flex-col text-left">
+
+      </div>
+    );
+  };
+
 
   return (
     <div className="w-48 min-h-screen bg-gray-900 text-white flex flex-col justify-between">
@@ -62,9 +74,8 @@ export const Sidebar = () => {
           {menuItems.map((item, index) => (
             <li key={index}>
               <div
-                className={`flex items-center justify-between px-4 py-3 hover:bg-gray-800 rounded-md transition-colors duration-200 group ${
-                  item.hasSubmenu ? "cursor-pointer" : ""
-                }`}
+                className={`flex items-center justify-between px-4 py-3 hover:bg-gray-800 rounded-md transition-colors duration-200 group ${item.hasSubmenu ? "cursor-pointer" : ""
+                  }`}
               >
                 {!item.hasSubmenu ? (
                   <Link to={item.to} className="flex items-center gap-3 flex-1">
@@ -110,16 +121,41 @@ export const Sidebar = () => {
         </ul>
       </nav>
       <div className="p-4 border-t border-gray-700">
-        <button
+        <Link
           className="w-full flex items-center justify-center gap-2 bg-red-600 text-white text-sm font-medium  py-3 px-3 rounded-md hover:bg-red-700 transition-colors"
-          onClick={() => console.log("salir")}
+          onClick={() => setOpenModal(true)}
         >
-          <LogOut className="w-3 h-3"/>
+          <LogOut className="w-3 h-3" />
           Salir
 
-        </button>
+        </Link>
 
       </div>
+
+      {/*Modales */}
+
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <div className="w-[400px] p-6 mx-auto text-center">
+          <p className="mb-6 text-black">¿Está seguro que quiere cerrar sesión?</p>
+          <div className="flex gap-4">
+            <Link className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+              onClick={() => {
+                // Eliminar token
+                localStorage.removeItem("token");
+              }}
+              to='/login'>Cerrar sesión</Link>
+            <button
+              className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors"
+              onClick={() => setOpenModal(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </Modal>
+
     </div>
+
+
   );
 };

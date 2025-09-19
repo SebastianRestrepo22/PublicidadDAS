@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
-import Modal from "../components/modals/Modal";
+import Modal from "../components/modals/modal";
 
 function Toggle({ checked = false, onChange }) {
   const [isOn, setIsOn] = useState(checked);
@@ -60,18 +60,6 @@ export const Roles = () => {
           />
         </div>
 
-        <div className="flex flex-col">
-          <label className="mb-2 text-sm font-medium text-gray-700">
-            Usuarios asignados
-          </label>
-          <input
-            type="number"
-            placeholder="0"
-            readOnly
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC]"
-          />
-        </div>
-
         <div className="col-span-1 flex gap-4 mt-4">
           {type !== "ver" && (
             <button className="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">
@@ -114,6 +102,7 @@ export const Roles = () => {
                 <option value="">Filtrar por campo</option>
                 <option value="id">ID</option>
                 <option value="nombre">Nombre</option>
+                <option value="nombre">Estado</option>
               </select>
 
               <div className="relative flex-1 max-w-md">
