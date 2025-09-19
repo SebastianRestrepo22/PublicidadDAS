@@ -43,6 +43,7 @@ export const Sidebar = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const [expandedItems, setExpandedItems] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   const toggleSubmenu = (index) => {
     setExpandedItems((prev) =>
@@ -129,6 +130,34 @@ export const Sidebar = () => {
           Salir
 
         </Link>
+
+        <Modal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50"
+        >
+          <div className="w-[400px] p-6 mx-auto text-center bg-white rounded shadow-lg relative z-50">
+            <p className="mb-6 text-black">¿Está seguro que quiere cerrar sesión?</p>
+            <div className="flex gap-4">
+              <Link
+                className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                }}
+                to='/login'
+              >
+                Cerrar sesión
+              </Link>
+              <button
+                className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors"
+                onClick={() => setOpenModal(false)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </Modal>
+
 
       </div>
 
