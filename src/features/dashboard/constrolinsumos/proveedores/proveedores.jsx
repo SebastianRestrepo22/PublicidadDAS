@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
-import Modal from "../../components/modals/Modal";
+import Modal from "../../components/modals/modal";
 
 
 export const Proveedores = () => {
@@ -30,6 +30,20 @@ export const Proveedores = () => {
       rol: "Usuario",
     },
   ];
+
+  const [estadoActivos, setEstadoActivo] = useState(
+    proveedores.reduce((acc, p) => {
+      acc[p.id] = true;
+      return acc;
+    }, {})
+  );
+
+  const toggeEstado = (id) => {
+    setEstadoActivos((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const renderModalForm = (type = "create") => {
     const isReadOnly = type === "ver";
@@ -112,8 +126,8 @@ export const Proveedores = () => {
               if (type === "editar") setOpenEditar(false);
               else if (type === "ver") setOpenVer(false);
             }}
-          >
-            {type === "ver" ? "Cerrar" : "Cancelar"}
+            >
+              {type === "ver" ? "Cerrar" : "Cancelar"}
           </button>
         </div>
       </form>
@@ -127,6 +141,8 @@ export const Proveedores = () => {
           <h1 className="text-3xl font-bold text-slate-800 mb-6">
             Gestión de proveedores
           </h1>
+
+          
 
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 ">
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
@@ -237,6 +253,9 @@ export const Proveedores = () => {
                     className="hover:bg-slate-50 transition-colors duration-150 "
                   >
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">
+                      {p.id}
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-slate-900">
                       {p.nombre}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">
@@ -249,7 +268,24 @@ export const Proveedores = () => {
                       {p.direccion}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">
-                      {p.telefono}
+                      <label className="inline-flex items-center cursor-pointer select-none">
+                        <div className="relative">
+                          <input 
+                          id={`switch-${p.id}`}
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={Boolean(estadoActivos[p.id])}
+                          onChange={(e) => 
+                            setEstadoActivo((prev) => ({...prev, [p.id]: e.target.checked}))
+                          }
+                          aria-checked={Boolean(estadoActivos[p.id])}
+                          />
+                          <div className="w-11 h-6 rounded-full bg-gray-300 peer-checked:bg-green-500 transition-colors pointer-events-none"></div>
+                          <div className="absolute letf-1 top-1 w-4 h-4 bg-white rounded-full transition-transform transform peer-checked:translate-x-5 pointer-events-none"></div>
+                        </div>
+                        <span className="ml-3 text-sm text-slate-700 ">{estadoActivos[p.id]}</span>
+                      </label>
+                      
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex gap-2">

@@ -9,7 +9,7 @@ export const CategoriaDeDiseño = () => {
   const [openVer, setOpenVer] = useState(false);
   const [openEliminar, setOpenEliminar] = useState(false);
 
-  const usuarios = [
+  const categoria = [
     {
       id: 1,
       nombre: "Pendones",
@@ -117,7 +117,6 @@ export const CategoriaDeDiseño = () => {
             </div>
           </div>
 
-          {/* Modales */}
           <Modal open={openCreate} onClose={() => setOpenCreate(false)}>
             <div className="w-[450px] p-6 mx-auto text-center">
               <h3 className="text-lg font-black text-gray-800 mb-6">
@@ -165,7 +164,6 @@ export const CategoriaDeDiseño = () => {
             </div>
           </Modal>
 
-          {/* Tabla */}
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
             <table className="min-w-full">
               <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
@@ -185,20 +183,24 @@ export const CategoriaDeDiseño = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {usuarios.map((u) => (
+                {categoria.map((c) => (
                   <tr
-                    key={u.id}
+                    key={c.id}
                     className="hover:bg-slate-50 transition-colors duration-150 "
                   >
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">
-                      {u.cedula}
+                      {c.id}
                     </td>
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">
-                      {u.nombre}
+                      {c.nombre}
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-slate-900">
+                      {c.descripcion}
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex gap-2">
                         <Link
+                          
                           onClick={() => setOpenEditar(true)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150"
                         >
@@ -206,13 +208,13 @@ export const CategoriaDeDiseño = () => {
                         </Link>
                         <Link
                           onClick={() => setOpenVer(true)}
-                          className="p-2 text-blue-600 hover:bg-emerald-50 rounded-lg transition-colors duration-150"
+                          className="p-2 text-green-600 hover:bg-emerald-50 rounded-lg transition-colors duration-150"
                         >
                           <Eye size={16} />
                         </Link>
                         <Link
                           onClick={() => setOpenEliminar(true)}
-                          className="p-2 text-blue-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
                         >
                           <Trash2 size={16} />
                         </Link>
