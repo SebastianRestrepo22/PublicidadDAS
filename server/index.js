@@ -1,6 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import  proveedorRoutes from './routes/proveedores.routes.js';
+import insumosRoutes from './routes/insumos.routes.js';
+import categoriaRoutes from './routes/categoria.routes.js';
+
 
 // Routers
 import authRouter from './routes/authRoutes.js';
@@ -34,3 +38,10 @@ const startServer = async () => {
 };
 
 startServer();
+
+app.use('/api/categorias', categoriaRoutes)
+app.use('/api/proveedores', proveedorRoutes)
+app.use('/api/insumos', insumosRoutes)
+
+
+

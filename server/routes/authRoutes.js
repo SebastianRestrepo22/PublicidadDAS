@@ -35,6 +35,7 @@ router.post('/register', async (req, res) => {
         );
         if (roles.length === 0) {
             return res.status(400).json({ message: "Rol 'cliente' no encontrado en BD" });
+
         }
 
         const rol = roles[0];
@@ -92,6 +93,7 @@ router.post('/login', async (req, res) => {
             process.env.JWT_KEY,
             { expiresIn: '1h' }
         );
+
 
         res.status(200).json({ token });
     } catch (error) {
