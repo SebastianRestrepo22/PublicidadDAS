@@ -52,7 +52,7 @@ export const Navbar = () => {
 
                 <div className="flex items-center gap-2 mr-10">
                     <li className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
-                        <Link className="text-white font-bold text-[17px]" to='/login'>register</Link>
+                        <Link className="text-white font-bold text-[17px]" to='/login'>Registro</Link>
                     </li>
 
                     <Link to='/carritodecompras' className="flex items-center justify-center text-white w-10 h-10 transition-all duration-300 shadow-md hover:shadow-xl hover:bg-blue-500/10 rounded-full">
