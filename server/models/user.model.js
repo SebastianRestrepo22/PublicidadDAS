@@ -1,34 +1,56 @@
-import { DataTypes } from 'sequelize';
-import Role from './role.model.js';
-import sequelize from '../lib/db.js';
+import { connectDB } from '../lib/db.js';
 
-const Usuario = sequelize.define(
-  'Usuarios',
-  {
-    CedulaId: {
-      type: DataTypes.STRING(20),
-      primaryKey: true
-    },
-    NombreCompleto: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    Telefono: DataTypes.STRING(20),
-    CorreoElectronico: {
-      type: DataTypes.STRING(100),
-      unique: true,
-      allowNull: false
-    },
-    Direccion: DataTypes.STRING(255),
-    Contrasena: {
-      type: DataTypes.STRING(255),
-      allowNull: false
-    }
-  },
-  { timestamps: false }
-);
+// Crear usuario
+export const createUsuario = async ({
+  CedulaId,
+  NombreCompleto,
+  Telefono,
+  CorreoElectronico,
+  Direccion,
+  Contrasena,
+  RoleId
+}) => {
+  const connection = await connectDB();
+  await connection.execute(
+    `INSERT INTO usuarios 
+     (CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId]
+  );
+};
 
-Usuario.belongsTo(Role, { foreignKey: 'RoleId' });
-Role.hasMany(Usuario, { foreignKey: 'RoleId' });
+// Buscar usuario por correo
+export const getUsuarioByCorreo = async (CorreoElectronico) => {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(
+    `SELECT u.*, r.Nombre AS RoleNombre 
+     FROM usuarios u 
+     JOIN roles r ON u.RoleId = r.RoleId 
+     WHERE u.CorreoElectronico = ?`,
+    [CorreoElectronico]
+  );
+  return rows[0];
+};
 
-export default Usuario;
+// Buscar usuario por ID
+export const getUsuarioById = async (CedulaId) => {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(
+    `SELECT u.*, r.Nombre AS RoleNombre 
+     FROM usuarios u 
+     JOIN roles r ON u.RoleId = r.RoleId 
+     WHERE u.CedulaId = ?`,
+    [CedulaId]
+  );
+  return rows[0];
+};
+
+// Verificar si correo ya existe
+export const correoExiste = async (CorreoElectronico) => {
+  const connection = await connectDB();
+  const [rows] = await connection.execute(
+    'SELECT * FROM usuarios WHERE CorreoElectronico = ?',
+    [CorreoElectronico]
+  );
+  return rows.length > 0;
+};

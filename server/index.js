@@ -5,13 +5,10 @@ import dotenv from 'dotenv';
 // Routers
 import authRouter from './routes/authRoutes.js';
 import roleRouter from './routes/role.routes.js';
+import userRouter from './routes/user.routes.js'
 
 // DB
 import { connectDB } from './lib/db.js';
-
-// Models (import para que Sequelize los registre)
-import './models/role.model.js';
-import './models/user.model.js'; // si tienes modelo de Usuario
 
 dotenv.config();
 
@@ -23,10 +20,11 @@ app.use(express.json());
 // Rutas
 app.use('/auth', authRouter);
 app.use('/roles', roleRouter);
+app.use('/user', userRouter);
 
 const startServer = async () => {
   try {
-    await connectDB(); // Conecta y sincroniza la DB
+    const connection = await connectDB(); // Conecta a la DB
     app.listen(process.env.PORT || 3000, () => {
       console.log(`Server is running on port ${process.env.PORT || 3000}`);
     });

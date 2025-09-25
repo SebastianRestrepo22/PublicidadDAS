@@ -1,24 +1,27 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../lib/db.js';
+import { connectDB } from '../lib/db.js';
 
-const Role = sequelize.define('Role', {
-  RoleId: {
-    type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4,// Genera un UUID automáticamente
-    primaryKey: true
-  },
-  Nombre: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  Estado: {
-    type: DataTypes.ENUM('Activo', 'Inactivo'),  // ENUM con dos opciones
-    allowNull: false,
-    defaultValue: 'Activo'
-  }
-}, {
-  tableName: 'Roles',
-  timestamps: false
-});
+// Obtener rol por nombre
+export const getRoleByName = async (nombre) => {
+  const connection = await connectDB();
+  const [roles] = await connection.execute(
+    'SELECT * FROM roles WHERE Nombre = ?',
+    [nombre]
+  );
+  return roles[0]; // Devuelve el primer resultado
+};
 
-export default Role;
+// Crear rol
+export const createRole = async ({ RoleId, Nombre, Estado = 'Activo' }) => {
+  const connection = await connectDB();
+  await connection.execute(
+    'INSERT INTO roles (RoleId, Nombre, Estado) VALUES (?, ?, ?)',
+    [RoleId, Nombre, Estado]
+  );
+};
+
+// Obtener todos los roles
+export const getAllRoles = async () => {
+  const connection = await connectDB();
+  const [roles] = await connection.execute('SELECT * FROM roles');
+  return roles;
+};

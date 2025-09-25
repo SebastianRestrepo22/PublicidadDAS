@@ -41,3 +41,15 @@ export const deleteDataRol = async (id) => {
         return { status: false, message: "No se puede eliminar la compañía : ", error }; // Manejo de errores
     }
 }
+
+//Buscar roles
+
+export const buscarRoles = async (campo, valor) => {
+  try {
+    const response = await axios.get(`${url}roles/buscar?campo=${campo}&valor=${valor}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al buscar roles:", error);
+    return [];
+  }
+};

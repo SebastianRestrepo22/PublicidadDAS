@@ -1,8 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import Role from '../models/role.model.js';
-import Usuario from '../models/user.model.js';
+import { connectDB } from '../lib/db.js';
 
 const router = express.Router();
 
@@ -18,33 +17,38 @@ router.post('/register', async (req, res) => {
     } = req.body;
 
     try {
+        const connection = await connectDB();
+
         // Verifica si el correo ya existe
-        const existente = await Usuario.findOne({ where: { CorreoElectronico } });
-        if (existente) {
+        const [existente] = await connection.execute(
+            'SELECT * FROM usuarios WHERE CorreoElectronico = ?',
+            [CorreoElectronico]
+        );
+        if (existente.length > 0) {
             return res.status(409).json({ message: 'Usuario ya existe' });
         }
 
         // Busca el rol cliente
-        const rol = await Role.findOne({ where: { Nombre: 'cliente' } });
-        if (!rol) {
-            return res
-                .status(400)
-                .json({ message: "Rol 'cliente' no encontrado en BD" });
+        const [roles] = await connection.execute(
+            'SELECT * FROM roles WHERE Nombre = ?',
+            ['cliente']
+        );
+        if (roles.length === 0) {
+            return res.status(400).json({ message: "Rol 'cliente' no encontrado en BD" });
         }
+
+        const rol = roles[0];
 
         // Hashea contraseña
         const hash = await bcrypt.hash(Contrasena, 10);
 
         // Crea el usuario
-        await Usuario.create({
-            CedulaId,
-            NombreCompleto,
-            Telefono,
-            CorreoElectronico,
-            Direccion,
-            Contrasena: hash,
-            RoleId: rol.RoleId
-        });
+        await connection.execute(
+            `INSERT INTO usuarios 
+        (CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, hash, rol.RoleId]
+        );
 
         res.status(201).json({ message: 'Usuario creado exitosamente' });
     } catch (error) {
@@ -58,26 +62,32 @@ router.post('/login', async (req, res) => {
     const { CorreoElectronico, Contrasena } = req.body;
 
     try {
-        const user = await Usuario.findOne({
-            where: { CorreoElectronico },
-            include: [{ model: Role }]
-        });
-        if (!user) {
+        const connection = await connectDB();
+
+        const [users] = await connection.execute(
+            `SELECT u.*, r.Nombre AS RoleNombre 
+       FROM usuarios u 
+       JOIN roles r ON u.RoleId = r.RoleId 
+       WHERE u.CorreoElectronico = ?`,
+            [CorreoElectronico]
+        );
+
+        if (users.length === 0) {
             return res.status(404).json({ message: 'Usuario no existe' });
         }
+
+        const user = users[0];
 
         const isMatch = await bcrypt.compare(Contrasena, user.Contrasena);
         if (!isMatch) {
             return res.status(401).json({ message: 'Credenciales inválidas' });
         }
 
-        console.log(user.Role)
-
         const token = jwt.sign(
             {
                 CedulaId: user.CedulaId,
                 RoleId: user.RoleId,
-                Role: user.Role.Nombre
+                Role: user.RoleNombre
             },
             process.env.JWT_KEY,
             { expiresIn: '1h' }
@@ -110,16 +120,80 @@ const verifyToken = (req, res, next) => {
 // Dashboard
 router.get('/dashboard', verifyToken, async (req, res) => {
     try {
-        const user = await Usuario.findByPk(req.userId, {
-            include: [{ model: Role }]
-        });
-        if (!user) return res.status(404).json({ message: 'Usuario no existe' });
+        const connection = await connectDB();
 
-        res.status(200).json({ user });
+        const [users] = await connection.execute(
+            `SELECT u.*, r.Nombre AS RoleNombre 
+       FROM usuarios u 
+       JOIN roles r ON u.RoleId = r.RoleId 
+       WHERE u.CedulaId = ?`,
+            [req.userId]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'Usuario no existe' });
+        }
+
+        res.status(200).json({ user: users[0] });
     } catch (error) {
         console.error('Error en /dashboard:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
+
+// Validar si el correo ya existe
+router.get('/validar-correo', async (req, res) => {
+    const { correo } = req.query;
+
+    try {
+        const connection = await connectDB();
+        const [usuarios] = await connection.execute(
+            'SELECT * FROM usuarios WHERE CorreoElectronico = ?',
+            [correo]
+        );
+
+        res.status(200).json({ exists: usuarios.length > 0 });
+    } catch (error) {
+        console.error('Error en /validar-correo:', error);
+        res.status(500).json({ message: 'Error al validar correo' });
+    }
+});
+
+// Validar si la cedula ya existe
+router.get('/validar-cedula', async (req, res) => {
+    const { cedula } = req.query;
+
+    try {
+        const connection = await connectDB();
+        const [usuarios] = await connection.execute(
+            'SELECT * FROM usuarios WHERE CedulaId = ?',
+            [cedula]
+        );
+
+        res.status(200).json({ exists: usuarios.length > 0 });
+    } catch (error) {
+        console.error('Error en /validar-cedula:', error);
+        res.status(500).json({ message: 'Error al validar la cedula' });
+    }
+});
+
+// Validar si el telefono ya existe
+router.get('/validar-telefono', async (req, res) => {
+    const { telefono } = req.query;
+
+    try {
+        const connection = await connectDB();
+        const [usuarios] = await connection.execute(
+            'SELECT * FROM usuarios WHERE Telefono = ?',
+            [telefono]
+        );
+
+        res.status(200).json({ exists: usuarios.length > 0 });
+    } catch (error) {
+        console.error('Error en /validar-telefono:', error);
+        res.status(500).json({ message: 'Error al validar el telefono' });
+    }
+});
+
 
 export default router;

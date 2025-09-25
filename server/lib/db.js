@@ -1,26 +1,29 @@
-import { Sequelize } from 'sequelize';
+import mysql from 'mysql2/promise';
 import 'dotenv/config';
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-    logging: false // desactiva logs SQL 
-  }
-);
+let connection;
 
 export const connectDB = async () => {
   try {
-    await sequelize.authenticate();
-    console.log('Conexión exitosa con MySQL');
-    await sequelize.sync(); // crea tablas si no existen
+    if (!connection) {
+      connection = await mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+      });
+
+      console.log('Conexión exitosa con MySQL usando mysql2');
+    }
+
+    // Si necesitas crear tablas manualmente, puedes hacerlo aquí:
+    // await connection.execute(`CREATE TABLE IF NOT EXISTS users (...)`);
+
+    return connection;
   } catch (error) {
     console.error('Error de conexión con MySQL:', error);
     process.exit(1);
   }
 };
 
-export default sequelize;
+export default connectDB;

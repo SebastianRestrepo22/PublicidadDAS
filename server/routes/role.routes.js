@@ -1,32 +1,43 @@
-    import express from 'express';
-    import { 
-    createRole, 
-    getAllRoles, 
-    getRoleById, 
-    updateRole, 
+import express from 'express';
+import {
+    createRole,
+    getAllRoles,
+    getRoleById,
+    updateRole,
     deleteRole,
-    changeState 
-    } from '../controllers/role.controller.js';
+    changeState,
+    validarRol,
+    buscarRoles
+} from '../controllers/role.controller.js';
 
-    const router = express.Router();
+const router = express.Router();
 
-    // Crear rol
-    router.post('/', createRole);
+//Verificar si existe el rol
 
-    // Obtener todos los roles
-    router.get('/', getAllRoles);
+router.get('/validar-rol', validarRol);
 
-    // Obtener rol por ID
-    router.get('/:id', getRoleById);
+//Buscar rol
 
-    // Actualizar rol
-    router.put('/:id', updateRole);
+router.get('/buscar', buscarRoles);
 
-    // Eliminar rol
-    router.delete('/:id', deleteRole);
+// Crear rol
+router.post('/', createRole);
 
-    //Cambiar el estado del rol
+// Obtener todos los roles
+router.get('/', getAllRoles);
 
-    router.put('/:id/estado', changeState);
+// Obtener rol por ID
+router.get('/:id', getRoleById);
 
-    export default router;
+// Actualizar rol
+router.put('/:id', updateRole);
+
+// Eliminar rol
+router.delete('/:id', deleteRole);
+
+//Cambiar el estado del rol
+
+router.put('/:id/estado', changeState);
+
+
+export default router;

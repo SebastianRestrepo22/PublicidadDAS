@@ -1,25 +1,33 @@
-import Role from '../models/role.model.js';
+import { connectDB } from '../lib/db.js';
+import { v4 as uuidv4 } from 'uuid';
 
 // Crear rol
 export const createRole = async (req, res) => {
   try {
-    const { Nombre, Estado } = req.body; // Usa los nombres correctos
-    const role = await Role.create({ Nombre, Estado });
+    const { Nombre, Estado = 'Activo' } = req.body;
+    const RoleId = uuidv4(); // Genera UUID manualmente
+
+    const connection = await connectDB();
+    await connection.execute(
+      'INSERT INTO roles (RoleId, Nombre, Estado) VALUES (?, ?, ?)',
+      [RoleId, Nombre, Estado]
+    );
+
     res.status(201).json({
       message: 'Rol creado correctamente',
-      role
+      role: { RoleId, Nombre, Estado }
     });
   } catch (error) {
-    console.error(error); // Para ver el error real en la terminal
+    console.error('Error al crear el rol:', error);
     res.status(500).json({ message: 'Error al crear el rol', error: error.message });
   }
 };
 
-
 // Listar todos los roles
 export const getAllRoles = async (req, res) => {
   try {
-    const roles = await Role.findAll();
+    const connection = await connectDB();
+    const [roles] = await connection.execute('SELECT * FROM roles');
     res.status(200).json(roles);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener los roles', error: error.message });
@@ -30,57 +38,151 @@ export const getAllRoles = async (req, res) => {
 export const getRoleById = async (req, res) => {
   try {
     const { id } = req.params;
-    const role = await Role.findByPk(id);
-    if (!role) return res.status(404).json({ message: 'Rol no encontrado' });
-    res.status(200).json(role);
+    const connection = await connectDB();
+    const [roles] = await connection.execute('SELECT * FROM roles WHERE RoleId = ?', [id]);
+
+    if (roles.length === 0) return res.status(404).json({ message: 'Rol no encontrado' });
+    res.status(200).json(roles[0]);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener el rol', error: error.message });
   }
 };
 
 // Actualizar rol
-
 export const updateRole = async (req, res) => {
   try {
-    const { id } = req.params; // id aquí es el RoleId
-    const { Nombre, Estado } = req.body; // los nombres según tu modelo
-    // Buscamos el rol por su PK
-    const role = await Role.findByPk(id);
-    if (!role) return res.status(404).json({ message: 'Rol no encontrado' });
-    // Actualizamos los campos permitidos
-    await role.update({ Nombre, Estado });
-    res.status(200).json({ message: 'Rol actualizado correctamente', role });
+    const { id } = req.params;
+    const { Nombre, Estado } = req.body;
+
+    const connection = await connectDB();
+    const [result] = await connection.execute(
+      'UPDATE roles SET Nombre = ?, Estado = ? WHERE RoleId = ?',
+      [Nombre, Estado, id]
+    );
+
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'Rol no encontrado' });
+
+    res.status(200).json({
+      message: 'Rol actualizado correctamente',
+      role: { RoleId: id, Nombre, Estado }
+    });
   } catch (error) {
     console.error('Error actualizando rol:', error);
     res.status(500).json({ message: 'Error al actualizar el rol', error: error.message });
   }
 };
 
-
 // Eliminar rol
 export const deleteRole = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const role = await Role.findByPk(id);
-    if (!role) return res.status(404).json({ message: 'Rol no encontrado' });
+    const connection = await connectDB();
 
-    await role.destroy();
+    // Verifica si hay usuarios asociados a este rol
+    const [users] = await connection.execute(
+      'SELECT * FROM usuarios WHERE RoleId = ?',
+      [id]
+    );
+
+    if (users.length > 0) {
+      return res.status(400).json({
+        message: 'No se puede eliminar el rol porque tiene usuarios asociados'
+      });
+    }
+
+    // Si no hay usuarios, elimina el rol
+    await connection.execute('DELETE FROM roles WHERE RoleId = ?', [id]);
     res.status(200).json({ message: 'Rol eliminado correctamente' });
+
   } catch (error) {
-    console.error('Error eliminando rol:', error);
-    res.status(500).json({ message: 'Error al eliminar el rol', error: error.message });
+    console.error('Error al eliminar rol:', error);
+    res.status(500).json({ message: 'Error al eliminar rol' });
   }
 };
+
 
 // Cambiar estado de un rol
 export const changeState = async (req, res) => {
   const { estado } = req.body;
+  const { id } = req.params;
 
   try {
-    await Role.update({ Estado: estado }, { where: { RoleId: req.params.id } });
+    const connection = await connectDB();
+
+    // Verifica si hay usuarios asociados a este rol
+    const [users] = await connection.execute(
+      'SELECT * FROM usuarios WHERE RoleId = ?',
+      [id]
+    );
+
+    if (users.length > 0) {
+      return res.status(400).json({
+        message: 'No se puede cambiar el estado del rol porque tiene usuarios asociados'
+      });
+    }
+
+    // Si no hay usuarios, actualiza el estado
+    const [result] = await connection.execute(
+      'UPDATE roles SET Estado = ? WHERE RoleId = ?',
+      [estado, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Rol no encontrado' });
+    }
+
     res.status(200).json({ message: 'Estado actualizado correctamente' });
   } catch (error) {
     console.error('Error al actualizar estado del rol:', error);
+    res.status(500).json({ message: 'Error interno del servidor', error: error.message });
+  }
+};
+
+
+// Validar si el rol ya existe
+export const validarRol = async (req, res) => {
+  const { rol } = req.query;
+
+  try {
+    const connection = await connectDB();
+    const [roles] = await connection.execute(
+      'SELECT * FROM roles WHERE Nombre = ?',
+      [rol]
+    );
+
+    res.status(200).json({ exists: roles.length > 0 });
+  } catch (error) {
+    console.error('Error en /validar-rol:', error);
+    res.status(500).json({ message: 'Error al validar rol' });
+  }
+};
+
+//Buscar roles
+
+export const buscarRoles = async (req, res) => {
+  const { campo, valor } = req.query;
+
+  const columnasPermitidas = {
+    id: 'RoleId',
+    nombre: 'Nombre',
+    estado: 'Estado',
+  };
+
+  const columna = columnasPermitidas[campo];
+  if (!columna) {
+    return res.status(400).json({ message: 'Campo de búsqueda inválido' });
+  }
+
+  try {
+    const connection = await connectDB();
+    const [roles] = await connection.execute(
+      `SELECT * FROM roles WHERE ${columna} LIKE ?`,
+      [`%${valor}%`]
+    );
+
+    res.status(200).json(roles);
+  } catch (error) {
+    console.error('Error al buscar roles:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
