@@ -13,9 +13,15 @@ export const createCategoria = async (data) => {
     return await categoriaModel.createCategoria(data);
 };
 
+export const updateCategoria = async (id, data) => {
+    const result = await categoriaModel.updateCategoria(id. data);
+    if (result.affectedRows === 0) throw new Error(" Categoria no encontrada");
+    return result;
+};
+
 export const deleteCategoria = async (data) => {
     const result = await categoriaModel.deleteCategoria(id);
     if (result.affectedRows === 0 ) throw new Error("Categoria no encontrada");
     return result;
     
-}
+};

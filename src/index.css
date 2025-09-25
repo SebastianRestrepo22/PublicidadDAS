@@ -7,6 +7,10 @@ body.menu-open main {
   margin-top: 20rem;
 }
 
+@theme{
+  --color-green: #22C55E;
+
+}
 
 /*Carrusel inicio*/
 
@@ -274,4 +278,9 @@ td img {
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Esto nos sirve para reducir codigo */
+.modal{
+  @apply w-[450px] p-6 mx-auto text-center
 }
