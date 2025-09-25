@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({
             CedulaId: rows[0].CedulaId,
             RoleId: rows[0].RoleId
-        }, process.env.JWT_KEY, { expiresIn: '1m' })
+        }, process.env.JWT_KEY, { expiresIn: '1h' })
 
         res.status(201).json({ token: token })
     } catch (error) {

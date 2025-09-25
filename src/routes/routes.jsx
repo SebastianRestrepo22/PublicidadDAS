@@ -10,7 +10,6 @@ import { Usuarios } from "../features/dashboard/usuarios/usuarios"
 import { Roles } from "../features/dashboard/roles/roles"
 import { Pedidos } from "../features/dashboard/pedidos/pedidos"
 import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
-import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriadediseño"
 import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
 import { Error404 } from "../features/404/error404"
 import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
@@ -18,7 +17,7 @@ import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
 import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
 import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
 import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas"
-import { Agenda } from "../features/dashboard/agenda/agenda"
+import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
 
 export const Routers = () => {
     return (
@@ -37,13 +36,12 @@ export const Routers = () => {
                 <Route path="usuarios" element={<Usuarios />} />
                 <Route path="roles" element={<Roles />} />
                 <Route path="pedidos" element={<Pedidos />} />
-                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
                 <Route path="insumos" element={<Insumos />} />
                 <Route path="productoServicio" element={<ProductoServicios />} />
                 <Route path="proveedores" element={<Proveedores />} />
                 <Route path="gestionVentas" element={<GestionVentas/>}/>
+                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño/>}/>
                 <Route path="metodoDePago" element={<MetodoDePago />} />
-                <Route path="agenda" element={<Agenda/>}/>
             </Route>
 
             {/* 404 */}
