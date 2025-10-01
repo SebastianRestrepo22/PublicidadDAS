@@ -7,7 +7,7 @@ import Modal from "../components/modals/modal";
 export const CategoriaDeDiseño = () => {
   const [categorias, setCategorias] = useState([]);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
-  const [compoFiltro, setCampoFiltro] = useState("");
+  const [campoFiltro, setCampoFiltro] = useState("");
   const [busqueda, setBusqueda] = useState("");
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -89,21 +89,22 @@ export const CategoriaDeDiseño = () => {
     setOpenEditar(true);
   };
 
-  // const categoriaFiltradas = categoria.filter((c) =>  {
-  //   if (!busqueda) return true;
-  //   if (CampoFiltro === "id") {
-  //     return c.CategoriaId.toString().includes(busqueda); 
-  //   }
 
-  //   if (CampoFiltro === "nombre") {
-  //     return c.Nombre.tolowerCase().includes(busqueda.tolowerCase());
-  //   }
+  const categoriasFiltradas = categorias.filter((c) =>  {
+    if (!busqueda) return true;
+    if (campoFiltro === "id") {
+      return c.CategoriaId.toString().includes(busqueda); 
+    }
 
-  //   return (
-  //     c.CategoriaId.toString().includes(busqueda) ||
-  //     c.Nombre.tolowerCase
-  //   )
-  // })
+    if (campoFiltro === "nombre") {
+      return c.Nombre.toLowerCase().includes(busqueda.toLowerCase());
+    }
+
+    return (
+      c.CategoriaId.toString().includes(busqueda) ||
+      c.Nombre.toLowerCase().includes(busqueda.toLowerCase))
+  
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue p-6">
@@ -123,7 +124,10 @@ export const CategoriaDeDiseño = () => {
                 <Plus size={18} /> Nueva categoria
               </Link>
 
-              <select className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]">
+              <select value={campoFiltro}
+              onChange={(e) => setCampoFiltro(e.target.value)}
+              className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500  focus:border-transparent transition-all duration-200 min-w-[140px]"
+              >
                 <option value="">Filtrar por campo</option>
                 <option value="id">ID</option>
                 <option value="nombre">Nombre</option>
@@ -134,6 +138,8 @@ export const CategoriaDeDiseño = () => {
                 <input
                   type="text"
                   placeholder="Buscar categoria"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
                   className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
                 />
               </div>
@@ -160,7 +166,7 @@ export const CategoriaDeDiseño = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {categorias.map((c) => (
+                {categoriasFiltradas.map((c) => (
                   <tr
                     key={c.CategoriaId}
                     className="hover:bg-slate-50 transition-colors duration-150 "

@@ -32,22 +32,15 @@ export const createCategoria = async (data) => {
   }
 };
 
-// Actualizar una categoría
 export const updateCategoria = async (id, data) => {
-  try {
-    const response = await axios.put(`${url}categorias/${id}`, data);
-    return response;
-  } catch (error) {
-    return { status: false, message: "No se puede actualizar la categoría", error };
-  }
+    const result = await categoriaModel.updateCategoria(id. data);
+    if (result.affectedRows === 0) throw new Error(" Categoria no encontrada");
+    return result;
 };
 
-// Eliminar una categoría
-export const deleteCategoria = async (id) => {
-  try {
-    const response = await axios.delete(`${url}categorias/${id}`);
-    return response;
-  } catch (error) {
-    return { status: false, message: "No se puede eliminar la categoría", error };
-  }
+export const deleteCategoria = async (data) => {
+    const result = await categoriaModel.deleteCategoria(id);
+    if (result.affectedRows === 0 ) throw new Error("Categoria no encontrada");
+    return result;
+    
 };

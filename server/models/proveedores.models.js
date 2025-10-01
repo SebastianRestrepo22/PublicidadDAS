@@ -1,32 +1,42 @@
 import { connectionToDatabase } from '../lib/db.js';
+import { v4 as uuidv4 } from 'uuid';
 
-// Obtener todos los proveedores
+
 export const getAllProveedores = async () => {
   const db = await connectionToDatabase();
-  const [rows] = await db.query('SELECT * FROM Proveedores');
+  const [rows] = await db.query('SELECT * FROM Proveedores'); 
   return rows;
 };
 
-// Obtener proveedor por ID
-export const getProveedorById = async (id) => {
+export const getInsumoById = async (id) => {
   const db = await connectionToDatabase();
-  const [rows] = await db.query('SELECT * FROM Proveedores WHERE ProveedorId = ?', [id]);
+  const [rows] = await db.query('SELECT * FROM Proveedores WHERE InsumoId = ?', [id]);
   return rows[0];
 };
 
-// Crear nuevo proveedor
-export const createProveedor = async ({ nombreProveedor, telefono, correo, direccion, estado }) => {
+export const createInsumo = async ({ nombreInsumo, stock }) => {
   const db = await connectionToDatabase();
-  const [result] = await db.query(
-    'INSERT INTO Proveedores (NombreProveedor, Telefono, Correo, Direccion, Estado) VALUES (?, ?, ?, ?, ?)',
-    [nombreProveedor, telefono, correo, direccion, estado]
+  const insumoId = uuidv4();
+  await db.query(
+    'INSERT INTO Insumos (InsumoId, Nombre, Stock) VALUES (?, ?, ?)',
+    [insumoId, nombreInsumo, stock]
   );
+  return { insumoId: insumoId, Nombre: nombreInsumo, Stock: stock};
+};
+
+export const deleteInsumo = async (id) => {
+  const db = await connectionToDatabase();
+  const [result] = await db.query('DELETE FROM Insumos WHERE InsumoId = ?', [id]);
   return result;
 };
 
-// Eliminar proveedor por ID
-export const deleteProveedor = async (id) => {
+export const updateInsumo = async (id, { nombreInsumo, stock }) => {
   const db = await connectionToDatabase();
-  const [result] = await db.query('DELETE FROM Proveedores WHERE ProveedorId = ?', [id]);
-  return result;
-};
+  const [result] = await db.query(
+    'UPDATE Insumos SET Nombre = ?, Stock = ? WHERE InsumoId = ?',
+    [nombreInsumo, stock, id]
+  );
+  return result
+
+}
+
