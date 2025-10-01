@@ -9,6 +9,8 @@ const API_URL = "http://localhost:3000/api/insumos";
 export const Insumos = () => {
   const [insumos, setInsumos] = useState([]);
   const [selectedInsumo, setSelectedInsumo] = useState(null);
+  const [campoFiltro, setCampoFiltro] = useState("");
+  const [busqueda, setBusqueda] = useState("");
 
   const [openCreate, setOpenCreate] = useState(false);
   const [openEditar, setOpenEditar] = useState(false);
@@ -47,11 +49,12 @@ export const Insumos = () => {
       nombreInsumo: formCrear.nombreInsumo,
       stock: Number(formCrear.stock), // 🔹 convierte a número si tu DB espera INT
     });
+    alert("Insumo creado exitosamente ")
     setOpenCreate(false);
     setFormCrear({ nombreInsumo: "", stock: "" });
     fetchInsumos();
   } catch (err) {
-    console.log("Error al crear insumo:", err.response?.data || err.message);
+    alert("Error al crear insumo:", err.response?.data || err.message);
   }
 };
 
@@ -62,10 +65,11 @@ export const Insumos = () => {
         nombreInsumo: formEditar.nombreInsumo,
         stock: formEditar.stock,
       });
+      alert("Insumo actualizado correctamente")
       setOpenEditar(false);
       fetchInsumos();
     } catch (err) {
-      console.error("Error al actualizar insumos:", err);
+      alert("Error al actualizar insumos:", err);
     }
   };
 
@@ -73,21 +77,47 @@ export const Insumos = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(`${API_URL}/${selectedInsumo.InsumoId}`);
+      alert("Insumo eliminado con exito")
       setOpenEliminar(false);
       fetchInsumos();
     } catch (err) {
-      console.error("Error al eliminar el insumo:", err);
+      alert("Error al eliminar el insumo:", err);
     }
   };
 
   const openEditarModal = (item) => {
     setSelectedInsumo(item);
     setFormEditar({
-      nombreInsumo: item.Nombre, // 👈 usa Nombre
+      nombreInsumo: item.Nombre,
       stock: item.Stock,
     });
     setOpenEditar(true);
   };
+
+  // filtro
+    const insumosFiltrados = insumos.filter((i) =>  {
+    if (!busqueda) return true;
+    if (campoFiltro === "id") {
+      return i.InsumoId.toString().includes(busqueda); 
+    }
+
+    if (campoFiltro === "nombre") {
+      return i.Nombre.toLowerCase().includes(busqueda.toLowerCase());
+    }
+
+    if (campoFiltro === "stock"){
+      return i.Stock.toString().includes(busqueda)
+    }
+
+    return (
+      i.InsumoId.toString().includes(busqueda) ||
+      i.Nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+      i.Stock.toString().includes(busqueda)
+    );
+  
+  })
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue p-6">
@@ -106,11 +136,15 @@ export const Insumos = () => {
                 <Plus size={18} /> Nuevo insumo
               </Link>
 
-              <select className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]">
+              <select value={campoFiltro}
+              onChange={(e) => setCampoFiltro(e.target.value)}
+              className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]"
+              >
                 <option value="">Filtrar por campo</option>
                 <option value="id">ID</option>
-                <option value="insumo">Insumo</option>
                 <option value="nombre">Nombre</option>
+                <option value="stock">Stock</option>
+                
               </select>
 
               <div className="relative flex-1 max-w-md">
@@ -118,6 +152,8 @@ export const Insumos = () => {
                 <input
                   type="text"
                   placeholder="Buscar insumos"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
                   className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
                 />
               </div>
@@ -144,10 +180,10 @@ export const Insumos = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {insumos.map((i) => (
+                {insumosFiltrados.map((i) => (
                   <tr key={i.InsumoId} className="hover:bg-slate-50 transition-colors duration-150 ">
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.InsumoId}</td>
-                    <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.Nombre}</td> {/* 👈 */}
+                    <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.Nombre}</td> 
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.Stock}</td>
                     <td className="py-4 px-6">
                       <div className="flex gap-2">

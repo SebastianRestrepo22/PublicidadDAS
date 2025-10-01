@@ -100,6 +100,25 @@ export const Proveedores = () => {
     setOpenEditar(true);
   };
 
+  const toggleEstado = async (idProveedor, estadoNuevo) => {
+    try {
+      await axios.put(`http://localhost:3000/api/proveedores/${idProveedor}`, {
+        estado: estadoNuevo ? 1 : 0, 
+      });
+
+      setEstadoActivo((prev) => ({
+        ...prev,
+        [idProveedor]: estadoNuevo,
+      }));
+    } catch (error) {
+      alert("Error al actualizar estado:", err)
+
+      
+    }
+  };
+
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue p-6">
       <div className="max-w-5xl mx-auto">
@@ -192,13 +211,8 @@ export const Proveedores = () => {
                             type="checkbox"
                             className="sr-only peer"
                             checked={Boolean(estadoActivos[p.ProveedorId])}
-                            onChange={(e) =>
-                              setEstadoActivo((prev) => ({
-                                ...prev,
-                                [p.ProveedorId]: e.target.checked,
-                              }))
-                            }
-                            aria-checked={Boolean(estadoActivos[p.ProveedorId])}
+                            onChange={(e) => toggleEstado(p.ProveedorId, e.target.checked)}
+                            aia-checked={Boolean(estadoActivos[p.ProveedorId])}
                           />
                           <div className="w-11 h-6 rounded-full bg-gray-300 peer-checked:bg-green-500 transition-colors pointer-events-none"></div>
                           <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform transform peer-checked:translate-x-5 pointer-events-none"></div>
