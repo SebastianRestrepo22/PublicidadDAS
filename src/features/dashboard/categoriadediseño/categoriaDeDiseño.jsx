@@ -89,21 +89,21 @@ export const CategoriaDeDiseño = () => {
     setOpenEditar(true);
   };
 
-  const categoriaFiltradas = categoria.filter((c) =>  {
-    if (!busqueda) return true;
-    if (CampoFiltro === "id") {
-      return c.CategoriaId.toString().includes(busqueda); 
-    }
+  // const categoriaFiltradas = categoria.filter((c) =>  {
+  //   if (!busqueda) return true;
+  //   if (CampoFiltro === "id") {
+  //     return c.CategoriaId.toString().includes(busqueda); 
+  //   }
 
-    if (CampoFiltro === "nombre") {
-      return c.Nombre.tolowerCase().includes(busqueda.tolowerCase());
-    }
+  //   if (CampoFiltro === "nombre") {
+  //     return c.Nombre.tolowerCase().includes(busqueda.tolowerCase());
+  //   }
 
-    return (
-      c.CategoriaId.toString().includes(busqueda) ||
-      c.Nombre.tolowerCase
-    )
-  })
+  //   return (
+  //     c.CategoriaId.toString().includes(busqueda) ||
+  //     c.Nombre.tolowerCase
+  //   )
+  // })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue p-6">
