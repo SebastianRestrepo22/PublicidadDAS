@@ -6,6 +6,10 @@ import { GetDataUser, postDataUsers, updateDatauser, deleteDataUser, buscarUsuar
 import axios from "axios";
 import { GetDataRoles } from "../roles/services/services.role.js";
 
+//importamos toastify
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const Usuarios = () => {
   const [user, setUser] = useState([]);
   const [values, setValues] = useState({
@@ -17,6 +21,7 @@ export const Usuarios = () => {
     Contrasena: "",
     RoleId: ""
   });
+
   const [editData, setEditData] = useState(null);
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -33,7 +38,7 @@ export const Usuarios = () => {
       if (data?.data) setRoles(data.data);
     };
     fetchRoles();
-  }, []);   
+  }, []);
 
   //Buscar usuarios
 
@@ -135,7 +140,7 @@ export const Usuarios = () => {
     e.preventDefault();
 
     if (correoError || cedulaError || telefonoError) {
-      alert("Corrige los errores antes de enviar");
+      toast.warning("Corrige los errores antes de enviar");
       return;
     }
 
@@ -146,7 +151,7 @@ export const Usuarios = () => {
           const updatedList = await GetDataUser();
           setUser(updatedList.data);
           setOpenEditar(false);
-          alert("Usuario actualizado correctamente");
+          toast.success("Usuario actualizado correctamente");
         }
       } else {
         const response = await postDataUsers(values);
@@ -154,14 +159,14 @@ export const Usuarios = () => {
           const updatedList = await GetDataUser();
           setUser(updatedList.data);
           setOpenCreate(false);
-          alert("Usuario creado correctamente");
+          toast.success("Usuario creado correctamente");
         }
       }
       setValues({ CedulaId: "", NombreCompleto: "", Telefono: "", CorreoElectronico: "", Direccion: "", Contrasena: "" });
       setEditData(null);
     } catch (error) {
       console.error(error);
-      alert("Error al procesar la solicitud");
+      toast.error("Error al procesar la solicitud");
     }
   };
 
@@ -170,7 +175,7 @@ export const Usuarios = () => {
     try {
       const response = await deleteDataUser(id); // Usamos la función del servicio
       if (response.status === 200 || response.status === 201) {
-        alert(response.data.message); // Mensaje del backend
+        toast.success(response.data.message); // Mensaje del backend
 
         // Actualiza la lista de usuarios después de eliminar
         const updatedList = await GetDataUser();
@@ -178,10 +183,10 @@ export const Usuarios = () => {
 
         setOpenEliminar(false); // Cerramos el modal
       } else {
-        alert(response.message || "No se pudo eliminar el usuario");
+        toast.error(response.message || "No se pudo eliminar el usuario");
       }
     } catch (error) {
-      alert(error.message || "Error al eliminar el usuario");
+      toast.error(error.message || "Error al eliminar el usuario");
     }
   };
 
@@ -194,7 +199,6 @@ export const Usuarios = () => {
     setOriginalCorreo(u.CorreoElectronico);
     setOriginalCedula(u.CedulaId);
     setOriginalTelefono(u.Telefono);
-
 
     setCedulaError('');
     setCorreoError('');
@@ -230,7 +234,7 @@ export const Usuarios = () => {
             readOnly={isReadOnly}
             onChange={handleChanges}
             onBlur={handleCedulaBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {cedulaError && <p className="text-red-500 text-sm">{cedulaError}</p>}
         </div>
@@ -243,7 +247,7 @@ export const Usuarios = () => {
             value={values.NombreCompleto}
             placeholder="Ingrese su nombre"
             onChange={handleChanges}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -255,7 +259,7 @@ export const Usuarios = () => {
             value={values.Direccion}
             placeholder="Ingrese su dirección"
             onChange={handleChanges}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -268,7 +272,7 @@ export const Usuarios = () => {
             placeholder="Ingrese su correo"
             onChange={handleChanges}
             onBlur={handleCorreoBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {correoError && <p className="text-red-500 text-sm">{correoError}</p>}
         </div>
@@ -282,28 +286,28 @@ export const Usuarios = () => {
             placeholder="Ingrese su teléfono"
             onChange={handleChanges}
             onBlur={handleTelefonoBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {telefonoError && <p className="text-red-500 text-sm">{telefonoError}</p>}
         </div>
 
         {openEditar && (
-        <div className="flex flex-col">
-          <label>Rol</label>
-          <select
-            name="RoleId"
-            value={values.RoleId || ""}
-            onChange={handleChanges}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Seleccione un rol</option>
-            {roles.map((rol) => (
-              <option key={rol.RoleId} value={rol.RoleId}>
-                {rol.Nombre}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="flex flex-col">
+            <label>Rol</label>
+            <select
+              name="RoleId"
+              value={values.RoleId || ""}
+              onChange={handleChanges}
+              className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Seleccione un rol</option>
+              {roles.map((rol) => (
+                <option key={rol.RoleId} value={rol.RoleId}>
+                  {rol.Nombre}
+                </option>
+              ))}
+            </select>
+          </div>
         )}
 
 
@@ -498,6 +502,21 @@ export const Usuarios = () => {
             </tbody>
           </table>
         </div>
+
+        {/* El contenedor de notificaciones (una sola vez) */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+
       </div>
     </div>
   );

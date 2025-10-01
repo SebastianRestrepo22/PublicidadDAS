@@ -1,16 +1,35 @@
-import { data } from 'react-router-dom';
-import * as categoriaModel from "../models/categoria.models.js";
+import axios from "axios";
 
+const url = "http://localhost:3000/api/";
+
+// Listar todas las categorías
 export const getAllCategorias = async () => {
-    return await categoriaModel.getAllCategorias();
+  try {
+    const response = await axios.get(url + "categorias");
+    return response;
+  } catch (error) {
+    return { status: false, message: "No está la API de categorías", error };
+  }
 };
 
-export const getAllCategoriasById = async (id) => {
-    return await categoriaModel.getAllCategoriasById(id);
-}
+// Obtener una categoría por ID
+export const getCategoriaById = async (id) => {
+  try {
+    const response = await axios.get(`${url}categorias/${id}`);
+    return response;
+  } catch (error) {
+    return { status: false, message: "No se puede obtener la categoría", error };
+  }
+};
 
+// Crear una nueva categoría
 export const createCategoria = async (data) => {
-    return await categoriaModel.createCategoria(data);
+  try {
+    const response = await axios.post(url + "categorias", data);
+    return response;
+  } catch (error) {
+    return { status: false, message: "No se puede crear la categoría", error };
+  }
 };
 
 export const updateCategoria = async (id, data) => {

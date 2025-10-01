@@ -5,6 +5,11 @@ import Modal from "../components/modals/modal.jsx";
 import { buscarRoles, deleteDataRol, GetDataRoles, postDataRoles, updateDataRol } from './services/services.role';
 import axios from "axios";
 
+//importamos toastify
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 function Toggle({ checked = false, onChange }) {
   const [isOn, setIsOn] = useState(checked);
 
@@ -116,14 +121,13 @@ export const Roles = () => {
       const response = await axios.put(`http://localhost:3000/roles/${roleId}/estado`, {
         estado: nuevoEstado
       });
-      alert(response.data.message);
+      toast.success(response.data.message);
     } catch (error) {
       if (error.response?.data?.message) {
-        alert(error.response.data.message);
+        toast.warning(error.response.data.message);
       } else {
-        alert("No se pudo actualizar el estado del rol.");
+        toast.error("No se pudo actualizar el estado del rol.");
       }
-      console.error("Error al cambiar estado:", error);
     }
   };
 
@@ -138,7 +142,7 @@ export const Roles = () => {
         const updatedList = await GetDataRoles();
         setRoles(updatedList.data);
         setOpenEditar(false);
-        alert("Rol actualizado correctamente");
+        toast.success("Rol actualizado correctamente");
       }
     } else {
       const response = await postDataRoles(formData);
@@ -146,7 +150,7 @@ export const Roles = () => {
         const updatedList = await GetDataRoles();
         setRoles(updatedList.data);
         setOpenCreate(false);
-        alert("Rol creado correctamente");
+        toast.success("Rol creado correctamente");
       }
     }
 
@@ -176,15 +180,15 @@ export const Roles = () => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`http://localhost:3000/roles/${id}`);
-      alert(response.data.message);
+      toast.success(response.data.message);
       const updatedList = await GetDataRoles();
       if (updatedList?.data) setRoles(updatedList.data);
       setOpenEliminar(false);
     } catch (error) {
       if (error.response?.data?.message) {
-        alert(error.response.data.message);
+        toast.warning(error.response.data.message);
       } else {
-        alert('Error al eliminar el rol');
+        toast.error('Error al eliminar el rol');
       }
     }
   };
@@ -203,7 +207,7 @@ export const Roles = () => {
             value={formData.Nombre}
             onChange={changeData}
             onBlur={handleRolBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {rolError && <p className="text-red-500 text-sm">{rolError}</p>}
         </div>
@@ -369,6 +373,21 @@ export const Roles = () => {
             </table>
           </div>
         </div>
+
+        {/* El contenedor de notificaciones (una sola vez) */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+
       </div>
     </div>
   );

@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
 import Modal from "../components/modals/modal";
+import { buscarServicios, deleteDataService, GetDataServices, postDataServices, updateDataServices } from "./services/services.servicios";
+import { getAllCategorias } from "../categoriadediseño/services/services.categoria.js";
+import axios from "axios";
+
+//importamos toastify
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const ProductoServicios = () => {
   const [openCreate, setOpenCreate] = useState(false);
@@ -9,79 +16,243 @@ export const ProductoServicios = () => {
   const [openVer, setOpenVer] = useState(false);
   const [openEliminar, setOpenEliminar] = useState(false);
 
-  const productos = [
-    { id: 1, tipo: "producto", nombre: "Tintas", descripcion: "Tinta negra para impresora", url: "https://example.com/tintas.jpg", precio: 10, descuento: 0, stock: 50, esPersonalizado: false, categoriaId: 1 },
-    { id: 2, tipo: "producto", nombre: "Papel Couché", descripcion: "Papel de alta calidad", url: "https://example.com/papel.jpg", precio: 5, descuento: 0, stock: 200, esPersonalizado: false, categoriaId: 2 },
-    { id: 3, tipo: "producto", nombre: "Barniz UV", descripcion: "Barniz protector", url: "https://example.com/barniz.jpg", precio: 15, descuento: 0, stock: 75, esPersonalizado: false, categoriaId: 3 },
-  ];
+  const [service, setService] = useState([]);
+  const [values, setValues] = useState({
+    ProductoServicioId: "",
+    Tipo: "",
+    Nombre: "",
+    Descripcion: "",
+    UrlImagen: "",
+    Precio: "",
+    Descuento: "",
+    Stock: "",
+    EsPersonalizado: false,
+    CategoriaId: ""
+  });
+  const [editData, setEditData] = useState(null);
+  const [categorias, setCategorias] = useState([]);
 
-  // NUEVA FUNCIÓN PARA RENDERIZAR EL FORM
+  useEffect(() => {
+    const fetchCategoria = async () => {
+      const data = await getAllCategorias();
+      if (data?.data) setCategorias(data.data);
+    };
+    fetchCategoria();
+  }, []);
+
+  const [filtroCampo, setFiltroCampo] = useState('');
+  const [filtroValor, setFiltroValor] = useState('');
+
+  useEffect(() => {
+    const cargarProductoServicio = async () => {
+      try {
+        let resultados;
+        if (filtroCampo && filtroValor) {
+          // Búsqueda por filtro
+          resultados = await buscarServicios(filtroCampo, filtroValor);
+        } else {
+          // Si no hay filtro, obtener todos
+          const todos = await GetDataServices();
+          resultados = todos?.data || [];
+        }
+        setService(Array.isArray(resultados) ? resultados : []);
+      } catch (error) {
+        console.error(error);
+        setService([]);
+      }
+    };
+    cargarProductoServicio();
+  }, [filtroCampo, filtroValor]);
+
+  const [nombreError, setNombreError] = useState("");
+  const [originalNombre, setOriginalNombre] = useState("");
+
+  const handleChanges = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
+
+  const handleNombreBlur = async () => {
+    if (values.Nombre === originalNombre) return;
+    try {
+      const response = await axios.get(`http://localhost:3000/service/validar-nombre?nombre=${values.Nombre}`);
+      setNombreError(response.data.exists ? 'Este nombre ya está registrado' : '');
+    } catch {
+      setNombreError('No se pudo validar el nombre');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (nombreError) {
+      toast.warning("Corrige los errores antes de enviar");
+      return;
+    }
+    try {
+      if (editData) {
+        const response = await updateDataServices(editData.ProductoServicioId, values);
+        if (response.status === 200) {
+          const updatedList = await GetDataServices();
+          setService(updatedList.data);
+          setOpenEditar(false);
+          toast.success("Producto/servicio actualizado correctamente");
+        }
+      } else {
+        const response = await postDataServices(values);
+        if (response.status === 201) {
+          const updatedList = await GetDataServices();
+          setService(updatedList.data);
+          setOpenCreate(false);
+          toast.success("Producto/servicio creado correctamente");
+        }
+      }
+      setValues({
+        ProductoServicioId: "",
+        Tipo: "",
+        Nombre: "",
+        Descripcion: "",
+        UrlImagen: "",
+        Precio: "",
+        Descuento: "",
+        Stock: "",
+        EsPersonalizado: false,
+        CategoriaId: ""
+      });
+      setEditData(null);
+    } catch (error) {
+      console.error(error);
+      success.error("Error al procesar la solicitud");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteDataService(id);
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response.data.message);
+        const updatedList = await GetDataServices();
+        if (updatedList?.data) setService(updatedList.data);
+        setOpenEliminar(false);
+      } else {
+        success.error(response.message || "No se pudo eliminar el producto/servicio");
+      }
+    } catch (error) {
+      success.error(error.message || "Error al eliminar el producto/servicio");
+    }
+  };
+
+  const handleEditClick = (u) => {
+    setEditData(u);
+    setValues({ ...u });
+    setOriginalNombre(u.Nombre);
+    setNombreError('');
+    setOpenEditar(true);
+  };
+
+  const handleViewClick = (u) => {
+    setEditData(u);
+    setValues({ ...u });
+    setOpenVer(true);
+  };
+
+  const handleDeleteClick = (u) => {
+    setEditData(u);
+    setOpenEliminar(true);
+  };
+
   const renderModalForm = (type = "create") => {
-    const isReadOnly = type === "ver";
     const buttonLabel =
       type === "create" ? "Crear" : type === "editar" ? "Editar" : "Cerrar";
 
     return (
-      <form className="flex flex-col gap-6 p-4 bg-white rounded-lg shadow-md">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex flex-col gap-2">
-            <label className="font-medium">ID</label>
-            <input
-              type="text"
-              placeholder="Ingrese el ID"
-              readOnly={isReadOnly}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-4 bg-white rounded-lg shadow-md">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col gap-2">
             <label className="font-medium">Tipo</label>
-            <input
-              type="text"
-              placeholder="producto o servicio"
-              readOnly={isReadOnly}
+            <select
+              name="Tipo"
+              value={values.Tipo || ""}
+              onChange={handleChanges}
               className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Seleccione tipo</option>
+              <option value="Producto">Producto</option>
+              <option value="Servicio">Servicio</option>
+            </select>
           </div>
+
           <div className="flex flex-col gap-2">
             <label className="font-medium">Nombre</label>
             <input
               type="text"
               placeholder="Ingrese el nombre"
-              readOnly={isReadOnly}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              name="Nombre"
+              value={values.Nombre}
+              onChange={handleChanges}
+              onBlur={handleNombreBlur}
+              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {nombreError && <p className="text-red-500 text-sm">{nombreError}</p>}
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-2">
             <label className="font-medium">Descripción</label>
             <input
               type="text"
               placeholder="Ingrese la descripción"
-              readOnly={isReadOnly}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              name="Descripcion"
+              value={values.Descripcion}
+              onChange={handleChanges}
+              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 flex flex-col gap-2">
+            <label className="font-medium">URL de la imagen</label>
+            <input
+              type="text"
+              placeholder="http://..."
+              name="UrlImagen"
+              value={values.UrlImagen}
+              onChange={handleChanges}
+              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          {values.UrlImagen && (
+            <div className="flex-shrink-0">
+              <p className="text-sm text-gray-500 mb-1">Vista previa:</p>
+              <img
+                src={values.UrlImagen}
+                alt="Vista previa"
+                className="w-[80px] h-[80px ] object-cover rounded border border-gray-300"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col gap-2">
             <label className="font-medium">Precio</label>
             <input
               type="number"
               placeholder="Ingrese el precio"
-              readOnly={isReadOnly}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              name="Precio"
+              value={values.Precio}
+              onChange={handleChanges}
+              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="flex flex-col gap-2">
             <label className="font-medium">Descuento</label>
             <input
               type="number"
               placeholder="0"
-              readOnly={isReadOnly}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              name="Descuento"
+              value={values.Descuento}
+              onChange={handleChanges}
+              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -89,48 +260,112 @@ export const ProductoServicios = () => {
             <input
               type="number"
               placeholder="Cantidad"
-              readOnly={isReadOnly}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="font-medium">Es personalizado</label>
-            <input
-              type="checkbox"
-              readOnly={isReadOnly}
-              className="w-5 h-5 border-gray-300 focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="font-medium">Categoría ID</label>
-            <input
-              type="number"
-              placeholder="Ingrese la categoría"
-              readOnly={isReadOnly}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              name="Stock"
+              value={values.Stock}
+              onChange={handleChanges}
+              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 mt-4 items-center">
-          {type !== "ver" && (
-            <button className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition-colors">
-              {buttonLabel}
-            </button>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div className="flex flex-col gap-2">
+            <label>Categoría ID</label>
+            <select
+              name="CategoriaId"
+              value={values.CategoriaId || ""}
+              onChange={handleChanges}
+              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Seleccione la categoria</option>
+              {categorias.map((categoria) => (
+                <option key={categoria.CategoriaId} value={categoria.CategoriaId}>
+                  {categoria.Nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col items-start gap-2">
+            <label className="font-medium">Es personalizado</label>
+            <input
+              type="checkbox"
+              name="EsPersonalizado"
+              checked={values.EsPersonalizado || false}
+              onChange={(e) =>
+                setValues({ ...values, EsPersonalizado: e.target.checked })
+              }
+              className="w-5 h-5 border-gray-300 focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-4 mt-4">
+          <button className="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">
+            {buttonLabel}
+          </button>
           <button
             type="button"
-            className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors"
+            className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors"
             onClick={() => {
-              if (type === "create") setOpenCreate(false);
-              else if (type === "editar") setOpenEditar(false);
-              else if (type === "ver") setOpenVer(false);
+              setOpenCreate(false);
+              setOpenEditar(false);
+              setOpenVer(false);
+              setOpenEliminar(false);
+              setValues({
+                ProductoServicioId: "",
+                Tipo: "",
+                Nombre: "",
+                Descripcion: "",
+                UrlImagen: "",
+                Precio: "",
+                Descuento: "",
+                Stock: "",
+                EsPersonalizado: false,
+                CategoriaId: ""
+              });
+              setEditData(null);
+              setNombreError('');
             }}
           >
-            {type === "ver" ? "Cerrar" : "Cancelar"}
+            Cerrar
           </button>
         </div>
       </form>
+    );
+  };
+
+  const renderView = () => {
+    if (!editData) return null;
+    return (
+      <div className="text-left space-y-2">
+        <p><strong>ID:</strong> {editData.ProductoServicioId}</p>
+        <p><strong>Tipo:</strong> {editData.Tipo}</p>
+        <p><strong>Nombre:</strong> {editData.Nombre}</p>
+        <p><strong>Descripción:</strong> {editData.Descripcion || "—"}</p>
+        <p><strong>Precio:</strong> ${editData.Precio}</p>
+        <p><strong>Descuento:</strong> {editData.Descuento}%</p>
+        <p><strong>Stock:</strong> {editData.Stock}</p>
+        <p><strong>Es personalizado:</strong> {editData.EsPersonalizado ? "Sí" : "No"}</p>
+        <p><strong>Categoría:</strong> {editData.CategoriaNombre || editData.CategoriaId}</p>
+        {editData.UrlImagen && (
+          <div className="mt-4">
+            <img
+              src={editData.UrlImagen}
+              alt={editData.Nombre}
+              className="w-[90px] h-[90px] object-cover rounded-lg border"
+            />
+          </div>
+        )}
+        <div className="mt-4 text-center">
+          <button
+            className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 w-[400px]"
+            onClick={() => setOpenVer(false)}
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
     );
   };
 
@@ -149,9 +384,30 @@ export const ProductoServicios = () => {
           >
             <Plus size={18} /> Nuevo producto/servicio
           </Link>
+
+          <select
+            value={filtroCampo}
+            onChange={(e) => setFiltroCampo(e.target.value)}
+            className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[180px]"
+          >
+            <option value="">Filtrar por campo</option>
+            <option value="id">ID</option>
+            <option value="tipo">Tipo</option>
+            <option value="nombre">Nombre</option>
+            <option value="descripcion">Descripción</option>
+            <option value="url">URL</option>
+            <option value="precio">Precio</option>
+            <option value="descuento">Descuento</option>
+            <option value="stock">Stock</option>
+            <option value="personalizado">Personalizado</option>
+            <option value="categoria">CategoriaId</option>
+          </select>
+
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
+              value={filtroValor}
+              onChange={(e) => setFiltroValor(e.target.value)}
               type="text"
               placeholder="Buscar producto/servicio"
               className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
@@ -159,35 +415,33 @@ export const ProductoServicios = () => {
           </div>
         </div>
 
-        {/* MODALES */}
+        {/* Modales */}
         <Modal open={openCreate} onClose={() => setOpenCreate(false)}>
+          <h3 className="text-lg font-black text-gray-800 mb-6">Nuevo producto/servicio</h3>
           {renderModalForm("create")}
         </Modal>
 
         <Modal open={openEditar} onClose={() => setOpenEditar(false)}>
+          <h3 className="text-lg font-black text-gray-800 mb-6">Editar producto/servicio</h3>
           {renderModalForm("editar")}
         </Modal>
 
         <Modal open={openVer} onClose={() => setOpenVer(false)}>
-          {renderModalForm("ver")}
+          <div className="w-[450px] p-6 mx-auto text-center">
+            <h3 className="text-lg font-black text-gray-800 mb-6">Ver producto/servicio</h3>
+            {renderView()}
+          </div>
         </Modal>
 
         <Modal open={openEliminar} onClose={() => setOpenEliminar(false)}>
-          <div className="max-w-md w-full p-6 mx-auto bg-white rounded-xl shadow-lg">
-            <h3 className="text-lg font-black text-gray-800 mb-4 text-center">
-              Eliminar producto/servicio
-            </h3>
-            <p className="mb-6 text-center">
-              ¿Está seguro de eliminar este producto/servicio?
-            </p>
+          <div className="w-[400px] p-6 mx-auto text-center">
+            <h3 className="text-lg font-black text-gray-800 mb-4">Eliminar producto/Servicio</h3>
+            <p className="mb-6">¿Estás seguro de eliminar este producto/servicio?</p>
             <div className="flex gap-4">
-              <button className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors">
+              <button className="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors" onClick={() => handleDelete(editData.ProductoServicioId)}>
                 Eliminar
               </button>
-              <button
-                className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition-colors"
-                onClick={() => setOpenEliminar(false)}
-              >
+              <button className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors" onClick={() => setOpenEliminar(false)}>
                 Cancelar
               </button>
             </div>
@@ -195,90 +449,86 @@ export const ProductoServicios = () => {
         </Modal>
 
         {/* TABLA */}
-        <div className="bg-white rounded-xl shadow-sm border overflow-x-auto">
-          <table className="min-w-full">
-            <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
-              <tr>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Tipo
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Nombre
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Descripción
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  URL
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Precio
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Descuento
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Stock
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Personalizado
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Categoría
-                </th>
-                <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                  Acciones
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {productos.map((p) => (
-                <tr
-                  key={p.id}
-                  className="hover:bg-slate-50 transition-colors duration-150"
-                >
-                  <td className="py-4 px-6 text-sm">{p.id}</td>
-                  <td className="py-4 px-6 text-sm">{p.tipo}</td>
-                  <td className="py-4 px-6 text-sm">{p.nombre}</td>
-                  <td className="py-4 px-6 text-sm">{p.descripcion}</td>
-                  <td className="py-4 px-6 text-sm">{p.url}</td>
-                  <td className="py-4 px-6 text-sm">{p.precio}</td>
-                  <td className="py-4 px-6 text-sm">{p.descuento}</td>
-                  <td className="py-4 px-6 text-sm">{p.stock}</td>
-                  <td className="py-4 px-6 text-sm">
-                    {p.esPersonalizado ? "Sí" : "No"}
-                  </td>
-                  <td className="py-4 px-6 text-sm">{p.categoriaId}</td>
-                  <td className="py-4 px-6">
-                    <div className="flex gap-2">
-                      <Link
-                        onClick={() => setOpenEditar(true)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      >
-                        <Edit size={16} />
-                      </Link>
-                      <Link
-                        onClick={() => setOpenVer(true)}
-                        className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-                      >
-                        <Eye size={16} />
-                      </Link>
-                      <Link
-                        onClick={() => setOpenEliminar(true)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      >
-                        <Trash2 size={16} />
-                      </Link>
-                    </div>
-                  </td>
+        <div className="overflow-x-auto bg-white rounded-xl shadow-sm border">
+          <div className="w-full overflow-x-auto">
+            <table className="min-w-[1000px] table-auto">
+              <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
+                <tr>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">ID</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Tipo</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Nombre</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Descripción</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">URL</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Precio</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Descuento</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Stock</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Personalizado</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Categoría</th>
+                  <th className="py-3 px-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {service.length > 0 ? (
+                  service.map((p) => (
+                    <tr key={p.ProductoServicioId} className="hover:bg-slate-50 transition-colors duration-150">
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">{p.ProductoServicioId.slice(0, 3)}</td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">{p.Tipo}</td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">{p.Nombre}</td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">{p.Descripcion}</td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">
+                        {p.UrlImagen ? <img src={p.UrlImagen} alt={p.Nombre} className="w-10 h-10 object-cover rounded" /> : "—"}
+                      </td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">${p.Precio}</td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">{p.Descuento}%</td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">{p.Stock}</td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">
+                        {p.EsPersonalizado ? "Sí" : "No"}
+                      </td>
+
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">
+                        {categorias.find(c => c.CategoriaId === p.CategoriaId)?.Nombre || "—"}
+                      </td>
+                      <td className="py-3 px-4 text-xs whitespace-nowrap">
+                        <div className="flex gap-1">
+                          <Link onClick={() => handleEditClick(p)} className="p-1 text-blue-600 hover:bg-blue-50 rounded">
+                            <Edit size={14} />
+                          </Link>
+                          <Link onClick={() => handleViewClick(p)} className="p-1 text-green-600 hover:bg-green-50 rounded">
+                            <Eye size={14} />
+                          </Link>
+                          <Link onClick={() => handleDeleteClick(p)} className="p-1 text-red-600 hover:bg-red-50 rounded">
+                            <Trash2 size={14} />
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={11} className="text-center py-4 text-gray-500">
+                      No hay productos o servicios registrados
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        {/* El contenedor de notificaciones (una sola vez) */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+
       </div>
     </div>
   );

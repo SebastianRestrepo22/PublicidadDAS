@@ -89,6 +89,7 @@ export const CategoriaDeDiseño = () => {
     setOpenEditar(true);
   };
 
+
   const categoriasFiltradas = categorias.filter((c) =>  {
     if (!busqueda) return true;
     if (campoFiltro === "id") {
