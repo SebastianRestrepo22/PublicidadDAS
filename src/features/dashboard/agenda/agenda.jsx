@@ -47,7 +47,9 @@ export default function Agenda() {
     if (editingAppointment) {
       setAppointments(
         appointments.map((apt) =>
-          apt.id === editingAppointment.id ? { ...appointmentData, id: editingAppointment.id } : apt
+          apt.id === editingAppointment.id
+            ? { ...appointmentData, id: editingAppointment.id }
+            : apt
         )
       );
       setEditingAppointment(null);
@@ -65,83 +67,106 @@ export default function Agenda() {
   };
 
   const getAppointmentsForDate = (date) => {
-    return appointments.filter((apt) => apt.date.toDateString() === date.toDateString());
+    return appointments.filter(
+      (apt) => apt.date.toDateString() === date.toDateString()
+    );
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="w-full min-h-screen bg-white px-8 pt-4 pb-8">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Agenda</h1>
-          <p className="text-muted-foreground">Gestiona tus citas y trabajos de litografía</p>
+          <h1 className="text-3xl font-bold">Agenda</h1>
+          <p className="text-gray-500">Gestiona tus citas y trabajos</p>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="flex items-center bg-muted rounded-lg p-1">
+          {/* Toggle vista */}
+          <div className="flex items-center border rounded-lg overflow-hidden">
             <button
               onClick={() => setViewMode("calendar")}
-              className={`px-3 py-1 rounded ${viewMode === "calendar" ? "bg-gray-200" : ""}`}
+              className={`px-4 py-2 text-sm font-medium ${
+                viewMode === "calendar"
+                  ? "bg-blue-100 text-blue-600"
+                  : "text-gray-600"
+              }`}
             >
               Calendario
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`px-3 py-1 rounded ${viewMode === "list" ? "bg-gray-200" : ""}`}
+              className={`px-4 py-2 text-sm font-medium ${
+                viewMode === "list"
+                  ? "bg-blue-100 text-blue-600"
+                  : "text-gray-600"
+              }`}
             >
               Lista
             </button>
           </div>
 
+          {/* Botón nueva cita */}
           <button
             onClick={() => {
               setEditingAppointment(null);
               setIsFormOpen(true);
             }}
-            className="px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600"
+            className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
           >
-            Nueva Cita
+            Nueva cita
           </button>
         </div>
       </div>
 
-      {/* Modal del formulario */}
+      {/* Modal formulario */}
       {isFormOpen && (
-        <div className="max-w-2xl mx-auto bg-white p-4 rounded shadow">
-          <h2 className="text-xl font-bold mb-2">
-            {editingAppointment ? "Editar Cita" : "Nueva Cita"}
-          </h2>
-          <CitaForm
-            appointment={editingAppointment}
-            onSubmit={editingAppointment ? handleUpdateAppointment : handleCreateAppointment}
-            onCancel={() => {
-              setIsFormOpen(false);
-              setEditingAppointment(null);
-            }}
-          />
-        </div>
-      )}
-
-      {viewMode === "calendar" ? (
-        <div className="flex justify-center">
-          <div className="w-full max-w-4xl bg-white p-4 rounded shadow">
-            <Calendar
-              selectedDate={selectedDate}
-              onDateSelect={setSelectedDate}
-              appointments={appointments}
-              getAppointmentsForDate={getAppointmentsForDate}
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
+        >
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+            <h2 className="text-xl font-bold mb-4">
+              {editingAppointment ? "Editar Cita" : "Nueva Cita"}
+            </h2>
+            <CitaForm
+              appointment={editingAppointment}
+              onSubmit={
+                editingAppointment
+                  ? handleUpdateAppointment
+                  : handleCreateAppointment
+              }
+              onCancel={() => {
+                setIsFormOpen(false);
+                setEditingAppointment(null);
+              }}
             />
           </div>
         </div>
-      ) : (
-        <div className="bg-white p-4 rounded shadow">
-          <CitaList
-            appointments={appointments}
-            onEdit={handleEditAppointment}
-            onDelete={handleDeleteAppointment}
-            showDate={true}
-          />
-        </div>
       )}
+
+      {/* Contenido principal → solo si no está abierto el modal */}
+      {!isFormOpen &&
+        (viewMode === "calendar" ? (
+          <div className="flex justify-center mt-6">
+            <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow">
+              <Calendar
+                selectedDate={selectedDate}
+                onDateSelect={setSelectedDate}
+                appointments={appointments}
+                getAppointmentsForDate={getAppointmentsForDate}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white p-6 rounded-lg shadow mt-6">
+            <CitaList
+              appointments={appointments}
+              onEdit={handleEditAppointment}
+              onDelete={handleDeleteAppointment}
+              showDate={true}
+            />
+          </div>
+        ))}
     </div>
   );
 }

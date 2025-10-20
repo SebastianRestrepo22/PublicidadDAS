@@ -20,6 +20,8 @@ import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas
 import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
 import { Servicios } from "../features/landing/nuestrosproductos/servicios"
 
+import Agenda from "../features/dashboard/agenda/agenda"
+
 export const Routers = () => {
     return (
         <Routes>
@@ -44,6 +46,7 @@ export const Routers = () => {
                 <Route path="gestionVentas" element={<GestionVentas />} />
                 <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
                 <Route path="metodoDePago" element={<MetodoDePago />} />
+                <Route path="agenda" element={<Agenda/>}/>
             </Route>
 
             {/* 404 */}
