@@ -47,7 +47,7 @@ export const Navbar = () => {
                     </li>
 
                     <li>
-                        <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500" to='/quienessomos'>Quienes somos</Link>
+                        <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500" to='/quienessomos'>¿Quiénes somos?</Link>
                     </li>
                 </ul>
 

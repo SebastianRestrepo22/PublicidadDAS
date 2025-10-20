@@ -5,6 +5,16 @@ import { v4 as uuidv4 } from 'uuid';
 export const createRole = async (req, res) => {
   try {
     const { Nombre, Estado = 'Activo' } = req.body;
+
+    // Validación de campos vacíos
+    if (!Nombre || Nombre.trim() === '') {
+      return res.status(400).json({ message: 'El nombre del rol es obligatorio' });
+    }
+
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ message: 'El nombre del rol ya existe' });
+    }
+
     const RoleId = uuidv4(); // Genera UUID manualmente
 
     const connection = await connectDB();
@@ -53,6 +63,10 @@ export const updateRole = async (req, res) => {
   try {
     const { id } = req.params;
     const { Nombre, Estado } = req.body;
+
+    if (!Nombre || Nombre.trim() === '') {
+      return res.status(400).json({ message: 'El nombre del rol no puede estar vacío' });
+    }
 
     const connection = await connectDB();
     const [result] = await connection.execute(
@@ -175,14 +189,28 @@ export const buscarRoles = async (req, res) => {
 
   try {
     const connection = await connectDB();
-    const [roles] = await connection.execute(
-      `SELECT * FROM roles WHERE ${columna} LIKE ?`,
-      [`%${valor}%`]
-    );
+    let query = "";
+    let params = [];
 
+    if (columna === "Estado") {
+      // Comparación exacta para ENUM
+      query = `SELECT * FROM roles WHERE ${columna} = ?`;
+      // Normalizamos para mayúscula inicial
+      const valorNormalizado =
+        valor.toLowerCase() === "activo" ? "Activo" :
+        valor.toLowerCase() === "inactivo" ? "Inactivo" :
+        valor;
+      params = [valorNormalizado];
+    } else {
+      // Búsqueda flexible para otros campos
+      query = `SELECT * FROM roles WHERE ${columna} LIKE ?`;
+      params = [`%${valor}%`];
+    }
+
+    const [roles] = await connection.execute(query, params);
     res.status(200).json(roles);
   } catch (error) {
-    console.error('Error al buscar roles:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    console.error("Error al buscar roles:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 };
