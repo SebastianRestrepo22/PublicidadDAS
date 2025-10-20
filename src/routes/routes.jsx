@@ -18,6 +18,8 @@ import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/car
 import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
 import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas"
 import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
+import { Servicios } from "../features/landing/nuestrosproductos/servicios"
+
 import Agenda from "../features/dashboard/agenda/agenda"
 
 export const Routers = () => {
@@ -25,6 +27,7 @@ export const Routers = () => {
         <Routes>
             <Route path="/" element={<Inicio />} />
             <Route path="/productos" element={<Productos />} />
+            <Route path="/servicios" element={<Servicios />} />
             <Route path="/quienessomos" element={<QuienesSomos />} />
             <Route path="/login" element={<Login />} />
 
@@ -33,15 +36,15 @@ export const Routers = () => {
             <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
 
             <Route path="/dashboard" element={<DashboardLayout />}>
-                <Route path="graficosEstadisticos" element={<GraficosEstadisticos/>} />
+                <Route path="graficosEstadisticos" element={<GraficosEstadisticos />} />
                 <Route path="usuarios" element={<Usuarios />} />
                 <Route path="roles" element={<Roles />} />
                 <Route path="pedidos" element={<Pedidos />} />
                 <Route path="insumos" element={<Insumos />} />
                 <Route path="productoServicio" element={<ProductoServicios />} />
                 <Route path="proveedores" element={<Proveedores />} />
-                <Route path="gestionVentas" element={<GestionVentas/>}/>
-                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño/>}/>
+                <Route path="gestionVentas" element={<GestionVentas />} />
+                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
                 <Route path="metodoDePago" element={<MetodoDePago />} />
                 <Route path="agenda" element={<Agenda/>}/>
             </Route>

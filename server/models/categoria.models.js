@@ -38,4 +38,5 @@ export const updateCategoria = async (id, { nombreCategoria, descripcion }) => {
   );
   return result
 
+
 }

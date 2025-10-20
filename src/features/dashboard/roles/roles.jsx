@@ -11,22 +11,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 function Toggle({ checked = false, onChange }) {
-  const [isOn, setIsOn] = useState(checked);
-
-  const handleToggle = () => {
-    const newValue = !isOn;
-    setIsOn(newValue);
-    if (onChange) onChange(newValue);
-  };
-
   return (
     <button
       type="button"
-      onClick={handleToggle}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${isOn ? "bg-green-500" : "bg-gray-300"}`}
+      onClick={() => onChange(!checked)}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${checked ? "bg-green-500" : "bg-gray-300"}`}
     >
       <span
-        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${isOn ? "translate-x-6" : "translate-x-1"}`}
+        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${checked ? "translate-x-6" : "translate-x-1"}`}
       />
     </button>
   );
@@ -44,6 +36,9 @@ export const Roles = () => {
 
   const [filtroCampo, setFiltroCampo] = useState('');
   const [filtroValor, setFiltroValor] = useState('');
+
+  //Manejar los errores debajo del imput
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (filtroCampo && filtroValor) {
@@ -122,7 +117,16 @@ export const Roles = () => {
         estado: nuevoEstado
       });
       toast.success(response.data.message);
+
+      // Refrescar los roles para que el estado visual sea consistente
+      const updatedList = await GetDataRoles();
+      setRoles(updatedList.data);
+
     } catch (error) {
+      // Si falla, volver a cargar la lista para restaurar el estado anterior
+      const updatedList = await GetDataRoles();
+      setRoles(updatedList.data);
+
       if (error.response?.data?.message) {
         toast.warning(error.response.data.message);
       } else {
@@ -131,40 +135,69 @@ export const Roles = () => {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitted(true);
 
-    if (rolError) return;
-
-    if (editData) {
-      const response = await updateDataRol(editData.RoleId, formData);
-      if (response.status === 200 || response.status === 201) {
-        const updatedList = await GetDataRoles();
-        setRoles(updatedList.data);
-        setOpenEditar(false);
-        toast.success("Rol actualizado correctamente");
-      }
-    } else {
-      const response = await postDataRoles(formData);
-      if (response.status === 200 || response.status === 201) {
-        const updatedList = await GetDataRoles();
-        setRoles(updatedList.data);
-        setOpenCreate(false);
-        toast.success("Rol creado correctamente");
-      }
+    // Validación local rápida
+    if (!formData.Nombre || !formData.Nombre.trim()) {
+      setRolError('El nombre no puede ir vacío');
+      return;
     }
 
-    setFormData({ Nombre: "", description: "", Estado: true });
-    setEditData(null);
+    try {
+      // Verificar en backend si el rol existe
+      const validarRes = await axios.get(`http://localhost:3000/roles/validar-rol?rol=${encodeURIComponent(formData.Nombre.trim())}`);
+      const exists = validarRes.data?.exists;
+
+      // Si existe y NO estamos editando el mismo nombre -> bloquear
+      if (exists && (!editData || formData.Nombre.trim() !== (originalNombre || "").trim())) {
+        setRolError('Este rol ya está registrado');
+        toast.warning('Ya existe un rol con ese nombre');
+        return;
+      }
+
+      let response;
+      if (editData && editData.RoleId) {
+        // editar
+        response = await updateDataRol(editData.RoleId, formData);
+      } else {
+        // crear
+        response = await postDataRoles(formData);
+      }
+
+      if (response && (response.status === 200 || response.status === 201)) {
+        const updatedList = await GetDataRoles();
+        setRoles(updatedList.data || []);
+        toast.success(editData ? "Rol actualizado correctamente" : "Rol creado correctamente");
+        handleCloseModal();
+      } else {
+        toast.error("Error al guardar el rol");
+      }
+    } catch (error) {
+      console.error("Error en handleSubmit:", error);
+
+      // Si el backend tuvo una validación (por ejemplo UNIQUE constraint), mostrar mensaje útil
+      const serverMessage = error?.response?.data?.message;
+      if (serverMessage) {
+        setRolError(serverMessage);
+        toast.warning(serverMessage);
+      } else {
+        toast.error("Error al procesar la solicitud");
+      }
+    }
   };
+
 
   const handleEditClick = (rol) => {
     setEditData(rol);
     setFormData({ ...rol, Estado: rol.Estado === "Activo" });
-    setOriginalNombre(rol.Nombre);
+    setOriginalNombre(rol.Nombre || "");
     setRolError('');
     setOpenEditar(true);
   };
+
 
   const handleViewClick = (rol) => {
     setEditData(rol);
@@ -193,6 +226,23 @@ export const Roles = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setOpenCreate(false);
+    setOpenEditar(false);
+    setOpenVer(false);
+    setFormData({ Nombre: "", description: "", Estado: true });
+    setEditData(null);
+    setRolError('');
+    setSubmitted(false); //RESETEA el estado de validación
+  };
+
+  //También se peude resetear automáticamente cuando el modal se abre
+  useEffect(() => {
+    if (openCreate || openEditar) {
+      setSubmitted(false);
+    }
+  }, [openCreate, openEditar]);
+
   const renderForm = (type = "create") => {
     const buttonLabel = type === "create" ? "Crear" : type === "editar" ? "Guardar" : "Cerrar";
 
@@ -207,9 +257,14 @@ export const Roles = () => {
             value={formData.Nombre}
             onChange={changeData}
             onBlur={handleRolBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full h-11 px-4 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 
+            ${(submitted && !formData.Nombre.trim()) || rolError ? "border-red-500" : "border-gray-300"}`}
           />
-          {rolError && <p className="text-red-500 text-sm">{rolError}</p>}
+          {(!formData.Nombre.trim() && submitted) ? (
+            <p className="text-red-500 text-sm mt-1">El nombre no puede ir vacío</p>
+          ) : rolError ? (
+            <p className="text-red-500 text-sm mt-1">{rolError}</p>
+          ) : null}
         </div>
 
         <div className="col-span-1 flex gap-4 mt-4">
@@ -226,6 +281,7 @@ export const Roles = () => {
               setFormData({ Nombre: "", description: "" });
               setEditData(null);
               setRolError('');
+              handleCloseModal();
             }}
           >
             Cancelar
@@ -264,7 +320,17 @@ export const Roles = () => {
           {/* Filtros */}
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-              <Link onClick={() => setOpenCreate(true)} className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg hover:from-emerald">
+              <Link
+                onClick={() => {
+                  setEditData(null);
+                  setFormData({ Nombre: "", description: "", Estado: true });
+                  setRolError('');
+                  setOriginalNombre("");
+                  setSubmitted(false);
+                  setOpenCreate(true);
+                }}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg hover:from-emerald"
+              >
                 <Plus size={18} /> Nuevo rol
               </Link>
 
@@ -277,13 +343,30 @@ export const Roles = () => {
                 <option value="estado">Estado</option>
               </select>
 
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                <input
+
+              {/* Campo de búsqueda o selección de estado */}
+              {filtroCampo === "estado" ? (
+                <select
                   value={filtroValor}
                   onChange={(e) => setFiltroValor(e.target.value)}
-                  type="text" placeholder="Buscar roles" className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700" />
-              </div>
+                  className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[160px]"
+                >
+                  <option value="">Seleccionar estado</option>
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select>
+              ) : (
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input
+                    value={filtroValor}
+                    onChange={(e) => setFiltroValor(e.target.value)}
+                    type="text"
+                    placeholder="Buscar roles"
+                    className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
+                  />
+                </div>
+              )}
             </div>
           </div>
 

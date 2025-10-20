@@ -5,8 +5,10 @@ import {
   deleteInsumo as deleteInsumoModel,
   updateInsumo as updateInsumoModel
 } from '../models/insumos.models.js';
+import { v4 as uuidv4 } from 'uuid';
 
-// Obtener todos los insumos
+// Obtener todas los insumos 
+
 export const getAllInsumos = async (req, res) => {
   try {
     const insumos = await getAllInsumosModel();
@@ -19,6 +21,7 @@ export const getAllInsumos = async (req, res) => {
 
 // Obtener insumo por ID
 export const getInsumoById = async (req, res) => {
+
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ error: "ID inválido" });
 
@@ -27,12 +30,14 @@ export const getInsumoById = async (req, res) => {
     if (!insumo) return res.status(404).json({ message: "Insumo no encontrado" });
     res.json(insumo);
   } catch (err) {
+
     console.error("Error al obtener insumo por ID:", err.message);
     res.status(500).json({ error: err.message });
   }
 };
 
 // Crear nuevo insumo
+
 // controller
 export const createInsumo = async (req, res) => {
   console.log("💡 Cuerpo recibido del frontend:", req.body);
@@ -55,6 +60,7 @@ export const createInsumo = async (req, res) => {
   }
 };
 
+
 export const updateInsumo = async (req, res) => {
   const id = parseInt(req.params.id);
   if (isNaN(id)) return res.status(400).json({ error: "ID inválido" });
@@ -75,7 +81,6 @@ export const updateInsumo = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 
 // Eliminar insumo por ID
