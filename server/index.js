@@ -11,6 +11,7 @@ import authRouter from './routes/authRoutes.js';
 import roleRouter from './routes/role.routes.js';
 import userRouter from './routes/user.routes.js'
 import serviceRouter from './routes/service.routes.js'
+import tipoDocumentoRoutes from './routes/tipoDocumento.js';
 
 // DB
 import { connectDB } from './lib/db.js';
@@ -26,7 +27,9 @@ app.use(express.json());
 app.use('/auth', authRouter);
 app.use('/roles', roleRouter);
 app.use('/user', userRouter);
-app.use('/service', serviceRouter)
+app.use('/service', serviceRouter);
+app.use('/tipos-documento', tipoDocumentoRoutes);
+
 
 const startServer = async () => {
   try {

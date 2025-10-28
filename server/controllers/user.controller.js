@@ -6,6 +6,7 @@ import { sendWelcomeEmail } from '../utils/email.js';
 export const createUser = async (req, res) => {
     const {
         CedulaId,
+        TipoDocumentoId,
         NombreCompleto,
         Telefono,
         CorreoElectronico,
@@ -53,9 +54,9 @@ export const createUser = async (req, res) => {
 
         await connection.execute(
             `INSERT INTO usuarios 
-       (CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, hash, rol.RoleId]
+        (CedulaId, TipoDocumentoId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [CedulaId, TipoDocumentoId, NombreCompleto, Telefono, CorreoElectronico, Direccion, hash, rol.RoleId]
         );
 
         // Enviar correo con la contraseña generada/predeterminada
@@ -78,8 +79,8 @@ export const getAllUsers = async (req, res) => {
         const connection = await connectDB();
         const [users] = await connection.execute(
             `SELECT u.*, r.Nombre AS RolNombre 
-       FROM usuarios u 
-       JOIN roles r ON u.RoleId = r.RoleId`
+        FROM usuarios u 
+        JOIN roles r ON u.RoleId = r.RoleId`
         );
         res.status(200).json(users);
     } catch (error) {
@@ -95,9 +96,9 @@ export const getUserById = async (req, res) => {
         const connection = await connectDB();
         const [users] = await connection.execute(
             `SELECT u.*, r.Nombre AS RolNombre 
-       FROM usuarios u 
-       JOIN roles r ON u.RoleId = r.RoleId 
-       WHERE u.CedulaId = ?`,
+        FROM usuarios u 
+        JOIN roles r ON u.RoleId = r.RoleId 
+        WHERE u.CedulaId = ?`,
             [id]
         );
 
@@ -116,6 +117,7 @@ export const getUserById = async (req, res) => {
 export const updateUser = async (req, res) => {
     const { id } = req.params;
     const {
+        TipoDocumentoId,
         NombreCompleto,
         Telefono,
         CorreoElectronico,
@@ -127,9 +129,9 @@ export const updateUser = async (req, res) => {
         const connection = await connectDB();
         const [result] = await connection.execute(
             `UPDATE usuarios 
-       SET NombreCompleto = ?, Telefono = ?, CorreoElectronico = ?, Direccion = ?, RoleId = ? 
-       WHERE CedulaId = ?`,
-            [NombreCompleto, Telefono, CorreoElectronico, Direccion, RoleId, id]
+        SET TipoDocumentoId = ?, NombreCompleto = ?, Telefono = ?, CorreoElectronico = ?, Direccion = ?, RoleId = ? 
+        WHERE CedulaId = ?`,
+            [TipoDocumentoId, NombreCompleto, Telefono, CorreoElectronico, Direccion, RoleId, id]
         );
 
         if (result.affectedRows === 0) {
@@ -217,40 +219,46 @@ export const validarTelefono = async (req, res) => {
     }
 };
 
-//Buscar usuarios
-
+// Buscar usuarios
 export const buscarUsuarios = async (req, res) => {
     const { campo, valor } = req.query;
 
+    // Campos permitidos
     const columnasPermitidas = {
-        id: 'CedulaId',
-        cedula: 'CedulaId',
-        nombre: 'NombreCompleto',
-        direccion: 'Direccion',
-        correo: 'CorreoElectronico',
-        telefono: 'Telefono',
-        rol: 'r.Nombre'
+        id: "u.CedulaId",
+        cedula: "u.CedulaId",
+        nombre: "u.NombreCompleto",
+        direccion: "u.Direccion",
+        correo: "u.CorreoElectronico",
+        telefono: "u.Telefono",
+        rol: "r.Nombre",
+        tipoDocumento: "td.Nombre" // 👈 Nuevo: tipo de documento
     };
-
 
     const columna = columnasPermitidas[campo];
     if (!columna) {
-        return res.status(400).json({ message: 'Campo de búsqueda inválido' });
+        return res.status(400).json({ message: "Campo de búsqueda inválido" });
     }
 
     try {
         const connection = await connectDB();
+
         const [usuarios] = await connection.execute(
-            `SELECT u.*, r.Nombre AS RolNombre
-       FROM usuarios u
-       JOIN roles r ON u.RoleId = r.RoleId
-       WHERE u.${columna} LIKE ?`,
+            `SELECT 
+      u.*, 
+      r.Nombre AS RolNombre, 
+      td.Nombre AS TipoDocumentoNombre
+   FROM usuarios u
+   JOIN roles r ON u.RoleId = r.RoleId
+   JOIN TipoDocumento td ON u.TipoDocumentoId = td.TipoDocumentoId
+   WHERE ${columna} LIKE ?`,
             [`%${valor}%`]
         );
 
+
         res.status(200).json(usuarios);
     } catch (error) {
-        console.error('Error al buscar usuarios:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+        console.error("Error al buscar usuarios:", error);
+        res.status(500).json({ message: "Error interno del servidor" });
     }
 };

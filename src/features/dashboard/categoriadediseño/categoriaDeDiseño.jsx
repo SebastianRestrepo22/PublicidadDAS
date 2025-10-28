@@ -3,8 +3,6 @@ import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../components/modals/modal";
-import { toast } from "react-hot-toast";
-
 
 export const CategoriaDeDiseño = () => {
   const [categorias, setCategorias] = useState([]);

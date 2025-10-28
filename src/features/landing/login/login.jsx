@@ -1,13 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
-import { Footer } from "../components/footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
+import { toast, ToastContainer } from "react-toastify";
+
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+
+  const [tiposDocumento, setTiposDocumento] = useState([]);
+
+  // Obtener tipos de documento desde el backend
+  useEffect(() => {
+    const fetchTiposDocumento = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/tipos-documento");
+        setTiposDocumento(response.data);
+      } catch (error) {
+        console.error("Error obteniendo tipos de documento:", error);
+      }
+    };
+    fetchTiposDocumento();
+  }, []);
+
+  //Confirmar constraseña
+
+  const [confirmarContrasena, setConfirmarContrasena] = useState("");
+  const [contrasenaError, setContrasenaError] = useState("");
+
 
   //Validar correo
   const [correoError, setCorreoError] = useState('');
@@ -63,6 +85,7 @@ export const Login = () => {
   // Registro
   const [values, setValues] = useState({
     CedulaId: "",
+    TipoDocumentoId: "",
     NombreCompleto: "",
     Telefono: "",
     CorreoElectronico: "",
@@ -76,19 +99,30 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (values.Contrasena !== confirmarContrasena) {
+      setContrasenaError("Las contraseñas no coinciden");
+      return;
+    }
+
+    setContrasenaError("");
+
     try {
       const response = await axios.post("http://localhost:3000/auth/register", values);
       if (response.status === 201) {
-        alert("Registro exitoso");
+        toast.success("Registro exitoso");
         setIsLogin(true);
         setValues({
           CedulaId: "",
           NombreCompleto: "",
+          TipoDocumentoId: "",
           Telefono: "",
           CorreoElectronico: "",
           Direccion: "",
           Contrasena: "",
         });
+        setConfirmarContrasena("");
+
       }
     } catch (error) {
       console.error("Error en registro:", error);
@@ -148,11 +182,12 @@ export const Login = () => {
 
               <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
                 <h1 className="text-4xl font-bold text-center mb-6">Iniciar Sesión</h1>
+                {/* Login */}
                 <form onSubmit={handleSubmitLogin} className="space-y-5">
                   <input
                     type="email"
                     placeholder="Correo electrónico"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
                     value={valuesLogin.CorreoElectronico}
                     name="CorreoElectronico"
                     onChange={handleChangesLogin}
@@ -161,7 +196,7 @@ export const Login = () => {
                   <input
                     type="password"
                     placeholder="Contraseña"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
+                    className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
                     value={valuesLogin.Contrasena}
                     name="Contrasena"
                     onChange={handleChangesLogin}
@@ -174,6 +209,16 @@ export const Login = () => {
                     Iniciar Sesión
                   </button>
                 </form>
+
+                {/* Link para recuperar contraseña */}
+                <button
+                  onClick={() => navigate("/recuperar-contrasena")}
+                  className="mt-3 text-blue-700 hover:underline text-sm"
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+
+
                 <button
                   onClick={() => setIsLogin(false)}
                   className="mt-4 text-violet-600 hover:underline text-sm"
@@ -186,78 +231,148 @@ export const Login = () => {
             {/* Registro */}
             <div className="w-1/2 flex flex-col md:flex-row">
               <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
-                <h1 className="text-2xl font-bold text-center mb-2">Crear Cuenta</h1>
-                <form className="space-y-3" onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    placeholder="Nombre Completo"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.NombreCompleto}
-                    name="NombreCompleto"
-                    onChange={handleChanges}
-                    required
-                  />
-                  <input
-                    type="email"
-                    placeholder="Correo electrónico"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.CorreoElectronico}
-                    name="CorreoElectronico"
-                    onChange={handleChanges}
-                    onBlur={handleCorreoBlur}
-                    required
-                  />
-                  {correoError && <p className="text-red-500 text-sm">{correoError}</p>}
-                  <input
-                    type="text"
-                    placeholder="Cédula"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.CedulaId}
-                    name="CedulaId"
-                    onChange={handleChanges}
-                    onBlur={handleCedulaBlur}
-                    required
-                  />
-                  {cedulaError && <p className="text-red-500 text-sm">{cedulaError}</p>}
-                  <input
-                    type="text"
-                    placeholder="Dirección"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.Direccion}
-                    name="Direccion"
-                    onChange={handleChanges}
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Teléfono"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.Telefono}
-                    name="Telefono"
-                    onChange={handleChanges}
-                    onBlur={handleTelefonoBlur}
-                    required
-                  />
-                  {telefonoError && <p className="text-red-500 text-sm">{telefonoError}</p>}
-                  <input
-                    type="password"
-                    placeholder="Contraseña"
-                    className="w-full border-2 border-gray-200 rounded-xl p-4 bg-transparent focus:border-violet-500 focus:outline-none"
-                    value={values.Contrasena}
-                    name="Contrasena"
-                    onChange={handleChanges}
-                    required
-                  />
+                <h1 className="text-2xl font-bold text-center mb-1">Crear Cuenta</h1>
+                <form
+                  className="space-y-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-hide"
+                  onSubmit={handleSubmit}
+                >
+                  {/* Nombre */}
+                  <div className="flex flex-col gap-1">
+                    <input
+                      type="text"
+                      placeholder="Nombre Completo"
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      value={values.NombreCompleto}
+                      name="NombreCompleto"
+                      onChange={handleChanges}
+                      required
+                    />
+                    <p className="min-h-[16px] text-sm"></p>
+                  </div>
+
+                  {/* Correo */}
+                  <div className="flex flex-col gap-1">
+                    <input
+                      type="email"
+                      placeholder="Correo electrónico"
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      value={values.CorreoElectronico}
+                      name="CorreoElectronico"
+                      onChange={handleChanges}
+                      onBlur={handleCorreoBlur}
+                      required
+                    />
+                    <p className="text-red-500 text-xs min-h-[16px] leading-none">{correoError}</p>
+                  </div>
+
+                  {/* Tipo documento */}
+                  <div className="flex flex-col gap-1">
+                    <select
+                      name="TipoDocumentoId"
+                      value={values.TipoDocumentoId}
+                      onChange={handleChanges}
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      required
+                    >
+                      <option value="">Seleccione un tipo de documento</option>
+                      {tiposDocumento.map((tipo) => (
+                        <option key={tipo.TipoDocumentoId} value={tipo.TipoDocumentoId}>
+                          {tipo.Nombre}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="min-h-[16px] text-sm"></p>
+                  </div>
+
+                  {/* Cédula */}
+                  <div className="flex flex-col gap-1">
+                    <input
+                      type="text"
+                      placeholder="Cédula"
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      value={values.CedulaId}
+                      name="CedulaId"
+                      onChange={handleChanges}
+                      onBlur={handleCedulaBlur}
+                      required
+                    />
+                    <p className="text-red-500 text-xs min-h-[16px] leading-none">{cedulaError}</p>
+                  </div>
+
+                  {/* Dirección */}
+                  <div className="flex flex-col gap-1">
+                    <input
+                      type="text"
+                      placeholder="Dirección"
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      value={values.Direccion}
+                      name="Direccion"
+                      onChange={handleChanges}
+                      required
+                    />
+                    <p className="min-h-[16px] text-sm"></p>
+                  </div>
+
+                  {/* Teléfono */}
+                  <div className="flex flex-col gap-1">
+                    <input
+                      type="text"
+                      placeholder="Teléfono"
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      value={values.Telefono}
+                      name="Telefono"
+                      onChange={handleChanges}
+                      onBlur={handleTelefonoBlur}
+                      required
+                    />
+                    <p className="text-red-500 text-xs min-h-[16px] leading-none">{telefonoError}</p>
+                  </div>
+
+                  {/* Contraseña */}
+                  <div className="flex flex-col gap-1">
+                    <input
+                      type="password"
+                      placeholder="Contraseña"
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      value={values.Contrasena}
+                      name="Contrasena"
+                      onChange={handleChanges}
+                      required
+                    />
+                    <p className="min-h-[16px] text-sm"></p>
+                  </div>
+
+                  {/* Confirmar contraseña */}
+                  <div className="flex flex-col gap-1">
+                    <input
+                      type="password"
+                      placeholder="Confirmar contraseña"
+                      className="w-full border-2 border-gray-200 rounded-xl p-2 bg-transparent focus:border-violet-500 focus:outline-none"
+                      value={confirmarContrasena}
+                      onChange={(e) => {
+                        setConfirmarContrasena(e.target.value);
+                        if (values.Contrasena !== e.target.value) {
+                          setContrasenaError("Las contraseñas no coinciden");
+                        } else {
+                          setContrasenaError("");
+                        }
+                      }}
+                      required
+                    />
+                    <p className="text-red-500 text-xs min-h-[16px] leading-none">{contrasenaError}</p>
+                  </div>
+
                   <button
                     type="submit"
-                    className="w-full bg-blue-900 text-white py-3 rounded-xl font-semibold hover:bg-violet-700 transition"
+                    className="w-full bg-blue-900 text-white py-2 rounded-xl font-semibold hover:bg-violet-700 transition"
                   >
                     Registrarse
                   </button>
                 </form>
+
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="mt-4 text-blue-800 hover:underline text-sm"
+                  className="mt-1 text-blue-800 hover:underline text-sm"
                 >
                   ¿Ya tienes cuenta? Inicia sesión
                 </button>
@@ -271,6 +386,20 @@ export const Login = () => {
           </div>
         </div>
       </div>
+
+      {/* El contenedor de notificaciones (una sola vez) */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 };

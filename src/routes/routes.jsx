@@ -21,6 +21,8 @@ import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/cat
 import { Servicios } from "../features/landing/nuestrosproductos/servicios"
 
 import Agenda from "../features/dashboard/agenda/agenda"
+import { RecuperarContrasena } from "../features/landing/login/RecuperarContrasena"
+import { RestablecerContrasena } from "../features/landing/login/RestablecerContrasena"
 
 export const Routers = () => {
     return (
@@ -30,6 +32,8 @@ export const Routers = () => {
             <Route path="/servicios" element={<Servicios />} />
             <Route path="/quienessomos" element={<QuienesSomos />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
+            <Route path="/reset-password/:token" element={<RestablecerContrasena />} />
 
             <Route path="/carritodecompras" element={<CarritoCompras />} />
             <Route path="/carritoproducto" element={<CarritoProducto />} />
@@ -46,7 +50,7 @@ export const Routers = () => {
                 <Route path="gestionVentas" element={<GestionVentas />} />
                 <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
                 <Route path="metodoDePago" element={<MetodoDePago />} />
-                <Route path="agenda" element={<Agenda/>}/>
+                <Route path="agenda" element={<Agenda />} />
             </Route>
 
             {/* 404 */}
