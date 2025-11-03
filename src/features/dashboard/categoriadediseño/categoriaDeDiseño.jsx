@@ -42,7 +42,7 @@ export const CategoriaDeDiseño = () => {
     try {
       await axios.post("http://localhost:3000/api/categorias", formCrear);
 
-      toast.success("Categoría creada con éxito ");
+      alert("Categoría creada con éxito ");
       fetchCategorias();
       setFormCrear({ nombreCategoria: "", descripcion: "" });
       setOpenCreate(false);

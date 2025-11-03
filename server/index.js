@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import insumosRoutes from './routes/insumos.routes.js';
 import categoriaRoutes from './routes/categoria.routes.js';
 
+// Importar archivo para crear usuario
+import { initRolesAndAdmin } from './scripts/initRolesAndAdmin.js';
 
 // Routers
 import authRouter from './routes/authRoutes.js';
@@ -34,6 +36,8 @@ app.use('/tipos-documento', tipoDocumentoRoutes);
 const startServer = async () => {
   try {
     const connection = await connectDB(); // Conecta a la DB
+    // Inicializar roles y usuario administrador
+    await initRolesAndAdmin();
     app.listen(process.env.PORT || 3000, () => {
       console.log(`Server is running on port ${process.env.PORT || 3000}`);
     });
