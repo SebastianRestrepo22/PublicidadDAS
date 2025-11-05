@@ -29,6 +29,12 @@ export const ProductoServicios = () => {
     EsPersonalizado: false,
     CategoriaId: ""
   });
+  const [submitted, setSubmitted] = useState(false);
+
+  const [originalNombre, setOriginalNombre] = useState('');
+  const [nombreError, setNombreError] = useState('');
+
+
   const [editData, setEditData] = useState(null);
   const [categorias, setCategorias] = useState([]);
 
@@ -64,9 +70,6 @@ export const ProductoServicios = () => {
     cargarProductoServicio();
   }, [filtroCampo, filtroValor]);
 
-  const [nombreError, setNombreError] = useState("");
-  const [originalNombre, setOriginalNombre] = useState("");
-
   const handleChanges = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
@@ -82,12 +85,29 @@ export const ProductoServicios = () => {
     }
   };
 
+  //Reseteo de las alertas de errores
+  const resetForm = () => {
+    setValues({
+      ProductoServicioId: "",
+      Tipo: "",
+      Nombre: "",
+      Descripcion: "",
+      UrlImagen: "",
+      Precio: "",
+      Descuento: "",
+      Stock: "",
+      EsPersonalizado: false,
+      CategoriaId: ""
+    });
+
+    setEditData(null);
+    setSubmitted(false); // esto evita que muestre validaciones al abrir
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (nombreError) {
-      toast.warning("Corrige los errores antes de enviar");
-      return;
-    }
+    setSubmitted(true);
+
     try {
       if (editData) {
         const response = await updateDataServices(editData.ProductoServicioId, values);
@@ -96,6 +116,7 @@ export const ProductoServicios = () => {
           setService(updatedList.data);
           setOpenEditar(false);
           toast.success("Producto/servicio actualizado correctamente");
+          resetForm();
         }
       } else {
         const response = await postDataServices(values);
@@ -106,19 +127,6 @@ export const ProductoServicios = () => {
           toast.success("Producto/servicio creado correctamente");
         }
       }
-      setValues({
-        ProductoServicioId: "",
-        Tipo: "",
-        Nombre: "",
-        Descripcion: "",
-        UrlImagen: "",
-        Precio: "",
-        Descuento: "",
-        Stock: "",
-        EsPersonalizado: false,
-        CategoriaId: ""
-      });
-      setEditData(null);
     } catch (error) {
       console.error(error);
       success.error("Error al procesar la solicitud");
@@ -167,21 +175,26 @@ export const ProductoServicios = () => {
     return (
       <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-4 bg-white rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label className="font-medium">Tipo</label>
             <select
               name="Tipo"
               value={values.Tipo || ""}
               onChange={handleChanges}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+              className={`w-full h-10 px-3 border rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500
+              ${submitted && !values.Tipo.trim() ? "border-red-500" : "border-gray-300"}`}>
               <option value="">Seleccione tipo</option>
               <option value="Producto">Producto</option>
               <option value="Servicio">Servicio</option>
             </select>
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.Tipo.trim() && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Seleccione un tipo</p>
+              )}
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label className="font-medium">Nombre</label>
             <input
               type="text"
@@ -190,12 +203,16 @@ export const ProductoServicios = () => {
               value={values.Nombre}
               onChange={handleChanges}
               onBlur={handleNombreBlur}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {nombreError && <p className="text-red-500 text-sm">{nombreError}</p>}
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && !values.Nombre.trim() ? "border-red-500" : "border-gray-300"}`} />
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.Nombre.trim() && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Ingrese el nombre</p>
+              )}
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label className="font-medium">Descripción</label>
             <input
               type="text"
@@ -203,37 +220,73 @@ export const ProductoServicios = () => {
               name="Descripcion"
               value={values.Descripcion}
               onChange={handleChanges}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && !values.Descripcion.trim() ? "border-red-500" : "border-gray-300"}`} />
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.Descripcion.trim() && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Ingrese la descripcion</p>
+              )}
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 flex flex-col gap-2">
-            <label className="font-medium">URL de la imagen</label>
+          <div className="flex-1 flex flex-col gap-1">
+            <label className="font-medium">Imagen (URL o archivo)</label>
+
+            {/* Campo de URL */}
             <input
               type="text"
               placeholder="http://..."
               name="UrlImagen"
               value={values.UrlImagen}
               onChange={handleChanges}
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+              ${submitted && !values.UrlImagen.trim() ? "border-red-500" : "border-gray-300"}`} />
+
+            {/* Campo para subir archivo */}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    // Esto actualiza el mismo campo UrlImagen con la imagen local en base64
+                    handleChanges({
+                      target: {
+                        name: "UrlImagen",
+                        value: reader.result,
+                      },
+                    });
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
               className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.UrlImagen.trim() && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Seleccione o ingrese una imagen</p>
+              )}
+            </div>
           </div>
+
           {values.UrlImagen && (
             <div className="flex-shrink-0">
               <p className="text-sm text-gray-500 mb-1">Vista previa:</p>
               <img
                 src={values.UrlImagen}
                 alt="Vista previa"
-                className="w-[80px] h-[80px ] object-cover rounded border border-gray-300"
+                className="w-[80px] h-[80px] object-cover rounded border border-gray-300"
               />
             </div>
           )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label className="font-medium">Precio</label>
             <input
               type="number"
@@ -241,10 +294,15 @@ export const ProductoServicios = () => {
               name="Precio"
               value={values.Precio}
               onChange={handleChanges}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && !values.Precio.trim() ? "border-red-500" : "border-gray-300"}`} />
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.Precio.trim() && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Ingrese el precio</p>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label className="font-medium">Descuento</label>
             <input
               type="number"
@@ -252,10 +310,15 @@ export const ProductoServicios = () => {
               name="Descuento"
               value={values.Descuento}
               onChange={handleChanges}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && !values.Descuento.trim() ? "border-red-500" : "border-gray-300"}`} />
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.Descuento.trim() && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Ingrese el descuento</p>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label className="font-medium">Stock</label>
             <input
               type="number"
@@ -263,20 +326,26 @@ export const ProductoServicios = () => {
               name="Stock"
               value={values.Stock}
               onChange={handleChanges}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && (!values.Stock || values.Stock <= 0) ? "border-red-500" : "border-gray-300"}`} />
+            <div className="min-h-[16px] mt-0.5">
+              {submitted && (!values.Stock || values.Stock <= 0) && (
+                <p className="text-red-500 text-[12px] leading-4">Ingrese el stock</p>
+              )}
+
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <label>Categoría ID</label>
             <select
               name="CategoriaId"
               value={values.CategoriaId || ""}
               onChange={handleChanges}
-              className="w-full h-10 px-3 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+              ${submitted && !values.CategoriaId.trim() ? "border-red-500" : "border-gray-300"}`}            >
               <option value="">Seleccione la categoria</option>
               {categorias.map((categoria) => (
                 <option key={categoria.CategoriaId} value={categoria.CategoriaId}>
@@ -284,9 +353,15 @@ export const ProductoServicios = () => {
                 </option>
               ))}
             </select>
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.CategoriaId.trim() && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Seleccione una categoría</p>
+              )}
+            </div>
+
           </div>
 
-          <div className="flex flex-col items-start gap-2">
+          <div className="flex flex-col items-start gap-1">
             <label className="font-medium">Es personalizado</label>
             <input
               type="checkbox"
@@ -379,11 +454,15 @@ export const ProductoServicios = () => {
         {/* Barra de acciones */}
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <Link
-            onClick={() => setOpenCreate(true)}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+            onClick={() => {
+              resetForm(); // limpia valores y setSubmitted(false)
+              setOpenCreate(true);
+            }}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg ..."
           >
             <Plus size={18} /> Nuevo producto/servicio
           </Link>
+
 
           <select
             value={filtroCampo}
