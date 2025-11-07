@@ -19,8 +19,8 @@ export const updateInsumos = async () => {
     return result;  
 };
 
-export const deleteInsumos = async () => {
-    const result = await insumosModel.deleteInsumos(id);
+export const deleteInsumo = async () => {
+    const result = await insumoModel.deleteInsumo(id);
     if (result.affectedRows === 0) throw new Error("Insumo no encontrado");
     return result;
 };

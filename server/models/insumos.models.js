@@ -40,3 +40,4 @@ export const updateInsumo = async (id, { nombreInsumo, stock }) => {
 
 }
 
+

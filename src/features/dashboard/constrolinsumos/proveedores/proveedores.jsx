@@ -63,6 +63,9 @@ export const Proveedores = () => {
     }
   };
 
+
+
+
   const handleUpdate = async () => {
     try {
       await axios.put(

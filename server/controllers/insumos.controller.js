@@ -32,17 +32,25 @@ export const getInsumoById = async (req, res) => {
   }
 };
 
-// Crear nuevo insumo
-// controller
+// Creacion de nuevo insumo
 export const createInsumo = async (req, res) => {
-  console.log("💡 Cuerpo recibido del frontend:", req.body);
-
   const { nombreInsumo, stock } = req.body;
 
-  // Validación básica
+  // Validación 
   if (!nombreInsumo || stock === undefined) {
     console.log("Error: campos obligatorios faltantes");
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  }
+
+  //Validacion del nombre insumo solo letras y espacios
+  const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+  if (!nombreRegex.test(nombreInsumo)) {
+    return res.status(400).json({ error : "Nombre insumo debe tener solo letras"})
+  }
+
+  // Validacion de stock que solo contenga numeros
+  if (typeof stock !== "number" || isNaN(stock) || !Number.isInteger(stock) || stock < 0) {
+    return res.status(400).json({ error: "El stock solo debe ser un numero valido y no negativo"})
   }
 
   try {
@@ -55,38 +63,51 @@ export const createInsumo = async (req, res) => {
   }
 };
 
+//actualizar insumo
 export const updateInsumo = async (req, res) => {
-  const id = parseInt(req.params.id);
-  if (isNaN(id)) return res.status(400).json({ error: "ID inválido" });
-
+  const id = req.params.id;
   const { nombreInsumo, stock } = req.body;
-  if (!nombreInsumo || stock === undefined) {
+
+  //Valida campos obligatorios
+  if (!nombreInsumo || !stock) {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  }
+
+    //Validacion del nombre insumo solo letras y espacios
+  const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+  if (!nombreRegex.test(nombreInsumo)) {
+    return res.status(400).json({ error : "Nombre insumo debe tener solo letras"})
+  }
+
+  // Validacion de stock que solo contenga numeros
+  const stockRegex =  /^[0-9]+$/;
+  if (!stockRegex.test(stock)) {
+    return res.status(400).json({ error: "El stock solo debe tener numero "})
   }
 
   try {
     const result = await updateInsumoModel(id, { nombreInsumo, stock });
-    if (result.affectedRows === 0)
-      return res.status(404).json({ message: "Insumo no encontrado" });
-
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Insumo no encontro" });
+    }
     res.json({ message: "Insumo actualizado correctamente" });
   } catch (err) {
-    console.error("Error al actualizar insumo:", err.message);
+    console.error("Error al actualizar el insumo:", err.message);
     res.status(500).json({ error: err.message });
   }
 };
 
 
-
 // Eliminar insumo por ID
 export const deleteInsumo = async (req, res) => {
-  const id = parseInt(req.params.id);
-  if (isNaN(id)) return res.status(400).json({ error: "ID inválido" });
+  const id = req.params.id;
+  if (!id) return res.status(400).json({ error: "ID inválido" });
 
   try {
     const result = await deleteInsumoModel(id);
-    if (result.affectedRows === 0)
+    if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Insumo no encontrado" });
+    }
     res.json({ message: "Insumo eliminado correctamente" });
   } catch (err) {
     console.error("Error al eliminar insumo:", err.message);

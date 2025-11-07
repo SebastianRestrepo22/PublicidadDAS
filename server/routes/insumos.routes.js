@@ -6,6 +6,7 @@ import {
   deleteInsumo,
   updateInsumo
 } from '../controllers/insumos.controller.js';
+
 const router = express.Router();
 
 router.get('/', getAllInsumos);

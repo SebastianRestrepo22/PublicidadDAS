@@ -3,14 +3,18 @@ import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../components/modals/modal";
-import { toast } from "react-hot-toast";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export const CategoriaDeDiseño = () => {
+export const Diseño = () => {
   const [categorias, setCategorias] = useState([]);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
   const [campoFiltro, setCampoFiltro] = useState("");
   const [busqueda, setBusqueda] = useState("");
+  const [errorNombre, setErrorNombre] = useState("");
+  const [errorDescripcion, setErrorDescipcion] = useState("");
+
 
   const [openCreate, setOpenCreate] = useState(false);
   const [openEditar, setOpenEditar] = useState(false);
@@ -40,7 +44,33 @@ export const CategoriaDeDiseño = () => {
     }
   };
 
+  const validarFormularioCategoria = (form) => {
+    const errores = {};
+
+    if (!form.nombreCategoria.trim()) {
+      errores.nombreCategoria = "El nombre de la categoria es obligatorio";
+    }else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(form.nombreCategoria)) {
+      errores.nombreCategoria = "El nombre solo puede contener letras y espacios";
+    }
+
+    if(!form.descripcion.trim()){
+      errores.descripcion = "La descripcion es obligatoria";
+    }else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s.,-]+$/.test(form.Descripcion)) {
+      errores.descripcion =
+      "La descripcion solo puede contener letras y signos basicos";
+    }
+
+    return errores;
+  }
+
   const handleCreate = async () => {
+
+    const validaciones = validarFormularioCategoria(formCrear);
+    if(Object.keys(validaciones).length > 9) {
+      setErrores(validaciones)
+      return;
+    }
+    
     try {
       await axios.post("http://localhost:3000/api/categorias", formCrear);
 
@@ -49,8 +79,7 @@ export const CategoriaDeDiseño = () => {
       setFormCrear({ nombreCategoria: "", descripcion: "" });
       setOpenCreate(false);
     } catch (error) {
-      console.error("Error al crear categoria:", error);
-      alert("Error al crear la categoría ");
+      toast.error("Error al crear la categoría ");
     }
   };
 
@@ -61,12 +90,11 @@ export const CategoriaDeDiseño = () => {
         formEditar
       );
 
-      alert("Categoría actualizada con éxito ");
+      toast.success("Categoría actualizada con éxito ");
       fetchCategorias();
       setOpenEditar(false);
     } catch (error) {
-      console.error("Error al actualizar categoria:", error);
-      alert("Error al actualizar la categoría ");
+      toast.error("Error al actualizar la categoría ");
     }
   };
 
@@ -78,7 +106,7 @@ export const CategoriaDeDiseño = () => {
       setOpenEliminar(false);
       fetchCategorias();
     } catch (err) {
-      console.error("Error al eliminar la categoria:", err);
+      toast.error("Error al eliminar la categoria:", err);
     }
   };
 
@@ -113,7 +141,7 @@ export const CategoriaDeDiseño = () => {
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-800 mb-6">
-            Gestión de categoria de diseño
+            Gestión  diseño
           </h1>
 
           {/* botón crear */}
@@ -123,7 +151,7 @@ export const CategoriaDeDiseño = () => {
                 onClick={() => setOpenCreate(true)}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg hover:from-emerald"
               >
-                <Plus size={18} /> Nueva categoria
+                <Plus size={18} /> Nuevo diseño
               </Link>
 
               <select value={campoFiltro}
@@ -139,7 +167,7 @@ export const CategoriaDeDiseño = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="Buscar categoria"
+                  placeholder="Buscar diseño"
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
                   className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
@@ -157,7 +185,7 @@ export const CategoriaDeDiseño = () => {
                     ID
                   </th>
                   <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
-                    Nombre categoria
+                    Nombre diseño
                   </th>
                   <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">
                     Descripcion
@@ -220,36 +248,55 @@ export const CategoriaDeDiseño = () => {
           <Modal open={openCreate} onClose={() => setOpenCreate(false)}>
             <div className="w-[450px] p-6 mx-auto text-center">
               <h3 className="text-lg font-black text-gray-800 mb-6">
-                Nueva categoria
+                Nuevo diseño
               </h3>
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                 <div className="flex flex-col">
-                  <label>Nombre categoria</label>
+                  <label>Nombre diseño</label>
                   <input
                     placeholder="Ingrese la categoria"
                     value={formCrear.nombreCategoria}
-                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    onChange={(e) =>
-                      setFormCrear({
-                        ...formCrear,
-                        nombreCategoria: e.target.value,
-                      })
-                    }
-                  />
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => {
+                      const valor = e.target.value;
+                      setFormCrear({ ...formCrear, nombreCategoria: e.target.value, });
+                      const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/;
+                      if(!regex.test(valor)) {
+                        setErrorNombre("El nombre solo puede contener letras y espacios");
+                      }else if (valor.trim() === "") {
+                        setErrorNombre("El nombre es obligatorio")
+                      }else {
+                        setErrorNombre("")
+                      }
+                    }}
+                  />  
+                  {errorNombre  && (
+                    <p className="text-red-500 text-sm mt-1">{errorNombre}</p>
+                  )}
                 </div>
                 <div className="flex flex-col">
                   <label>Descripcion</label>
                   <input
                     placeholder="Ingrese descripcion"
                     value={formCrear.descripcion}
-                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    onChange={(e) =>
-                      setFormCrear({
-                        ...formCrear,
-                        descripcion: e.target.value,
-                      })
-                    }
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => {
+                      const valor = e.target.value;
+                      setFormCrear({ ...formCrear, descripcion: e.target.value, });
+                      const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/;
+                      if(!regex.test(valor)) {
+                        setErrorDescipcion("la descripcion solo puede contener letras y espacios");
+                      }else if (valor.trim() === "") {
+                        setErrorDescipcion("la descipcion es obligatorio")
+                      }else {
+                        setErrorDescipcion("")
+                      }
+
+                    }}
                   />
+                  {errorDescripcion && (
+                    <p className="text-red-500 text-sm mt-1">{errorDescripcion}</p>
+                  )}
                 </div>
                 <div className="col-span-2 flex gap-4 mt-4">
                   <button
@@ -275,7 +322,7 @@ export const CategoriaDeDiseño = () => {
           <Modal open={openEditar} onClose={() => setOpenEditar(false)}>
             <div className="w-[450px] p-6 mx-auto text-center">
               <h3 className="text-lg font-black text-gray-800 mb-6">
-                Editar categoria
+                Editar diseño
               </h3>
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                 <div className="flex flex-col">
@@ -283,7 +330,7 @@ export const CategoriaDeDiseño = () => {
                   <input
                     placeholder="Ingrese la categoria"
                     value={formEditar.nombreCategoria}
-                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     onChange={(e) =>
                       setFormEditar({
                         ...formEditar,
@@ -297,7 +344,7 @@ export const CategoriaDeDiseño = () => {
                   <input
                     placeholder="Ingrese descripcion"
                     value={formEditar.descripcion}
-                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg  focus:outline-none focus:ring-2 focus:ring-blue-500"
                     onChange={(e) =>
                       setFormEditar({
                         ...formEditar,
@@ -330,7 +377,7 @@ export const CategoriaDeDiseño = () => {
           <Modal open={openVer} onClose={() => setOpenVer(false)}>
             <div className="w-[450px] p-6 mx-auto text-center">
               <h3 className="text-lg font-black text-gray-800 mb-6">
-                Ver categoria
+                Ver diseño
               </h3>
               {selectedCategoria && (
                 <div className="text-left space-y-2">
@@ -352,9 +399,9 @@ export const CategoriaDeDiseño = () => {
           <Modal open={openEliminar} onClose={() => setOpenEliminar(false)}>
             <div className="w-[400px] p-6 mx-auto text-center ">
               <h3 className="text-lg font-black text-gray-800 mb-4">
-                Eliminar categoria
+                Eliminar diseño
               </h3>
-              <p className="mb-6">¿Estás seguro de eliminar esta categoria?</p>
+              <p className="mb-6">¿Estás seguro de eliminar este diseño?</p>
               <div className="flex gap-4">
                 <button
                   onClick={handleDelete}
@@ -373,6 +420,18 @@ export const CategoriaDeDiseño = () => {
           </Modal>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 };
