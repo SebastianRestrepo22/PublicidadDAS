@@ -174,7 +174,6 @@ export const buscarProductoServicios = async (req, res) => {
   const { campo, valor } = req.query;
 
   const columnasPermitidas = {
-    id: 'ProductoServicioId',
     tipo: 'Tipo',
     nombre: 'Nombre',
     descripcion: 'Descripcion',

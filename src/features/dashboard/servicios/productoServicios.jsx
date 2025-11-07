@@ -129,7 +129,7 @@ export const ProductoServicios = () => {
       }
     } catch (error) {
       console.error(error);
-      success.error("Error al procesar la solicitud");
+      toast.error("Error al procesar la solicitud");
     }
   };
 
@@ -142,10 +142,10 @@ export const ProductoServicios = () => {
         if (updatedList?.data) setService(updatedList.data);
         setOpenEliminar(false);
       } else {
-        success.error(response.message || "No se pudo eliminar el producto/servicio");
+        toast.error(response.message || "No se pudo eliminar el producto/servicio");
       }
     } catch (error) {
-      success.error(error.message || "Error al eliminar el producto/servicio");
+      toast.error(error.message || "Error al eliminar el producto/servicio");
     }
   };
 
@@ -470,7 +470,6 @@ export const ProductoServicios = () => {
             className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[180px]"
           >
             <option value="">Filtrar por campo</option>
-            <option value="id">ID</option>
             <option value="tipo">Tipo</option>
             <option value="nombre">Nombre</option>
             <option value="descripcion">Descripción</option>
