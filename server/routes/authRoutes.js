@@ -9,6 +9,7 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
     const {
         CedulaId,
+        TipoDocumentoId,
         NombreCompleto,
         Telefono,
         CorreoElectronico,
@@ -46,9 +47,9 @@ router.post('/register', async (req, res) => {
         // Crea el usuario
         await connection.execute(
             `INSERT INTO usuarios 
-        (CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, hash, rol.RoleId]
+        (CedulaId, TipoDocumentoId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [CedulaId, TipoDocumentoId, NombreCompleto, Telefono, CorreoElectronico, Direccion, hash, rol.RoleId]
         );
 
         res.status(201).json({ message: 'Usuario creado exitosamente' });
@@ -66,12 +67,14 @@ router.post('/login', async (req, res) => {
         const connection = await connectDB();
 
         const [users] = await connection.execute(
-            `SELECT u.*, r.Nombre AS RoleNombre 
-       FROM usuarios u 
-       JOIN roles r ON u.RoleId = r.RoleId 
-       WHERE u.CorreoElectronico = ?`,
+            `SELECT u.*, r.Nombre AS RoleNombre, td.Nombre AS TipoDocumentoNombre
+   FROM usuarios u
+   JOIN roles r ON u.RoleId = r.RoleId
+   JOIN tipodocumento td ON u.TipoDocumentoId = td.TipoDocumentoId
+   WHERE u.CorreoElectronico = ?`,
             [CorreoElectronico]
         );
+
 
         if (users.length === 0) {
             return res.status(404).json({ message: 'Usuario no existe' });
@@ -125,12 +128,14 @@ router.get('/dashboard', verifyToken, async (req, res) => {
         const connection = await connectDB();
 
         const [users] = await connection.execute(
-            `SELECT u.*, r.Nombre AS RoleNombre 
-       FROM usuarios u 
-       JOIN roles r ON u.RoleId = r.RoleId 
-       WHERE u.CedulaId = ?`,
+            `SELECT u.*, r.Nombre AS RoleNombre, td.Nombre AS TipoDocumentoNombre
+   FROM usuarios u
+   JOIN roles r ON u.RoleId = r.RoleId
+   JOIN tipodocumento td ON u.TipoDocumentoId = td.TipoDocumentoId
+   WHERE u.CedulaId = ?`,
             [req.userId]
         );
+
 
         if (users.length === 0) {
             return res.status(404).json({ message: 'Usuario no existe' });
@@ -196,6 +201,92 @@ router.get('/validar-telefono', async (req, res) => {
         res.status(500).json({ message: 'Error al validar el telefono' });
     }
 });
+
+import crypto from "crypto";
+import nodemailer from "nodemailer";
+
+// Solicitar recuperación de contraseña
+router.post('/forgot-password', async (req, res) => {
+  const { correo } = req.body;
+
+  try {
+    const connection = await connectDB();
+    const [usuarios] = await connection.execute(
+      'SELECT * FROM usuarios WHERE CorreoElectronico = ?',
+      [correo]
+    );
+
+    if (usuarios.length === 0) {
+      return res.status(404).json({ message: 'Correo no registrado' });
+    }
+
+    const user = usuarios[0];
+
+    // Crear token seguro
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const expire = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
+
+    // Guardar token en BD
+    await connection.execute(
+      'UPDATE usuarios SET resetToken = ?, resetTokenExpire = ? WHERE CedulaId = ?',
+      [resetToken, expire, user.CedulaId]
+    );
+
+    // Enviar correo con enlace de recuperación
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // o el que uses
+      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+    });
+
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: correo,
+      subject: 'Recuperar contraseña',
+      html: `<p>Haz click en este enlace para restablecer tu contraseña: <a href="${resetUrl}">Restablecer contraseña</a></p>`
+    });
+
+    res.status(200).json({ message: 'Correo enviado' });
+  } catch (error) {
+    console.error('Error en forgot-password:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+// Restablecer contraseña
+router.post('/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+  const { nuevaContrasena } = req.body;
+
+  try {
+    const connection = await connectDB();
+    const [usuarios] = await connection.execute(
+      'SELECT * FROM usuarios WHERE resetToken = ? AND resetTokenExpire > NOW()',
+      [token]
+    );
+
+    if (usuarios.length === 0) {
+      return res.status(400).json({ message: 'Token inválido o expirado' });
+    }
+
+    const user = usuarios[0];
+
+    const hash = await bcrypt.hash(nuevaContrasena, 10);
+
+    // Actualizar contraseña y eliminar token
+    await connection.execute(
+      'UPDATE usuarios SET Contrasena = ?, resetToken = NULL, resetTokenExpire = NULL WHERE CedulaId = ?',
+      [hash, user.CedulaId]
+    );
+
+    res.status(200).json({ message: 'Contraseña actualizada exitosamente' });
+  } catch (error) {
+    console.error('Error en reset-password:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
 
 
 export default router;

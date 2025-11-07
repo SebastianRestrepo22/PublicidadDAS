@@ -136,58 +136,57 @@ export const Roles = () => {
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitted(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitted(true);
 
-    // Validación local rápida
-    if (!formData.Nombre || !formData.Nombre.trim()) {
-      setRolError('El nombre no puede ir vacío');
+  if (!formData.Nombre || !formData.Nombre.trim()) {
+    setRolError('El nombre no puede ir vacío');
+    return;
+  }
+
+  try {
+    const validarRes = await axios.get(
+      `http://localhost:3000/roles/validar-rol?rol=${encodeURIComponent(formData.Nombre.trim())}`
+    );
+    const exists = validarRes.data?.exists;
+
+    if (exists && (!editData || formData.Nombre.trim() !== (originalNombre || "").trim())) {
+      setRolError('Este rol ya está registrado');
+      toast.warning('Ya existe un rol con ese nombre');
       return;
     }
 
-    try {
-      // Verificar en backend si el rol existe
-      const validarRes = await axios.get(`http://localhost:3000/roles/validar-rol?rol=${encodeURIComponent(formData.Nombre.trim())}`);
-      const exists = validarRes.data?.exists;
+    //Convertir el booleano a texto válido para el ENUM
+    const estadoValido = formData.Estado === true ? "Activo" : "Inactivo";
 
-      // Si existe y NO estamos editando el mismo nombre -> bloquear
-      if (exists && (!editData || formData.Nombre.trim() !== (originalNombre || "").trim())) {
-        setRolError('Este rol ya está registrado');
-        toast.warning('Ya existe un rol con ese nombre');
-        return;
-      }
-
-      let response;
-      if (editData && editData.RoleId) {
-        // editar
-        response = await updateDataRol(editData.RoleId, formData);
-      } else {
-        // crear
-        response = await postDataRoles(formData);
-      }
-
-      if (response && (response.status === 200 || response.status === 201)) {
-        const updatedList = await GetDataRoles();
-        setRoles(updatedList.data || []);
-        toast.success(editData ? "Rol actualizado correctamente" : "Rol creado correctamente");
-        handleCloseModal();
-      } else {
-        toast.error("Error al guardar el rol");
-      }
-    } catch (error) {
-      console.error("Error en handleSubmit:", error);
-
-      // Si el backend tuvo una validación (por ejemplo UNIQUE constraint), mostrar mensaje útil
-      const serverMessage = error?.response?.data?.message;
-      if (serverMessage) {
-        setRolError(serverMessage);
-        toast.warning(serverMessage);
-      } else {
-        toast.error("Error al procesar la solicitud");
-      }
+    let response;
+    if (editData && editData.RoleId) {
+      response = await updateDataRol(editData.RoleId, { ...formData, Estado: estadoValido });
+    } else {
+      response = await postDataRoles({ ...formData, Estado: estadoValido });
     }
-  };
+
+    if (response && (response.status === 200 || response.status === 201)) {
+      const updatedList = await GetDataRoles();
+      setRoles(updatedList.data || []);
+      toast.success(editData ? "Rol actualizado correctamente" : "Rol creado correctamente");
+      handleCloseModal();
+    } else {
+      toast.error("Error al guardar el rol");
+    }
+  } catch (error) {
+    console.error("Error en handleSubmit:", error);
+    const serverMessage = error?.response?.data?.message;
+    if (serverMessage) {
+      setRolError(serverMessage);
+      toast.warning(serverMessage);
+    } else {
+      toast.error("Error al procesar la solicitud");
+    }
+  }
+};
+
 
 
   const handleEditClick = (rol) => {

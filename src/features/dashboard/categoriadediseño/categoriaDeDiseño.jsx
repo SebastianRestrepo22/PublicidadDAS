@@ -3,8 +3,6 @@ import { Search, Plus, Edit, Eye, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../components/modals/modal";
-import { toast } from "react-hot-toast";
-
 
 export const CategoriaDeDiseño = () => {
   const [categorias, setCategorias] = useState([]);
@@ -44,7 +42,7 @@ export const CategoriaDeDiseño = () => {
     try {
       await axios.post("http://localhost:3000/api/categorias", formCrear);
 
-      toast.success("Categoría creada con éxito ");
+      alert("Categoría creada con éxito ");
       fetchCategorias();
       setFormCrear({ nombreCategoria: "", descripcion: "" });
       setOpenCreate(false);
