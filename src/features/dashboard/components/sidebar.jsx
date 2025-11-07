@@ -16,6 +16,7 @@ import {
   LogOut,
 } from "lucide-react";
 import Modal from "./modals/modal";
+import { Label } from "recharts";
 
 const menuItems = [
   { icon: BarChart3, label: "Gráficos Estadísticos", to: "/dashboard/graficosEstadisticos" },
@@ -29,13 +30,21 @@ const menuItems = [
     hasSubmenu: true,
     submenu: [
       { label: "Proveedores", to: "/dashboard/proveedores" },
-      { label: "Pedidos", to: "/dashboard/pedidos" },
+      { label: "Compras", to: "/dashboard/compras" },
       { label: "Insumos", to: "/dashboard/insumos" },
     ],
   },
-  { icon: Palette, label: "Categoría de Diseño", to: "/dashboard/categoriaDeDiseño" },
-  { icon: ShoppingCart, label: "Gestión de Ventas", to: "/dashboard/gestionVentas", },
-  { icon: CreditCard, label: "Método de pago", to: "/dashboard/metodoDePago" },
+  { icon: Palette, label: "Diseño", to: "/dashboard/Diseño" },
+  { icon: ShoppingCart,
+    label: "Gestión de Ventas", 
+    to: "/dashboard/gestionVentas",
+    hasSubmenu: true,
+    submenu: [
+      { label: "Pedidos", to: "/dashboard/pedidos"},
+      { label: "Produccion", to: "/dashboard/produccion"},
+      { label: "Venta", to: "/dashboard/ventas"}
+    ]
+   },
   { icon: CalendarDays, label: "Agenda", to: "/dashboard/agenda" }
 ];
 
@@ -62,14 +71,14 @@ export const Sidebar = () => {
 
 
   return (
-    <div className="w-48 min-h-screen bg-gray-900 text-white flex flex-col justify-between">
+    <div className="w-48 min-h-screen bg-gray-900 space-y-3 py-4 text-white flex flex-col justify-between">
       {/* Encabezado */}
       <div className="p-4 pb-6 border-b border-gray-700">
         <h1 className="text-lg font-bold text-white tracking-tight">Dashboard</h1>
       </div>
 
       {/* Menú */}
-      <nav className="overflow-y-auto scrollbar-hide">
+      <nav className="flex-1 overflow-y-auto scrollbar-hide">
         <ul className="space-y-1">
           {menuItems.map((item, index) => (
             <li key={index}>
@@ -103,7 +112,7 @@ export const Sidebar = () => {
               </div>
 
               {item.hasSubmenu && expandedItems.includes(index) && (
-                <ul className="ml-5 mt-1 space-y-1 border-l border-gray-700 pl-3">
+                <ul className="ml-5 mt-1 space-y-3 py-4 border-l border-gray-700 pl-3">
                   {item.submenu?.map((subItem, subIndex) => (
                     <li key={subIndex}>
                       <Link

@@ -41,6 +41,22 @@ export const createCategoria = async (req, res) => {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
 
+  //validar solo letras 
+  const nombreRegex =  /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+  if (!nombreRegex.test(nombreCategoria)) {
+    return res.status(400).json({
+      error: "El nombre de la categoria solo puede contener letras y espacios"
+    })
+  }
+
+  // validar que no tenga numeros
+  const descripcionRegex =  /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+  if (!descripcionRegex.test(descripcion)) {
+    return res.status(400).json({
+      error: "La descripcion solo debe de tener letras y espacion"
+    })
+  }
+
   try {
     const result = await createCategoriaModel({ nombreCategoria, descripcion });
     res.status(201).json(result);
@@ -58,7 +74,7 @@ export const deleteCategoria = async (req, res) => {
   try {
     const result = await deleteCategoriaModel(id);
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Categoria no encontrada" });
+      return res.status(404).json({ message: "Categoria no encontrado" });
     }
     res.json({ message: "Categoria eliminada correctamente" });
   } catch (err) {
@@ -67,6 +83,23 @@ export const deleteCategoria = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Actualizar categoría
 export const updateCategoria = async (req, res) => {
   const id = req.params.id;
@@ -74,6 +107,21 @@ export const updateCategoria = async (req, res) => {
 
   if (!nombreCategoria || !descripcion) {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  }
+
+  const nombreRegex =  /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+  if (!nombreRegex.test(nombreCategoria)) {
+    return res.status(400).json({
+      error: "El nombre de la categoria solo puede contener letras y espacios"
+    })
+  }
+
+  // validar que no tenga numeros
+  const descripcionRegex =  /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+  if (!descripcionRegex.test(descripcion)) {
+    return res.status(400).json({
+      error: "La descripcion solo debe de tener letras y espacion"
+    })
   }
 
   try {

@@ -67,17 +67,6 @@ export default function CitaForm({ appointment, onSubmit, onCancel }) {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <label>Descripción</label>
-        <textarea
-          className="w-full border p-2 rounded"
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          placeholder="Detalles del trabajo a realizar..."
-          rows={3}
-        />
-      </div>
-
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label>Fecha *</label>
@@ -104,20 +93,6 @@ export default function CitaForm({ appointment, onSubmit, onCancel }) {
 
       <div className="grid grid-cols-3 gap-4">
         <div className="space-y-2">
-          <label>Servicio</label>
-          <select
-            className="w-full border p-2 rounded"
-            value={formData.service}
-            onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-          >
-            <option value="">Seleccionar servicio</option>
-            {services.map((service) => (
-              <option key={service} value={service}>{service}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="space-y-2">
           <label>Estado</label>
           <select
             className="w-full border p-2 rounded"
@@ -128,19 +103,6 @@ export default function CitaForm({ appointment, onSubmit, onCancel }) {
             <option value="confirmado">Confirmado</option>
             <option value="completado">Completado</option>
             <option value="cancelado">Cancelado</option>
-          </select>
-        </div>
-
-        <div className="space-y-2">
-          <label>Prioridad</label>
-          <select
-            className="w-full border p-2 rounded"
-            value={formData.priority}
-            onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-          >
-            <option value="baja">Baja</option>
-            <option value="media">Media</option>
-            <option value="alta">Alta</option>
           </select>
         </div>
       </div>

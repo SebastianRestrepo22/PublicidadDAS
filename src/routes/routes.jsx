@@ -9,8 +9,6 @@ import { ProductoServicios } from "../features/dashboard/servicios/productoServi
 import { Proveedores } from "../features/dashboard/constrolinsumos/proveedores/proveedores"
 import { Usuarios } from "../features/dashboard/usuarios/usuarios"
 import { Roles } from "../features/dashboard/roles/roles"
-import { Pedidos } from "../features/dashboard/pedidos/pedidos"
-import { MetodoDePago } from "../features/dashboard/metodopago/metododepago"
 import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
 import { Error404 } from "../features/404/error404"
 import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
@@ -42,8 +40,9 @@ export const Routers = () => {
                 <Route path="graficosEstadisticos" element={<GraficosEstadisticos />} />
                 <Route path="usuarios" element={<Usuarios />} />
                 <Route path="roles" element={<Roles />} />
-                <Route path="pedidos" element={<Pedidos />} />
+                <Route path="compras" element={<Compras/>} />
                 <Route path="insumos" element={<Insumos />} />
+                <Route path="diseño" element={<Diseño />} />
                 <Route path="productoServicio" element={<ProductoServicios />} />
                 <Route path="proveedores" element={<Proveedores />} />
                 <Route path="categoriaDeDiseño" element={<Diseño/>}/>
