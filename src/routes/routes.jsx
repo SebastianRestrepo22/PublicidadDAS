@@ -14,27 +14,27 @@ import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEst
 import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
 import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
 import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
+import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas"
+import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
 import Agenda from "../features/dashboard/agenda/agenda"
-import { Produccion } from "../features/dashboard/gestionventas/produccion/produccion"
-import { Compras } from "../features/dashboard/compras/compras"
-import { Pedidos } from "../features/dashboard/gestionventas/pedidos/pedidos"
-import { Ventas } from "../features/dashboard/gestionventas/venta/ventas"
-import { Diseño } from "../features/dashboard/categoriadediseño/diseño"
 
 export const Routers = () => {
     return (
         <Routes>
             <Route path="/" element={<Inicio />} />
             <Route path="/productos" element={<Productos />} />
+            <Route path="/servicios" element={<Servicios />} />
             <Route path="/quienessomos" element={<QuienesSomos />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
+            <Route path="/reset-password/:token" element={<RestablecerContrasena />} />
 
             <Route path="/carritodecompras" element={<CarritoCompras />} />
             <Route path="/carritoproducto" element={<CarritoProducto />} />
             <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
 
             <Route path="/dashboard" element={<DashboardLayout />}>
-                <Route path="graficosEstadisticos" element={<GraficosEstadisticos/>} />
+                <Route path="graficosEstadisticos" element={<GraficosEstadisticos />} />
                 <Route path="usuarios" element={<Usuarios />} />
                 <Route path="roles" element={<Roles />} />
                 <Route path="compras" element={<Compras/>} />
@@ -42,9 +42,9 @@ export const Routers = () => {
                 <Route path="diseño" element={<Diseño />} />
                 <Route path="productoServicio" element={<ProductoServicios />} />
                 <Route path="proveedores" element={<Proveedores />} />
-                <Route path="pedidos" element={<Pedidos/>} />
-                <Route path="produccion" element={<Produccion/>} />
-                <Route path="ventas" element={<Ventas/>} />
+                <Route path="gestionVentas" element={<GestionVentas/>}/>
+                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño/>}/>
+                <Route path="metodoDePago" element={<MetodoDePago />} />
                 <Route path="agenda" element={<Agenda/>}/>
             </Route>
 

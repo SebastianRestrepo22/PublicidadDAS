@@ -3,6 +3,7 @@ import { connectDB } from '../lib/db.js';
 // Crear usuario
 export const createUsuario = async ({
   CedulaId,
+  TipoDocumentoId,
   NombreCompleto,
   Telefono,
   CorreoElectronico,
@@ -13,9 +14,9 @@ export const createUsuario = async ({
   const connection = await connectDB();
   await connection.execute(
     `INSERT INTO usuarios 
-     (CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [CedulaId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId]
+     (CedulaId, TipoDocumentoId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [CedulaId, TipoDocumentoId, NombreCompleto, Telefono, CorreoElectronico, Direccion, Contrasena, RoleId]
   );
 };
 

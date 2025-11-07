@@ -16,8 +16,10 @@ export default function Modal({ open, onClose, children }) {
 
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 w-[20px] h-[20px] p-3 flex items-center justify-center border-[2px] border-gray-400 rounded-lg text-gray-400 text-2xl bg-white hover:bg-gray-50 hover:text-gray-600">
-                        X
+                        className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                        aria-label="Cerrar"
+                    >
+                        ✕
                     </button>
 
                     {children}

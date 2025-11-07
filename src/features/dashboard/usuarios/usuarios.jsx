@@ -14,6 +14,7 @@ export const Usuarios = () => {
   const [user, setUser] = useState([]);
   const [values, setValues] = useState({
     CedulaId: "",
+    TipoDocumentoId: "",
     NombreCompleto: "",
     Telefono: "",
     CorreoElectronico: "",
@@ -22,6 +23,9 @@ export const Usuarios = () => {
     RoleId: ""
   });
 
+  const [submitted, setSubmitted] = useState(false);
+
+
   const [editData, setEditData] = useState(null);
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -29,13 +33,36 @@ export const Usuarios = () => {
   const [openVer, setOpenVer] = useState(false);
   const [openEliminar, setOpenEliminar] = useState(false);
 
+  //Tarer los tipos de documentos
+
+  const [tiposDocumento, setTiposDocumento] = useState([]);
+  useEffect(() => {
+    const fetchTiposDocumento = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/tipos-documento");
+        setTiposDocumento(response.data); // response.data debe ser un array de { TipoDocumentoId, Nombre }
+      } catch (error) {
+        console.error("Error obteniendo tipos de documento:", error);
+      }
+    };
+    fetchTiposDocumento();
+  }, []);
+
   //Traer los roles para el seleccionar un rol para el usuario
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     const fetchRoles = async () => {
-      const data = await GetDataRoles();
-      if (data?.data) setRoles(data.data);
+      try {
+        const response = await GetDataRoles();
+        //Que solo aparezca los roles activos
+        if (response?.data) {
+          const activos = response.data.filter((rol) => rol.Estado === "Activo");
+          setRoles(activos);
+        }
+      } catch (error) {
+        console.error("Error al cargar roles:", error);
+      }
     };
     fetchRoles();
   }, []);
@@ -138,7 +165,27 @@ export const Usuarios = () => {
   // Crear / Editar usuario
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitted(true);
 
+    // Validación campos obligatorios
+    const camposObligatorios = [
+      "CedulaId",
+      "TipoDocumentoId",
+      "NombreCompleto",
+      "Telefono",
+      "CorreoElectronico",
+      "Direccion",
+      openEditar ? "RoleId" : null
+    ].filter(Boolean);
+
+    const camposVacios = camposObligatorios.filter(campo => !values[campo] || !values[campo].trim());
+
+    if (camposVacios.length > 0) {
+      toast.warning(`Los siguientes campos son obligatorios: ${camposVacios.join(", ")}`);
+      return; // Detiene el envío
+    }
+
+    // Validaciones existentes de correo, cédula y teléfono
     if (correoError || cedulaError || telefonoError) {
       toast.warning("Corrige los errores antes de enviar");
       return;
@@ -162,12 +209,31 @@ export const Usuarios = () => {
           toast.success("Usuario creado correctamente");
         }
       }
-      setValues({ CedulaId: "", NombreCompleto: "", Telefono: "", CorreoElectronico: "", Direccion: "", Contrasena: "" });
-      setEditData(null);
+      resetForm();
     } catch (error) {
       console.error(error);
       toast.error("Error al procesar la solicitud");
     }
+  };
+
+  //Reseteo de las alertas de errores
+  const resetForm = () => {
+    setValues({
+      CedulaId: "",
+      TipoDocumentoId: "",
+      NombreCompleto: "",
+      Telefono: "",
+      CorreoElectronico: "",
+      Direccion: "",
+      Contrasena: "",
+      RoleId: ""
+    });
+
+    setEditData(null);
+    setCedulaError("");
+    setCorreoError("");
+    setTelefonoError("");
+    setSubmitted(false); // esto evita que muestre validaciones al abrir
   };
 
   // Eliminar usuario
@@ -223,9 +289,34 @@ export const Usuarios = () => {
     const buttonLabel = type === "create" ? "Crear" : type === "editar" ? "Guardar" : "Cerrar";
 
     return (
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-left">
+        {/* Tipo de documento */}
         <div className="flex flex-col">
-          <label>Cédula</label>
+          <label className="mb-1">Tipo de documento</label>
+          <select
+            name="TipoDocumentoId"
+            value={values.TipoDocumentoId || ""}
+            onChange={handleChanges}
+            className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && !values.TipoDocumentoId ? "border-red-500" : "border-gray-300"}`}
+          >
+            <option value="">Seleccione un tipo de documento</option>
+            {tiposDocumento.map((tipo) => (
+              <option key={tipo.TipoDocumentoId} value={tipo.TipoDocumentoId}>
+                {tipo.Nombre}
+              </option>
+            ))}
+          </select>
+          <div className="min-h-[16px] mt-0.5">
+            {(!values.TipoDocumentoId && submitted) && (
+              <p className="text-red-500 text-[12px] leading-4">Campo obligatorio.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Cédula */}
+        <div className="flex flex-col">
+          <label className="mb-1">Cédula</label>
           <input
             type="text"
             name="CedulaId"
@@ -234,37 +325,59 @@ export const Usuarios = () => {
             readOnly={isReadOnly}
             onChange={handleChanges}
             onBlur={handleCedulaBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 
+      ${(submitted && !values.CedulaId.trim()) || cedulaError ? "border-red-500" : "border-gray-300"}`}
           />
-          {cedulaError && <p className="text-red-500 text-sm">{cedulaError}</p>}
+          <div className="min-h-[16px] mt-0.5">
+            {(!values.CedulaId.trim() && submitted) ? (
+              <p className="text-red-500 text-[12px] leading-4">Ingrese una cédula válida</p>
+            ) : cedulaError ? (
+              <p className="text-red-500 text-[12px] leading-4">{cedulaError}</p>
+            ) : null}
+          </div>
         </div>
 
+        {/* Nombre completo */}
         <div className="flex flex-col">
-          <label>Nombre completo</label>
+          <label className="mb-1">Nombre completo</label>
           <input
             type="text"
             name="NombreCompleto"
             value={values.NombreCompleto}
             placeholder="Ingrese su nombre"
             onChange={handleChanges}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && !values.NombreCompleto.trim() ? "border-red-500" : "border-gray-300"}`}
           />
+          <div className="min-h-[16px] mt-0.5">
+            {(!values.NombreCompleto.trim() && submitted) && (
+              <p className="text-red-500 text-[12px] leading-4">Ingrese su nombre completo</p>
+            )}
+          </div>
         </div>
 
+        {/* Dirección */}
         <div className="flex flex-col">
-          <label>Dirección</label>
+          <label className="mb-1">Dirección</label>
           <input
             type="text"
             name="Direccion"
             value={values.Direccion}
             placeholder="Ingrese su dirección"
             onChange={handleChanges}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${submitted && !values.Direccion.trim() ? "border-red-500" : "border-gray-300"}`}
           />
+          <div className="min-h-[16px] mt-0.5">
+            {(!values.Direccion.trim() && submitted) && (
+              <p className="text-red-500 text-[12px] leading-4">Ingrese una dirección</p>
+            )}
+          </div>
         </div>
 
+        {/* Correo electrónico */}
         <div className="flex flex-col">
-          <label>Correo electrónico</label>
+          <label className="mb-1">Correo electrónico</label>
           <input
             type="email"
             name="CorreoElectronico"
@@ -272,13 +385,21 @@ export const Usuarios = () => {
             placeholder="Ingrese su correo"
             onChange={handleChanges}
             onBlur={handleCorreoBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${(submitted && !values.CorreoElectronico.trim()) || correoError ? "border-red-500" : "border-gray-300"}`}
           />
-          {correoError && <p className="text-red-500 text-sm">{correoError}</p>}
+          <div className="min-h-[16px] mt-0.5">
+            {(!values.CorreoElectronico.trim() && submitted) ? (
+              <p className="text-red-500 text-[12px] leading-4">Ingrese un correo válido</p>
+            ) : correoError ? (
+              <p className="text-red-500 text-[12px] leading-4">{correoError}</p>
+            ) : null}
+          </div>
         </div>
 
+        {/* Teléfono */}
         <div className="flex flex-col">
-          <label>Teléfono</label>
+          <label className="mb-1">Teléfono</label>
           <input
             type="text"
             name="Telefono"
@@ -286,19 +407,28 @@ export const Usuarios = () => {
             placeholder="Ingrese su teléfono"
             onChange={handleChanges}
             onBlur={handleTelefonoBlur}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      ${(submitted && !values.Telefono.trim()) || telefonoError ? "border-red-500" : "border-gray-300"}`}
           />
-          {telefonoError && <p className="text-red-500 text-sm">{telefonoError}</p>}
+          <div className="min-h-[16px] mt-0.5">
+            {(!values.Telefono.trim() && submitted) ? (
+              <p className="text-red-500 text-[12px] leading-4">Ingrese un número</p>
+            ) : telefonoError ? (
+              <p className="text-red-500 text-[12px] leading-4">{telefonoError}</p>
+            ) : null}
+          </div>
         </div>
 
+        {/* Rol solo si se edita */}
         {openEditar && (
-          <div className="flex flex-col">
-            <label>Rol</label>
+          <div className="flex flex-col col-span-1 md:col-span-2">
+            <label className="mb-1">Rol</label>
             <select
               name="RoleId"
               value={values.RoleId || ""}
               onChange={handleChanges}
-              className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+        ${submitted && !values.RoleId ? "border-red-500" : "border-gray-300"}`}
             >
               <option value="">Seleccione un rol</option>
               {roles.map((rol) => (
@@ -307,28 +437,16 @@ export const Usuarios = () => {
                 </option>
               ))}
             </select>
+            <div className="min-h-[16px] mt-0.5">
+              {(!values.RoleId && submitted) && (
+                <p className="text-red-500 text-[12px] leading-4">Seleccione un rol</p>
+              )}
+            </div>
           </div>
         )}
 
-
-        {/*
-        
-        <div className="flex flex-col">
-          <label>Rol</label>
-          <input
-            type="rol"
-            name="Rol"
-            value={values.RoleId}
-            placeholder="Ingrese el rol"
-            onChange={handleChanges}
-            className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC] focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        */}
-
-        <div className="col-span-1 md:col-span-2 flex gap-4 mt-4">
-
+        {/* Botones */}
+        <div className="col-span-1 md:col-span-2 flex gap-4 mt-3">
           <button className="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">
             {buttonLabel}
           </button>
@@ -341,17 +459,15 @@ export const Usuarios = () => {
               setOpenEditar(false);
               setOpenVer(false);
               setOpenEliminar(false);
-              setValues({ CedulaId: "", NombreCompleto: "", Telefono: "", CorreoElectronico: "", Direccion: "", Contrasena: "" });
-              setEditData(null);
-              setCedulaError('');
-              setCorreoError('');
-              setTelefonoError('');
+              resetForm();
             }}
           >
             Cerrar
           </button>
         </div>
       </form>
+
+
     );
   };
 
@@ -360,6 +476,7 @@ export const Usuarios = () => {
 
     return (
       <div className="text-left space-y-2">
+        <p><strong>Tipo de documento:</strong> {tiposDocumento.find(tipo => tipo.TipoDocumentoId === editData.TipoDocumentoId)?.Nombre}</p>
         <p><strong>ID:</strong> {editData.CedulaId}</p>
         <p><strong>Nombre:</strong> {editData.NombreCompleto}</p>
         <p><strong>Telfono:</strong> {editData.Telefono}</p>
@@ -387,7 +504,12 @@ export const Usuarios = () => {
         {/* Filtros */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <Link onClick={() => setOpenCreate(true)} className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg">
+            <Link onClick={() => {
+              resetForm();          // limpia valores, errores y submitted
+              setEditData(null);    // asegura que no quede data previa
+              setOpenEditar(false);
+              setOpenCreate(true);  // abre el modal de crear limpio
+            }} className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-lg">
               <Plus size={18} /> Nuevo usuario
             </Link>
 
@@ -396,7 +518,7 @@ export const Usuarios = () => {
               onChange={(e) => setFiltroCampo(e.target.value)}
               className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]">
               <option value="">Filtrar por campo</option>
-              <option value="id">ID</option>
+              <option value="tipoDocumento">Tipo de documento</option>
               <option value="cedula">Cédula</option>
               <option value="nombre">Nombre</option>
               <option value="direccion">Dirección</option>
@@ -417,28 +539,40 @@ export const Usuarios = () => {
         </div>
 
         {/* Modales */}
-        <Modal open={openCreate} onClose={() => setOpenCreate(false)}>
+        <Modal open={openCreate} onClose={() => {
+          setOpenCreate(false);
+          resetForm();
+        }}>
           <div className="w-[450px] p-6 mx-auto text-center">
             <h3 className="text-lg font-black text-gray-800 mb-6">Nuevo usuario</h3>
             {renderModalForm("create")}
           </div>
         </Modal>
 
-        <Modal open={openEditar} onClose={() => setOpenEditar(false)}>
+        <Modal open={openEditar} onClose={() => {
+          setOpenEditar(false);
+          resetForm();
+        }} >
           <div className="w-[450px] p-6 mx-auto text-center">
             <h3 className="text-lg font-black text-gray-800 mb-6">Editar usuario</h3>
             {renderModalForm("editar")}
           </div>
         </Modal>
 
-        <Modal open={openVer} onClose={() => setOpenVer(false)}>
+        <Modal open={openVer} onClose={() => {
+          setOpenVer(false);
+          resetForm();
+        }}>
           <div className="w-[450px] p-6 mx-auto text-center">
             <h3 className="text-lg font-black text-gray-800 mb-6">Ver rol</h3>
             {renderView()}
           </div>
         </Modal>
 
-        <Modal open={openEliminar} onClose={() => setOpenEliminar(false)}>
+        <Modal open={openEliminar} onClose={() => {
+          setOpenEliminar(false);
+          resetForm();
+        }}>
           <div className="w-[400px] p-6 mx-auto text-center">
             <h3 className="text-lg font-black text-gray-800 mb-4">Eliminar usuario</h3>
             <p className="mb-6">¿Estás seguro de eliminar este usuario?</p>
@@ -458,6 +592,7 @@ export const Usuarios = () => {
           <table className="min-w-full">
             <thead className="bg-gradient-to-r from-slate-800 to-slate-700">
               <tr>
+                <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">Tipo documento</th>
                 <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">Cédula</th>
                 <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">Nombre</th>
                 <th className="py-4 px-6 text-sm font-semibold text-white uppercase tracking-wider">Dirección</th>
@@ -471,6 +606,9 @@ export const Usuarios = () => {
               {user.length > 0 ? (
                 user.map((u) => (
                   <tr key={u.CedulaId} className="hover:bg-slate-50 transition-colors duration-150">
+                    <td className="py-4 px-6 text-sm text-slate-900">
+                      {tiposDocumento.find(tipo => tipo.TipoDocumentoId === u.TipoDocumentoId)?.Nombre || u.TipoDocumentoId}
+                    </td>
                     <td className="py-4 px-6 text-sm text-slate-900">{u.CedulaId}</td>
                     <td className="py-4 px-6 text-sm text-slate-900">{u.NombreCompleto}</td>
                     <td className="py-4 px-6 text-sm text-slate-900">{u.Direccion}</td>
