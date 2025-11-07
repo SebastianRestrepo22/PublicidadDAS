@@ -252,14 +252,14 @@ export const Usuarios = () => {
         toast.error(response.message || "No se pudo eliminar el usuario");
       }
     } catch (error) {
-      toast.error(error.message || "Error al eliminar el usuario");
+      toast.error(error.message || "Error al  el usuario");
     }
   };
 
   // Abrir modal para editar, ver o eliminar
   const handleEditClick = (u) => {
     setEditData(u);
-    setValues({ ...u });
+    setValues({ ...u });eliminar
 
     //Evita que en el editar saque la exepción si no ha habido cambios
     setOriginalCorreo(u.CorreoElectronico);

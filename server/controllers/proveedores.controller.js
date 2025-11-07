@@ -5,6 +5,7 @@ import {
   deleteProveedor as deleteProveedorModel
 } from '../models/proveedores.models.js';
 
+
 // Obtener todos los proveedores
 export const getAllProveedores = async (req, res) => {
   try {
