@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Modal from "../../components/modals/modal";
 import axios from "axios";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const API_URL = "http://localhost:3000/api/insumos";
 
 export const Insumos = () => {
@@ -11,6 +14,9 @@ export const Insumos = () => {
   const [selectedInsumo, setSelectedInsumo] = useState(null);
   const [campoFiltro, setCampoFiltro] = useState("");
   const [busqueda, setBusqueda] = useState("");
+  const [errorNombre, setErrorNombre] = useState("");
+  const [errorStock, setErrorStock] = useState("");
+
 
   const [openCreate, setOpenCreate] = useState(false);
   const [openEditar, setOpenEditar] = useState(false);
@@ -34,7 +40,7 @@ export const Insumos = () => {
       const data = await response.json();
       setInsumos(data);
     } catch (error) {
-      console.error("Error al obtener insumos:", error);
+      toast.error("Error al obtener insumo");
     }
   };
 
@@ -44,44 +50,47 @@ export const Insumos = () => {
 
   // Crear insumo
   const handleCreate = async () => {
-  try {
-    await axios.post(API_URL, {
-      nombreInsumo: formCrear.nombreInsumo,
-      stock: Number(formCrear.stock), // 🔹 convierte a número si tu DB espera INT
-    });
-    alert("Insumo creado exitosamente ")
-    setOpenCreate(false);
-    setFormCrear({ nombreInsumo: "", stock: "" });
-    fetchInsumos();
-  } catch (err) {
-    alert("Error al crear insumo:", err.response?.data || err.message);
-  }
-};
+    try {
+      await axios.post(API_URL, {
+        nombreInsumo: formCrear.nombreInsumo,
+        stock: Number(formCrear.stock), 
+      });
+      toast.success("Insumo creado exitosamente");
+      setOpenCreate(false);
+      setFormCrear({ nombreInsumo: "", stock: "" });
+      fetchInsumos();
+    } catch (err) {
+      toast.error("Error al crear insumo");
+    }
+  };
 
   // Editar insumo
   const handleUpdate = async () => {
     try {
-      await axios.put(`${API_URL}/${selectedInsumo.InsumoId}`, {
-        nombreInsumo: formEditar.nombreInsumo,
-        stock: formEditar.stock,
-      });
-      alert("Insumo actualizado correctamente")
-      setOpenEditar(false);
+      await axios.put(
+        `http://localhost:3000/api/insumos/${selectedInsumo.InsumoId}`,
+        formEditar
+      );
+      toast.success("Insumo actualizado correctamente ")
       fetchInsumos();
-    } catch (err) {
-      alert("Error al actualizar insumos:", err);
+      setOpenEditar(false);
+    } catch (error) {
+      toast.error("Error al actualizar el insumo");
     }
   };
 
   // Eliminar insumo
   const handleDelete = async () => {
     try {
-      await axios.delete(`${API_URL}/${selectedInsumo.InsumoId}`);
-      alert("Insumo eliminado con exito")
+      await axios.delete(
+        `http://localhost:3000/api/insumos/${selectedInsumo.InsumoId}`
+      );
+      toast.success("Insumo eliminado correctamente")
       setOpenEliminar(false);
       fetchInsumos();
     } catch (err) {
-      alert("Error al eliminar el insumo:", err);
+      toast.error("Error al eliminar el insumo");
+
     }
   };
 
@@ -95,17 +104,17 @@ export const Insumos = () => {
   };
 
   // filtro
-    const insumosFiltrados = insumos.filter((i) =>  {
+  const insumosFiltrados = insumos.filter((i) => {
     if (!busqueda) return true;
     if (campoFiltro === "id") {
-      return i.InsumoId.toString().includes(busqueda); 
+      return i.InsumoId.toString().includes(busqueda);
     }
 
     if (campoFiltro === "nombre") {
       return i.Nombre.toLowerCase().includes(busqueda.toLowerCase());
     }
 
-    if (campoFiltro === "stock"){
+    if (campoFiltro === "stock") {
       return i.Stock.toString().includes(busqueda)
     }
 
@@ -114,7 +123,7 @@ export const Insumos = () => {
       i.Nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       i.Stock.toString().includes(busqueda)
     );
-  
+
   })
 
 
@@ -137,14 +146,14 @@ export const Insumos = () => {
               </Link>
 
               <select value={campoFiltro}
-              onChange={(e) => setCampoFiltro(e.target.value)}
-              className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]"
+                onChange={(e) => setCampoFiltro(e.target.value)}
+                className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]"
               >
                 <option value="">Filtrar por campo</option>
                 <option value="id">ID</option>
                 <option value="nombre">Nombre</option>
                 <option value="stock">Stock</option>
-                
+
               </select>
 
               <div className="relative flex-1 max-w-md">
@@ -183,7 +192,7 @@ export const Insumos = () => {
                 {insumosFiltrados.map((i) => (
                   <tr key={i.InsumoId} className="hover:bg-slate-50 transition-colors duration-150 ">
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.InsumoId}</td>
-                    <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.Nombre}</td> 
+                    <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.Nombre}</td>
                     <td className="py-4 px-6 text-sm font-medium text-slate-900">{i.Stock}</td>
                     <td className="py-4 px-6">
                       <div className="flex gap-2">
@@ -228,20 +237,47 @@ export const Insumos = () => {
                 <div className="flex flex-col">
                   <label className="mb-1 text-sm font-medium text-gray-700">Nombre insumo</label>
                   <input
-                  placeholder="Ingrese nombre insumo"
-                  value={formCrear.nombreInsumo}
-                  className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={(e) => setFormCrear({ ...formCrear, nombreInsumo: e.target.value })}
-                />
+                    placeholder="Ingrese nombre insumo"
+                    value={formCrear.nombreInsumo}
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => {
+                      const valor = e.target.value;
+                      setFormCrear({ ...formCrear, nombreInsumo: valor});
+                      const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/;
+                      if (!regex.test(valor)) {
+                        setErrorNombre("El nombre solo puede contener letras y espacios");
+                      } else if (valor.trim() === "") {
+                        setErrorNombre("El nombre es obligatorio")
+                      }else {
+                        setErrorNombre("")
+                      }
+                    }}
+                  />
+                  {errorNombre && (
+                    <span className="text-red-500 text-sm mt-1">{errorNombre}</span>
+                  )}
                 </div>
                 <div className="flex flex-col">
                   <label className="mb-2 text-sm font-medium text-gray-700">Stock</label>
                   <input
-                  placeholder="Ingrese stock"
-                  value={formCrear.stock}
-                  className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={(e) => setFormCrear({ ...formCrear, stock: e.target.value })}
-                />
+                    placeholder="Ingrese stock"
+                    value={formCrear.stock}
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => {
+                      const valor = e.target.value;
+                      setFormCrear({ ...formCrear, stock: valor});
+
+                      const regex = /^[0-9]+$/;
+                      if (!regex.test(valor)) {
+                        setErrorStock("El stock solo puede contener numeros");
+                      }else if (valor.trim() === "") {
+                        setErrorStock("El stock es obligatorio")
+                      }
+                    }}
+                  />
+                  {errorStock && (
+                    <span className="text-red-500 text-sm mt-1">{errorStock}</span>
+                  )}
                 </div>
                 <div className="col-span-2 flex gap-4 mt-4">
                   <button
@@ -270,19 +306,19 @@ export const Insumos = () => {
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                 <div className="flex flex-col">
                   <input
-                  placeholder="Ingrese su insumo"
-                  value={formEditar.nombreInsumo}
-                  className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={(e) => setFormEditar({ ...formEditar, nombreInsumo: e.target.value })}
-                />
+                    placeholder="Ingrese su insumo"
+                    value={formEditar.nombreInsumo}
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => setFormEditar({ ...formEditar, nombreInsumo: e.target.value })}
+                  />
                 </div>
                 <div className="flex flex-col">
                   <input
-                  placeholder="Insumo su stock"
-                  value={formEditar.stock}
-                  className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={(e) => setFormEditar({ ...formEditar, stock: e.target.value })}
-                />
+                    placeholder="Insumo su stock"
+                    value={formEditar.stock}
+                    className="w-full h-11 px-4 border border-gray-300 rounded-lg bg-[#EEECEC focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => setFormEditar({ ...formEditar, stock: e.target.value })}
+                  />
                 </div>
                 <div className="col-span-2 flex gap-4 mt-4">
                   <button
@@ -347,6 +383,18 @@ export const Insumos = () => {
           </Modal>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 };

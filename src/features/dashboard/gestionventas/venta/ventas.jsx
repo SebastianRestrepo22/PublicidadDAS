@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Edit, Eye, Trash2 } from "lucide-react";
-import Modal from "../components/modals/modal";
+import Modal from "../../components/modals/modal";
 
-export const GestionVentas = () => {
+export const Ventas = () => {
     const [openCreate, setOpenCreate] = useState(false);
     const [openEditar, setOpenEditar] = useState(false);
     const [openVer, setOpenVer] = useState(false);
