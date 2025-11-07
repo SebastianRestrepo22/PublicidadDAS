@@ -259,7 +259,7 @@ export const Usuarios = () => {
   // Abrir modal para editar, ver o eliminar
   const handleEditClick = (u) => {
     setEditData(u);
-    setValues({ ...u });eliminar
+    setValues({ ...u });
 
     //Evita que en el editar saque la exepción si no ha habido cambios
     setOriginalCorreo(u.CorreoElectronico);
