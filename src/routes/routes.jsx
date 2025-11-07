@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import { Inicio } from "../features/landing/inicio/inicio"
 import { Productos } from "../features/landing/nuestrosproductos/productos"
+import { Servicios } from "../features/landing/nuestrosproductos/servicios"
 import { QuienesSomos } from "../features/landing/quienessomos/quienesSomos"
 import { Login } from "../features/landing/login/login"
 import { Insumos } from "../features/dashboard/constrolinsumos/insumos/insumos"
@@ -16,13 +17,11 @@ import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEst
 import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
 import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
 import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
-import { GestionVentas } from "../features/dashboard/gestionventas/gestionVentas"
-import { CategoriaDeDiseño } from "../features/dashboard/categoriadediseño/categoriaDeDiseño"
-import { Servicios } from "../features/landing/nuestrosproductos/servicios"
-
 import Agenda from "../features/dashboard/agenda/agenda"
+import { Diseño } from "../features/dashboard/categoriadediseño/diseño"
 import { RecuperarContrasena } from "../features/landing/login/RecuperarContrasena"
 import { RestablecerContrasena } from "../features/landing/login/RestablecerContrasena"
+import { Compras } from "../features/dashboard/compras/compras"
 
 export const Routers = () => {
     return (
@@ -47,10 +46,8 @@ export const Routers = () => {
                 <Route path="insumos" element={<Insumos />} />
                 <Route path="productoServicio" element={<ProductoServicios />} />
                 <Route path="proveedores" element={<Proveedores />} />
-                <Route path="gestionVentas" element={<GestionVentas />} />
-                <Route path="categoriaDeDiseño" element={<CategoriaDeDiseño />} />
-                <Route path="metodoDePago" element={<MetodoDePago />} />
-                <Route path="agenda" element={<Agenda />} />
+                <Route path="categoriaDeDiseño" element={<Diseño/>}/>
+                <Route path="agenda" element={<Agenda/>}/>
             </Route>
 
             {/* 404 */}
