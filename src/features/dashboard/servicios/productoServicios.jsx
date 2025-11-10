@@ -204,13 +204,20 @@ export const ProductoServicios = () => {
               onChange={handleChanges}
               onBlur={handleNombreBlur}
               className={`w-full h-10 px-3 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
-      ${submitted && !values.Nombre.trim() ? "border-red-500" : "border-gray-300"}`} />
+      ${submitted && !values.Nombre.trim() || nombreError ? "border-red-500" : "border-gray-300"}`}
+            />
             <div className="min-h-[16px] mt-0.5">
+              {/* Mensaje de campo vacío */}
               {(!values.Nombre.trim() && submitted) && (
                 <p className="text-red-500 text-[12px] leading-4">Ingrese el nombre</p>
               )}
+              {/* Mensaje de nombre repetido */}
+              {nombreError && (
+                <p className="text-red-500 text-[12px] leading-4">{nombreError}</p>
+              )}
             </div>
           </div>
+
 
           <div className="flex flex-col gap-1">
             <label className="font-medium">Descripción</label>

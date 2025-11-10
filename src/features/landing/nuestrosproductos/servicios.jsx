@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
 import { Search } from "lucide-react";
+import { GetDataServices } from "../../dashboard/servicios/services/services.servicios";
+import { Link } from "react-router-dom";
 
 export const Servicios = () => {
     const products = [
@@ -36,6 +38,21 @@ export const Servicios = () => {
         return () => clearInterval(interval);
     });
 
+    //Para traer los servicios del backend
+
+    const [servicios, setServicios] = useState([]);
+
+    useEffect(() => {
+        const fetchProductos = async () => {
+            const response = await GetDataServices();
+            // Filtramos solo los registros cuyo Tipo es 'producto'
+            const serviciosSolo = response.data.filter(s => s.Tipo === 'servicio');
+            setServicios(serviciosSolo);
+        };
+
+        fetchProductos();
+    }, []);
+
     return (
         <>
             <Navbar />
@@ -53,7 +70,7 @@ export const Servicios = () => {
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
                         <input
                             type="text"
-                            placeholder="Buscar producto"
+                            placeholder="Buscar servicio"
                             className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
                         />
                     </div>
@@ -137,104 +154,28 @@ export const Servicios = () => {
 
             <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">Nuestros servicios</h1>
             <div className="card-container">
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
+                {(servicios?.length ?? 0) === 0 ? (
+                    <div className="no-products">
+                        <h2>No hay servicios disponibles</h2>
+                        <p>Vuelve más tarde o revisa nuestras categorías.</p>
                     </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <img src="https://litocreativos.co/wp-content/uploads/2021/04/papeleria-de-oficina-medellin.jpg" alt="" />
-                    <div className="card-content">
-                        <h3>Card 1</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat harum aliquid nemo non eligendi odio temporibus corporis excepturi, error deleniti, ipsum accusamus ea nisi voluptatem assumenda numquam commodi iusto quia?
-                        </p>
-                        <a href="" className="btn">Read More</a>
-                    </div>
-                </div>
+                ) : (
+                    servicios.map(servicio => (
+                        <div key={servicio.ProductoServicioId} className="card">
+                            <img src={servicio.UrlImagen} alt={servicio.Nombre} />
+                            <div className="card-content">
+                                <h3>{servicio.Nombre}</h3>
+                                <p>{servicio.Descripcion}</p>
+                                <div className="card-actions">
+                                    <Link className="btn" to="/carritoproducto">Añadir</Link>
+                                    <p className="price">
+                                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(servicio.Precio)}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
             <Footer />
         </>
