@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import { GetDataServices } from "../../dashboard/servicios/services/services.servicios";
 
 export const Productos = () => {
   const products = [
@@ -36,6 +37,21 @@ export const Productos = () => {
     const interval = setInterval(() => slide(1), 10000);
     return () => clearInterval(interval);
   });
+
+  //Para traer los productos del backend
+
+  const [productos, setProductos] = useState([]);
+
+  useEffect(() => {
+    const fetchProductos = async () => {
+      const response = await GetDataServices();
+      // Filtramos solo los registros cuyo Tipo es 'producto'
+      const productosSolo = response.data.filter(p => p.Tipo === 'producto');
+      setProductos(productosSolo);
+    };
+
+    fetchProductos();
+  }, []);
 
   return (
     <>
@@ -141,65 +157,28 @@ export const Productos = () => {
 
       <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 pt-10">Nuestros productos</h1>
       <div className="card-container">
-
-        <div className="card">
-          <img src="https://assets.freelogoservices.com/sites/all/themes/freelogoservices/images/bcworkflow/bc_lp_grey_top_bkg.png" alt="" />
-          <div className="card-content">
-            <div>
-              <h3>Tarjetas de presentación</h3>
-            </div>
-
-            <div>
-              <p>
-                Tarjetas personalizadas con información de contacto, ideales para networking y promoción profesional.
-              </p>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <Link className="btn" to='/carritoproducto'>Añadir al carrito</Link>
-              <p class="text-green-600 font-bold text-2xl mb-4 m-7">$60.000</p>
-            </div>
+        {(productos?.length ?? 0) === 0 ? (
+          <div className="no-products">
+            <h2>No hay productos disponibles</h2>
+            <p>Vuelve más tarde o revisa nuestras categorías.</p>
           </div>
-        </div>
-
-        <div className="card">
-          <img src="https://alsurestudio.es/wp-content/uploads/2024/01/papeleria-corporativa-alsurestudio-01.jpg" alt="" />
-          <div className="card-content">
-            <div>
-              <h3>Papelería corporativa</h3>
+        ) : (
+          productos.map(producto => (
+            <div key={producto.ProductoServicioId} className="card">
+              <img src={producto.UrlImagen} alt={producto.Nombre} />
+              <div className="card-content">
+                <h3>{producto.Nombre}</h3>
+                <p>{producto.Descripcion}</p>
+                <div className="card-actions">
+                  <Link className="btn" to="/carritoproducto">Añadir</Link>
+                  <p className="price">
+                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(producto.Precio)}
+                  </p>
+                </div>
+              </div>
             </div>
-
-            <div>
-              <p>
-                Incluye hojas membretadas, sobres y tarjetas de presentación, diseñadas para mantener una imagen coherente de la empresa.              </p>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <Link className="btn" to='/carritoproducto'>Añadir al carrito</Link>
-              <p class="text-green-600 font-bold text-2xl mb-4 m-7">$60.000</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card">
-          <img src="https://impresosrichard.com/wp-content/uploads/2018/11/producto_afiches_5.jpg" alt="" />
-          <div className="card-content">
-            <div>
-              <h3>Volantes y afiches</h3>
-            </div>
-
-            <div>
-              <p>
-                Material publicitario impreso en papel de alta calidad, utilizado para promociones, eventos o campañas publicitarias.              </p>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <Link className="btn" to='/carritoproducto'>Añadir al carrito</Link>
-              <p class="text-green-600 font-bold text-2xl mb-4 m-7">$60.000</p>
-            </div>
-          </div>
-        </div>
-
+          ))
+        )}
       </div>
       <Footer />
     </>

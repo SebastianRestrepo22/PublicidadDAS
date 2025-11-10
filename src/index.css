@@ -160,7 +160,7 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .card {
@@ -168,7 +168,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   width: 325px;
-  height: 500px;
+  height: 380px;
   background-color: #f0f0f0;
   border-radius: 8px;
   overflow: hidden;
@@ -210,6 +210,41 @@ body {
   border-radius: 5px;
   margin-top: 16px;
   color: #fff;
+}
+
+/* Mensaje cuando no hay productos */
+.no-products {
+  text-align: center;
+  margin: 80px auto;
+  color: #555;
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.no-products h2 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+.no-products p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* ajustes de la fila interna si tenías clases tailwind */
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  color: #16a34a; /* verde */
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 /*Carrusel de nuestros productos*/
