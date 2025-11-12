@@ -4,6 +4,7 @@ import { Footer } from "../components/footer";
 import { Search } from "lucide-react";
 import { GetDataServices } from "../../dashboard/servicios/services/services.servicios";
 import { Link } from "react-router-dom";
+import { getAllCategorias } from "../../dashboard/categoriadediseño/services/services.categoria";
 
 export const Servicios = () => {
     const products = [
@@ -38,48 +39,63 @@ export const Servicios = () => {
         return () => clearInterval(interval);
     });
 
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+    const [busqueda, setBusqueda] = useState("");
+
     //Para traer los servicios del backend
 
     const [servicios, setServicios] = useState([]);
 
     useEffect(() => {
-        const fetchProductos = async () => {
+        const fetchServicio = async () => {
             const response = await GetDataServices();
             // Filtramos solo los registros cuyo Tipo es 'producto'
             const serviciosSolo = response.data.filter(s => s.Tipo === 'servicio');
             setServicios(serviciosSolo);
         };
 
-        fetchProductos();
+        fetchServicio();
     }, []);
+
+    // Filtrar solo productos con descuento
+    const serviciosConDescuento = servicios.filter(servicio => servicio.Descuento > 0);
+
+    // Seleccionamos aleatoriamente 3 productos
+    const servicioDescuentoRandom = serviciosConDescuento
+        .sort(() => 0.5 - Math.random()) // mezcla aleatoriamente
+        .slice(0, 3);
+
+    //Traer las categorias
+
+    const [categorias, setCategorias] = useState([]);
+
+    useEffect(() => {
+        const fetchCategoria = async () => {
+            const data = await getAllCategorias();
+            if (data?.data) setCategorias(data.data);
+        };
+        fetchCategoria();
+    }, []);
+
+    //Filtrar el producto antes de mostralo
+
+    const servicioFiltrados = servicios.filter((servicio) => {
+        // Filtrado por categoría
+        const coincideCategoria = categoriaSeleccionada
+            ? String(servicio.CategoriaId) === categoriaSeleccionada
+            : true;
+        // Filtrado por búsqueda (nombre)
+        const coincideBusqueda = servicio.Nombre.toLowerCase().includes(busqueda.toLowerCase());
+
+        return coincideCategoria && coincideBusqueda;
+    });
 
     return (
         <>
             <Navbar />
-            {/* Sección de categoria y la barra de busqueda */}
-            <div className="bg-gradient-to-br from-slate-50 to-blue-50 pt-12">
-                <div className="flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                    <select className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]">
-                        <option value="">Categorias</option>
-                        <option value="id">Gran formato</option>
-                        <option value="Nombre del Insumo">Stickers / Etiquetas</option>
-                        <option value="Stock">Folletos / Trípticos</option>
-                        <option value="Stock">Posters / Pósters</option>
-                    </select>
-                    <div className="relative flex-1 max-w-md">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                        <input
-                            type="text"
-                            placeholder="Buscar servicio"
-                            className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
-                        />
-                    </div>
-                </div>
-            </div>
-
             {/*Carrusel */}
             <div className="max-w-6xl mx-auto px-4 py-12">
-                <h1 className="text-center font-bold text-4xl mb-2">Servicios que no puedes perder</h1>
+                <h1 className="text-center font-bold text-4xl mb-2 py-12">Servicios que no puedes perder</h1>
                 <p className="text-gray-400 text-center mb-12">Descubra nuestros productos y transforma tus ideas en impresiones únicas.</p>
 
                 <div className="relative">
@@ -118,59 +134,98 @@ export const Servicios = () => {
                 <div className="max-w-6xl mx-auto px-4 text-center">
                     <h2 className="text-3xl font-bold mb-4">¡Aprovecha nuestras ofertas!</h2>
                     <p className="text-lg text-gray-700 mb-8">
-                        Descuentos especiales en productos seleccionados, solo por tiempo limitado.
+                        Descuentos especiales en servicios seleccionados, solo por tiempo limitado.
                     </p>
 
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-2">Servicio A</h3>
-                            <p className="text-gray-500 mb-4">Antes: <span className="line-through">$50</span></p>
-                            <p className="text-green-600 font-bold text-2xl mb-4">$35</p>
-                            <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                                Comprar
-                            </button>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-2">Servicio B</h3>
-                            <p className="text-gray-500 mb-4">Antes: <span className="line-through">$80</span></p>
-                            <p className="text-green-600 font-bold text-2xl mb-4">$60</p>
-                            <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                                Comprar
-                            </button>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-2">Servicio C</h3>
-                            <p className="text-gray-500 mb-4">Antes: <span className="line-through">$100</span></p>
-                            <p className="text-green-600 font-bold text-2xl mb-4">$75</p>
-                            <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                                Comprar
-                            </button>
-                        </div>
+                    <div className="flex justify-center flex-wrap gap-6">
+                        {serviciosConDescuento.length === 0 ? (
+                            <div className="no-products">
+                                <p>No hay servicios con descuento disponibles.</p>
+                            </div>
+                        ) : (
+                            servicioDescuentoRandom.map(servicio => (
+                                <div key={servicio.ProductoServicioId} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 w-72 flex-shrink-0">
+                                    <h3 className="text-xl font-semibold mb-2">{servicio.Nombre}</h3>
+                                    <p className="text-gray-500 mb-4">Antes: <span className="line-through">{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(servicio.Precio)}</span></p>
+                                    <p className="text-green-600 font-bold text-2xl mb-4">
+                                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(
+                                            servicio.Precio - (servicio.Precio * servicio.Descuento / 100)
+                                        )}
+                                    </p>
+                                    <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                                        Comprar
+                                    </button>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
             </section>
 
+            {/* Sección de categoria y la barra de busqueda */}
+
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50">
+                <div className="flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <select
+                        value={categoriaSeleccionada}
+                        onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+                        name="CategoriaId"
+                    >
+                        <option value="">Seleccione la categoria</option>
+                        {categorias.map((categoria) => (
+                            <option key={categoria.CategoriaId} value={categoria.CategoriaId}>
+                                {categoria.Nombre}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                        <input
+                            type="text"
+                            placeholder="Buscar servicio"
+                            value={busqueda}
+                            onChange={(e) => setBusqueda(e.target.value)}
+                            className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
+                        />
+                    </div>
+                </div>
+            </div>
+
             <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">Nuestros servicios</h1>
             <div className="card-container">
-                {(servicios?.length ?? 0) === 0 ? (
+                {servicioFiltrados.length === 0 ? (
                     <div className="no-products">
-                        <h2>No hay servicios disponibles</h2>
+                        <h2>No hay productos disponibles</h2>
                         <p>Vuelve más tarde o revisa nuestras categorías.</p>
                     </div>
                 ) : (
-                    servicios.map(servicio => (
+                    servicioFiltrados.map((servicio) => (
                         <div key={servicio.ProductoServicioId} className="card">
-                            <img src={servicio.UrlImagen} alt={servicio.Nombre} />
+                            <div className="image-container">
+                                <img src={servicio.UrlImagen} alt={servicio.Nombre} />
+                            </div>
+
                             <div className="card-content">
                                 <h3>{servicio.Nombre}</h3>
-                                <p>{servicio.Descripcion}</p>
+                                <p className="description">{servicio.Descripcion}</p>
+
                                 <div className="card-actions">
                                     <Link className="btn" to="/carritoproducto">Añadir</Link>
-                                    <p className="price">
-                                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(servicio.Precio)}
-                                    </p>
+
+                                    <div className="price-section">
+                                        {servicio.Descuento > 0 && (
+                                            <span className="old-price">
+                                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(servicio.Precio)}
+                                            </span>
+                                        )}
+                                        <span className="new-price">
+                                            {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(
+                                                servicio.Descuento > 0
+                                                    ? servicio.Precio - (servicio.Precio * servicio.Descuento / 100)
+                                                    : servicio.Precio
+                                            )}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
