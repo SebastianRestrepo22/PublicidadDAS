@@ -92,10 +92,41 @@ export const Productos = () => {
 
   return (
     <>
-      <Navbar />
+      <nav className="sticky top-0 z-50 bg-white shadow-md">
+        <Navbar />
+      </nav>
+
+      {/* Sección de categoria y la barra de busqueda */}
+
+      <div className="sticky top-[64px] z-40 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <select
+            value={categoriaSeleccionada}
+            onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+            name="CategoriaId"
+          >
+            <option value="">Seleccione la categoria</option>
+            {categorias.map((categoria) => (
+              <option key={categoria.CategoriaId} value={categoria.CategoriaId}>
+                {categoria.Nombre}
+              </option>
+            ))}
+          </select>
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Buscar producto"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
+            />
+          </div>
+        </div>
+      </div>
 
       {/*Carrusel */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-center font-bold text-4xl mb-2 pt-12">Productos que no puedes perder</h1>
         <p className="text-gray-400 text-center mb-12">Descubra nuestros productos y transforma tus ideas en impresiones únicas.</p>
 
@@ -153,45 +184,22 @@ export const Productos = () => {
                       producto.Precio - (producto.Precio * producto.Descuento / 100)
                     )}
                   </p>
-                  <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                  <Link
+                    to="/carritoproducto"
+                    state={{
+                      item: producto,
+                      from: "/productos"
+                    }}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                  >
                     Comprar
-                  </button>
+                  </Link>
                 </div>
               ))
             )}
           </div>
         </div>
       </section>
-
-
-      {/* Sección de categoria y la barra de busqueda */}
-
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <select
-            value={categoriaSeleccionada}
-            onChange={(e) => setCategoriaSeleccionada(e.target.value)}
-            name="CategoriaId"
-          >
-            <option value="">Seleccione la categoria</option>
-            {categorias.map((categoria) => (
-              <option key={categoria.CategoriaId} value={categoria.CategoriaId}>
-                {categoria.Nombre}
-              </option>
-            ))}
-          </select>
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Buscar producto"
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
-            />
-          </div>
-        </div>
-      </div>
 
       <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 pt-10">Nuestros productos</h1>
       <div className="card-container">
@@ -212,7 +220,7 @@ export const Productos = () => {
                 <p className="description">{producto.Descripcion}</p>
 
                 <div className="card-actions">
-                  <Link className="btn" to="/carritoproducto">Añadir</Link>
+                  <Link className="btn" to="/carritoproducto" state={{ item: producto, from: "/productos" }}>Añadir</Link>
 
                   <div className="price-section">
                     {producto.Descuento > 0 && (
