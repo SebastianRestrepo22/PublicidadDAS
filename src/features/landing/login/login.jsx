@@ -148,10 +148,13 @@ export const Login = () => {
       localStorage.setItem("token", token);
 
       const decoded = jwtDecode(token);
-      if (decoded.Role === "Administrador") {
+      if (decoded.Role.toLowerCase() === "administrador") {
         navigate("/dashboard/graficosEstadisticos");
-      } else {
-        alert("Acceso denegado. Solo el administrador puede entrar al dashboard.");
+      } else if (decoded.Role.toLowerCase() === "cliente"){
+        navigate("/cliente/Clientehome");
+      }
+      else {
+        alert("Rol no permitido ")
       }
 
       setValuesLogin({
