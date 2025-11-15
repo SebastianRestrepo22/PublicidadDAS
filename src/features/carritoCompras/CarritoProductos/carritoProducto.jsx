@@ -14,7 +14,7 @@ export const CarritoProducto = () => {
             <Navbar />
 
             {/* Contenido principal */}
-            <div className="container mx-auto px-4 pt-[390px] flex-1">
+            <div className="mx-auto px-4 pt-[70px] flex-1">
 
                 {/* Header con botón regresar */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
