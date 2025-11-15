@@ -4,6 +4,7 @@ import { Footer } from "../components/footer";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { GetDataServices } from "../../dashboard/servicios/services/services.servicios";
+import { getAllCategorias } from "../../dashboard/categoriadediseño/services/services.categoria";
 
 export const Productos = () => {
   const products = [
@@ -38,6 +39,9 @@ export const Productos = () => {
     return () => clearInterval(interval);
   });
 
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+  const [busqueda, setBusqueda] = useState("");
+
   //Para traer los productos del backend
 
   const [productos, setProductos] = useState([]);
@@ -53,26 +57,68 @@ export const Productos = () => {
     fetchProductos();
   }, []);
 
+  // Filtrar solo productos con descuento
+  const productosConDescuento = productos.filter(producto => producto.Descuento > 0);
+
+  // Seleccionamos aleatoriamente 3 productos
+  const productosDescuentoRandom = productosConDescuento
+    .sort(() => 0.5 - Math.random()) // mezcla aleatoriamente
+    .slice(0, 3);
+
+  //Traer las categorias
+
+  const [categorias, setCategorias] = useState([]);
+
+  useEffect(() => {
+    const fetchCategoria = async () => {
+      const data = await getAllCategorias();
+      if (data?.data) setCategorias(data.data);
+    };
+    fetchCategoria();
+  }, []);
+
+  //Filtrar el producto antes de mostralo
+
+  const productosFiltrados = productos.filter((producto) => {
+    // Filtrado por categoría
+    const coincideCategoria = categoriaSeleccionada
+      ? String(producto.CategoriaId) === categoriaSeleccionada
+      : true;
+    // Filtrado por búsqueda (nombre)
+    const coincideBusqueda = producto.Nombre.toLowerCase().includes(busqueda.toLowerCase());
+
+    return coincideCategoria && coincideBusqueda;
+  });
+
   return (
     <>
-      <Navbar />
+      <nav className="sticky top-0 z-50 bg-white shadow-md">
+        <Navbar />
+      </nav>
 
       {/* Sección de categoria y la barra de busqueda */}
 
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50 pt-12">
+      <div className="sticky top-[64px] z-40 bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <select className="border border-slate-300 rounded-lg px-4 py-3 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-w-[140px]">
-            <option value="">Categorias</option>
-            <option value="id">Gran formato</option>
-            <option value="Nombre del Insumo">Stickers / Etiquetas</option>
-            <option value="Stock">Folletos / Trípticos</option>
-            <option value="Stock">Posters / Pósters</option>
+          <select
+            value={categoriaSeleccionada}
+            onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+            name="CategoriaId"
+          >
+            <option value="">Seleccione la categoria</option>
+            {categorias.map((categoria) => (
+              <option key={categoria.CategoriaId} value={categoria.CategoriaId}>
+                {categoria.Nombre}
+              </option>
+            ))}
           </select>
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               type="text"
               placeholder="Buscar producto"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
               className="border border-slate-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-slate-700"
             />
           </div>
@@ -80,8 +126,8 @@ export const Productos = () => {
       </div>
 
       {/*Carrusel */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-center font-bold text-4xl mb-2">Productos que no puedes perder</h1>
+      <div className="max-w-6xl mx-auto px-4">
+        <h1 className="text-center font-bold text-4xl mb-2 pt-12">Productos que no puedes perder</h1>
         <p className="text-gray-400 text-center mb-12">Descubra nuestros productos y transforma tus ideas en impresiones únicas.</p>
 
         <div className="relative">
@@ -123,63 +169,81 @@ export const Productos = () => {
             Descuentos especiales en productos seleccionados, solo por tiempo limitado.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
-              <h3 className="text-xl font-semibold mb-2">Producto A</h3>
-              <p className="text-gray-500 mb-4">Antes: <span className="line-through">$50</span></p>
-              <p className="text-green-600 font-bold text-2xl mb-4">$35</p>
-              <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                Comprar
-              </button>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
-              <h3 className="text-xl font-semibold mb-2">Producto B</h3>
-              <p className="text-gray-500 mb-4">Antes: <span className="line-through">$80</span></p>
-              <p className="text-green-600 font-bold text-2xl mb-4">$60</p>
-              <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                Comprar
-              </button>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300">
-              <h3 className="text-xl font-semibold mb-2">Producto C</h3>
-              <p className="text-gray-500 mb-4">Antes: <span className="line-through">$100</span></p>
-              <p className="text-green-600 font-bold text-2xl mb-4">$75</p>
-              <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                Comprar
-              </button>
-            </div>
+          <div className="flex justify-center flex-wrap gap-6">
+            {productosConDescuento.length === 0 ? (
+              <div className="no-products">
+                <p>No hay productos con descuento disponibles.</p>
+              </div>
+            ) : (
+              productosDescuentoRandom.map(producto => (
+                <div key={producto.ProductoServicioId} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 w-72 flex-shrink-0">
+                  <h3 className="text-xl font-semibold mb-2">{producto.Nombre}</h3>
+                  <p className="text-gray-500 mb-4">Antes: <span className="line-through">{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(producto.Precio)}</span></p>
+                  <p className="text-green-600 font-bold text-2xl mb-4">
+                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(
+                      producto.Precio - (producto.Precio * producto.Descuento / 100)
+                    )}
+                  </p>
+                  <Link
+                    to="/carritoproducto"
+                    state={{
+                      item: producto,
+                      from: "/productos"
+                    }}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                  >
+                    Comprar
+                  </Link>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>
 
-
       <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 pt-10">Nuestros productos</h1>
       <div className="card-container">
-        {(productos?.length ?? 0) === 0 ? (
+        {productosFiltrados.length === 0 ? (
           <div className="no-products">
             <h2>No hay productos disponibles</h2>
             <p>Vuelve más tarde o revisa nuestras categorías.</p>
           </div>
         ) : (
-          productos.map(producto => (
+          productosFiltrados.map((producto) => (
             <div key={producto.ProductoServicioId} className="card">
-              <img src={producto.UrlImagen} alt={producto.Nombre} />
+              <div className="image-container">
+                <img src={producto.UrlImagen} alt={producto.Nombre} />
+              </div>
+
               <div className="card-content">
                 <h3>{producto.Nombre}</h3>
-                <p>{producto.Descripcion}</p>
+                <p className="description">{producto.Descripcion}</p>
+
                 <div className="card-actions">
-                  <Link className="btn" to="/carritoproducto">Añadir</Link>
-                  <p className="price">
-                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(producto.Precio)}
-                  </p>
+                  <Link className="btn" to="/carritoproducto" state={{ item: producto, from: "/productos" }}>Añadir</Link>
+
+                  <div className="price-section">
+                    {producto.Descuento > 0 && (
+                      <span className="old-price">
+                        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(producto.Precio)}
+                      </span>
+                    )}
+                    <span className="new-price">
+                      {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(
+                        producto.Descuento > 0
+                          ? producto.Precio - (producto.Precio * producto.Descuento / 100)
+                          : producto.Precio
+                      )}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           ))
         )}
       </div>
+
+
       <Footer />
     </>
   );
