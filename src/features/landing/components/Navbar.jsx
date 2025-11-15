@@ -1,35 +1,26 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export const Navbar = () => {
-    function Menu(icon) {
-        let list = document.querySelector('ul');
-        if (icon.name === "menu-outline") {
-            icon.name = "close-outline";
-            list.classList.add('top-[80px]', 'opacity-100');
-            document.body.classList.add("menu-open");
-        } else {
-            icon.name = "menu-outline";
-            list.classList.remove('top-[80px]', 'opacity-100');
-            document.body.classList.remove("menu-open");
-        }
-    }
+    const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <header>
+        <header className="fixed top-0 left-0 w-full z-50 h-14">
             <nav className="bg-[#25395C] fixed top-0 left-0 w-full p-0 h-14 shadow z-50 flex items-center justify-between">
 
-                <div className="flex items-center ml-10">
+                <div className="flex items-center ml-6">
                     <img src="/public/multimedia/logo.png" alt="Logo" className="h-[70px] w-auto" />
                     <h1 style={{ fontFamily: 'Oswald, sans-serif' }} className="text-white">PublicidadDAS</h1>
                 </div>
 
+                {/* MENU DESKTOP */}
                 <ul className="hidden md:flex mx-auto items-center gap-10">
                     <li>
                         <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500" to='/'>Inicio</Link>
                     </li>
 
                     <li className="relative group">
-                        <Link className="text-white font-bold text-[17px] hover:text-cyan-500 duration-500">
+                        <Link className="text-white font-bold text-[17px] cursor-pointer hover:text-cyan-500 duration-500">
                             Nuestros productos
                         </Link>
                         <ul className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
@@ -51,8 +42,9 @@ export const Navbar = () => {
                     </li>
                 </ul>
 
-                <div className="flex items-center gap-2 mr-10">
-                    <li className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
+                {/* BOTONES Y TOGGLE */}
+                <div className="flex items-center gap-2 mr-6">
+                    <li className="hidden md:inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-1 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md hover:shadow-lg font-medium">
                         <Link className="text-white font-bold text-[17px]" to='/login'>Registro</Link>
                     </li>
 
@@ -61,10 +53,29 @@ export const Navbar = () => {
                     </Link>
 
                     <span className="text-3xl cursor-pointer md:hidden block">
-                        <ion-icon name="menu-outline" onClick={(e) => Menu(e.target)}></ion-icon>
+                        <ion-icon
+                            name={menuOpen ? "close-outline" : "menu-outline"}
+                            onClick={() => setMenuOpen(!menuOpen)}>
+                        </ion-icon>
                     </span>
                 </div>
             </nav>
+
+            {/* MENU MOBILE */}
+            <ul className={`md:hidden bg-[#25395C] text-white w-full absolute left-0 top-14 flex flex-col items-center gap-6 py-6 text-lg font-bold transition-all duration-500 
+                ${menuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
+
+                <li><Link to='/' onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+
+                <li><Link to='/productos' onClick={() => setMenuOpen(false)}>Productos</Link></li>
+                <li><Link to='/servicios' onClick={() => setMenuOpen(false)}>Servicios</Link></li>
+
+                <li><Link to='/quienessomos' onClick={() => setMenuOpen(false)}>¿Quiénes somos?</Link></li>
+
+                <li className="bg-blue-500 text-white px-5 py-1 rounded-lg">
+                    <Link to='/login' onClick={() => setMenuOpen(false)}>Registro</Link>
+                </li>
+            </ul>
         </header>
-    )
-}
+    );
+};
