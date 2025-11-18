@@ -3,10 +3,13 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
 import { Search } from "lucide-react";
 import { GetDataServices } from "../../dashboard/servicios/services/services.servicios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAllCategorias } from "../../dashboard/categoriadediseño/services/services.categoria";
+import { useCart } from "../../../context/CartContext";
 
 export const Servicios = () => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
     const products = [
         { name: "Tarjetas de Presentación", price: "$49", image: "https://images.unsplash.com/photo-1581092588429-14f0d3f8df8e?crop=entropy&cs=tinysrgb&fit=crop&w=600&h=400", rating: 4.8 },
         { name: "Volantes Publicitarios", price: "$79", image: "https://images.unsplash.com/photo-1557683316-973673baf926?crop=entropy&cs=tinysrgb&fit=crop&w=600&h=400", rating: 4.6 },
@@ -90,6 +93,17 @@ export const Servicios = () => {
         return coincideCategoria && coincideBusqueda;
     });
 
+    const handleAddClick = (servicio) => {
+        if (servicio.EsPersonalizado) {
+            // Redirige al formulario de personalización
+            navigate("/carritoproducto", { state: { item: servicio, from: "/productos" } });
+        } else {
+            // Añade directo al carrito
+            addToCart(servicio, {}, 1); // función que agrega el producto directamente
+            toast.success(`${servicio.Nombre} agregado al carrito`);
+        }
+    };
+
     return (
         <>
             <Navbar />
@@ -141,8 +155,12 @@ export const Servicios = () => {
                                 <p className="description">{servicio.Descripcion}</p>
 
                                 <div className="card-actions">
-                                    <Link className="btn" to="/carritoproducto" state={{ item: servicio, from: "/servicios" }} >Añadir</Link>
-
+                                    <button
+                                        className="btn"
+                                        onClick={() => handleAddClick(servicio)}
+                                    >
+                                        {servicio.EsPersonalizado ? "Personalizar" : "Añadir"}
+                                    </button>
                                     <div className="price-section">
                                         {servicio.Descuento > 0 && (
                                             <span className="old-price">
@@ -188,16 +206,13 @@ export const Servicios = () => {
                                             servicio.Precio - (servicio.Precio * servicio.Descuento / 100)
                                         )}
                                     </p>
-                                    <Link
-                                        to="/carritoproducto"
-                                        state={{
-                                            item: servicio,
-                                            from: "/servicios"
-                                        }}
+                                    <button
                                         className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                                        onClick={() => handleAddClick(producto)}
                                     >
                                         Comprar
-                                    </Link>
+                                    </button>
+
                                 </div>
                             ))
                         )}

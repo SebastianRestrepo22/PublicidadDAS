@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 import { toast, ToastContainer } from "react-toastify";
+import { useAuth } from "../../../context/AuthContext";
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const [tiposDocumento, setTiposDocumento] = useState([]);
 
@@ -148,22 +150,17 @@ export const Login = () => {
       localStorage.setItem("token", token);
 
       const decoded = jwtDecode(token);
+      setUser(decoded);
       if (decoded.Role.toLowerCase() === "administrador") {
         navigate("/dashboard/graficosEstadisticos");
-      } else if (decoded.Role.toLowerCase() === "cliente"){
-        navigate("/cliente/Clientehome");
-      }
-      else {
-        alert("Rol no permitido ")
+      } else if (decoded.Role.toLowerCase() === "cliente") {
+        navigate("/productos");
       }
 
-      setValuesLogin({
-        CorreoElectronico: "",
-        Contrasena: "",
-      });
+
     } catch (error) {
       console.error("Error en login:", error);
-      alert(error.response?.data?.message || "Error al iniciar sesión");
+      toast.error(error.response?.data?.message || "Error al iniciar sesión");
     }
   };
 

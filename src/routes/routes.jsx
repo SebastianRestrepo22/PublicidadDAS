@@ -12,17 +12,18 @@ import { Roles } from "../features/dashboard/roles/roles"
 import { DashboardLayout } from "../features/dashboard/components/dashboardLoyout"
 import { Error404 } from "../features/404/error404"
 import { GraficosEstadisticos } from "../features/dashboard/dashboard/graficoEstadisticos"
-import { CarritoCompras } from "../features/carritoCompras/carritoCompras"
-import { CarritoProducto } from "../features/carritoCompras/CarritoProductos/carritoProducto"
-import { EditarCarritoProducto } from "../features/carritoCompras/CarritoProductos/editarCarritoProducto"
 import Agenda from "../features/dashboard/agenda/agenda"
 import { Diseño } from "../features/dashboard/categoriadediseño/diseño"
 import { RecuperarContrasena } from "../features/landing/login/RecuperarContrasena"
 import { RestablecerContrasena } from "../features/landing/login/RestablecerContrasena"
 import { Compras } from "../features/dashboard/compras/compras"
-import { Navbarcliente } from "../features/navbarCliente/navbarCliente"
-import { Clientehome } from "../features/navbarCliente/clientehome"
+// import { Navbarcliente } from "../features/navbarCliente/navbarCliente"
+// import { Clientehome } from "../features/navbarCliente/clientehome"
 import { Pedidos } from "../features/dashboard/gestionventas/pedidos/pedidos"
+import { CarritoCompras } from "../features/landing/carritoCompras/carritoCompras"
+import { EditarCarritoProducto } from "../features/landing/carritoCompras/CarritoProductos/editarCarritoProducto"
+import { CarritoProducto } from "../features/landing/carritoCompras/CarritoProductos/carritoProducto"
+import { PrivateRoute } from "./PrivateRoute"
 
 export const Routers = () => {
     return (
@@ -34,31 +35,32 @@ export const Routers = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
             <Route path="/reset-password/:token" element={<RestablecerContrasena />} />
-
-            <Route path="cliente" element={<Navbarcliente/>}>
-                <Route path="Clientehome" element={<Clientehome/>}/>
-                
-            </Route>
-
             <Route path="/carritodecompras" element={<CarritoCompras />} />
             <Route path="/carritoproducto" element={<CarritoProducto />} />
             <Route path="/editarcarritoproducto" element={<EditarCarritoProducto />} />
-
-           
 
             <Route path="/dashboard" element={<DashboardLayout />}>
                 <Route path="graficosEstadisticos" element={<GraficosEstadisticos />} />
                 <Route path="usuarios" element={<Usuarios />} />
                 <Route path="roles" element={<Roles />} />
-                <Route path="compras" element={<Compras/>} />
+                <Route path="compras" element={<Compras />} />
                 <Route path="insumos" element={<Insumos />} />
                 <Route path="diseño" element={<Diseño />} />
                 <Route path="productoServicio" element={<ProductoServicios />} />
                 <Route path="proveedores" element={<Proveedores />} />
-                <Route path="pedidos" element={<Pedidos/>}/>
-                <Route path="categoriaDeDiseño" element={<Diseño/>}/>
-                <Route path="agenda" element={<Agenda/>}/>
+                <Route path="pedidos" element={<Pedidos />} />
+                <Route path="categoriaDeDiseño" element={<Diseño />} />
+                <Route path="agenda" element={<Agenda />} />
             </Route>
+
+            <Route
+                path="/productos"
+                element={
+                    <PrivateRoute role="cliente">
+                        <Productos />
+                    </PrivateRoute>
+                }
+            />
 
             {/* 404 */}
             <Route path="*" element={<Error404 />} />
