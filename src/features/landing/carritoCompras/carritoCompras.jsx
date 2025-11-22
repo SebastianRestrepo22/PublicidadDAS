@@ -3,9 +3,16 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/footer";
 import { useCart } from "../../../context/CartContext";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
+
 
 export const CarritoCompras = () => {
+  const { user } = useAuth();
+
   const { cart, removeFromCart, updateQuantity, getTotal, clearCart } = useCart();
+
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
@@ -29,7 +36,16 @@ export const CarritoCompras = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <button className="w-full bg-black text-white py-3 rounded-xl font-bold">
+                <button
+                  className="w-full bg-black text-white py-3 rounded-xl font-bold"
+                  onClick={() => {
+                    if (!user) {
+                      setShowModal(true);
+                      return;
+                    }
+                    // aquí iría la navegación a checkout cuando sí hay usuario
+                  }}
+                >
                   Finalizar compra
                 </button>
                 <button onClick={clearCart} className="w-full border py-2 rounded-xl mt-2">
@@ -53,8 +69,8 @@ export const CarritoCompras = () => {
                       <h3 className="font-semibold">{line.Nombre}</h3>
                       <p className="text-sm text-gray-600">{line.options?.descripcion}</p>
                       <div className="text-sm text-gray-700 mt-2">
-                        <div>Alto: {line.options?.alto ?? "-" } cm</div>
-                        <div>Ancho: {line.options?.ancho ?? "-" } cm</div>
+                        <div>Alto: {line.options?.alto ?? "-"} cm</div>
+                        <div>Ancho: {line.options?.ancho ?? "-"} cm</div>
                       </div>
                     </div>
 
@@ -78,8 +94,33 @@ export const CarritoCompras = () => {
             </div>
           </div>
         </div>
+
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-xl shadow-lg w-80 text-center">
+              <h2 className="text-lg font-bold">Necesitas una cuenta</h2>
+              <p className="mt-2">Para continuar con la compra, inicia sesión o regístrate.</p>
+
+              <div className="flex flex-col gap-2 mt-4">
+                <Link
+                  to="/login"
+                  className="bg-blue-600 text-white py-2 rounded-xl font-semibold"
+                >
+                  Iniciar sesión
+                </Link>
+
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-sm text-gray-600 mt-2"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <Footer />
-      </div>
+      </div >
     </>
   );
 };

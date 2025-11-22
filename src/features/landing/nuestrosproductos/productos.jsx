@@ -126,7 +126,7 @@ export const Productos = () => {
 
       {/* Sección de categoria y la barra de busqueda */}
 
-      <div className="sticky top-[64px] z-40 bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="sticky top-[55px] z-40 bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="flex justify-center bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <select
             value={categoriaSeleccionada}
